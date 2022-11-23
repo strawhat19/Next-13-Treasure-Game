@@ -1,0 +1,115 @@
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+        Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+:root {
+    --containerWidth: 75%;
+
+    --html: #f16529;
+    --css: #2862e9;
+    --js: #f7df1e;
+    --php: #7377ad;
+    --node: #73ab60;
+    --sass: #f783ac;
+    --sql: #f783ac;
+    --mongo: #00684a;
+    --node: #3eb112;
+    --git: #e94e31;
+    --swift: #f4993a;
+    --discord: #7289DA;
+    --bg: #1f1f1f;
+    --posterH: 250px;
+    --posterW: 165px;
+    --steel: #7a7a7a;
+    --react: #0fccce;
+    --silver: #f2f2f2;
+    --softBlack: #1a1a1a;
+    --secondary: #3c3c3c;
+    --piratechs: #2b4261;
+    --softBlack2: #636363;
+    --piratechsDark: #10141d;
+    --main: rgb(0, 216, 255);
+    --authGlass: rgba(0, 0, 0, 0.05);
+    --blackGlass: rgba(0, 0, 0, 0.75);
+    --silverGlass: rgba(0, 0, 0, 0.35);
+    --mainGlass: rgba(255, 28, 11, 0.75);
+    --softWhite: rgba(255, 255, 255, 0.87);
+    --transition: 0.24s cubic-bezier(0.77, 0.2, 0.05, 1) !important;
+}
+
+header {
+    top: 0;
+    grid-gap: 2em;
+    display: flex;
+    height: 200px;
+    margin: 0 auto;
+    position: sticky;
+    align-items: center;
+    justify-content: flex-end;
+    width: var(--containerWidth);
+}
+
+main {
+    margin: 0 auto;
+    width: var(--containerWidth);
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.hoverLink {
+    display: flex;
+    grid-gap: 0.3em;
+    align-items: center;
+    position: relative;
+    transition: var(--transition);
+
+    &::before {
+        content: "" !important;
+        background: var(--main);
+        position: absolute;
+        width: 100%;
+        height: 1px;
+        display: block;
+        bottom: -3px;
+        right: 0;
+        z-index: 0;
+        transform-origin: 0% 100%;
+        transform: scale(0, 1);
+        transition: var(--transition);
+    }
+
+    &:hover {
+        transition: var(--transition);
+
+        &::before {
+            transform: scale(1, 1);
+            transition: 500ms ease-in-out;
+        }
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    html {
+        color-scheme: dark;
+    }
+
+    body {
+        color: white;
+        background: black;
+    }
+}
