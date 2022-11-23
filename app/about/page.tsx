@@ -1,3 +1,5 @@
 export default function About() {
-    return <>About</>
+    return <>
+    <h1>About</h1>
+</>
 }

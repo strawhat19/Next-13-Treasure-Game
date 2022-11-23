@@ -1,3 +1,5 @@
 export default function App() {
-    return <>App</>
+    return <>
+        <h1>App</h1>
+    </>
 }

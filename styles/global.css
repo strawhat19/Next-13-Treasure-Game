@@ -3,8 +3,7 @@
 *::after {
   margin: 0;
   padding: 0;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html,
@@ -51,25 +50,44 @@ body {
 header {
   top: 0;
   grid-gap: 2em;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   height: 200px;
   margin: 0 auto;
+  font-weight: 500;
+  font-size: 1.2em;
   position: -webkit-sticky;
   position: sticky;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
+  align-items: center;
   width: var(--containerWidth);
+  justify-content: space-between;
+}
+header .logo {
+  display: flex;
+  grid-gap: 1em;
+  font-weight: 700;
+  font-size: 1.3em;
+  align-items: center;
+  justify-content: center;
+}
+header .logo.reactLogo {
+  -webkit-animation: logo-spin infinite 20s linear;
+          animation: logo-spin infinite 20s linear;
+}
+header .menu {
+  display: flex;
+  grid-gap: 2em;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 main {
   margin: 0 auto;
+  padding: 0 5em;
   width: var(--containerWidth);
+}
+
+h1 {
+  font-size: 3.5em;
 }
 
 a {
@@ -77,19 +95,30 @@ a {
   text-decoration: none;
 }
 
-.hoverLink {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  grid-gap: 0.3em;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  position: relative;
-  -webkit-transition: var(--transition);
-  transition: var(--transition);
+@-webkit-keyframes logo-spin {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
+@keyframes logo-spin {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.hoverLink {
+  display: flex;
+  grid-gap: 0.3em;
+  align-items: center;
+  position: relative;
+  transition: var(--transition);
+}
 .hoverLink::before {
   content: "" !important;
   background: var(--main);
@@ -100,23 +129,15 @@ a {
   bottom: -3px;
   right: 0;
   z-index: 0;
-  -webkit-transform-origin: 0% 100%;
-          transform-origin: 0% 100%;
-  -webkit-transform: scale(0, 1);
-          transform: scale(0, 1);
-  -webkit-transition: var(--transition);
+  transform-origin: 0% 100%;
+  transform: scale(0, 1);
   transition: var(--transition);
 }
-
 .hoverLink:hover {
-  -webkit-transition: var(--transition);
   transition: var(--transition);
 }
-
 .hoverLink:hover::before {
-  -webkit-transform: scale(1, 1);
-          transform: scale(1, 1);
-  -webkit-transition: 500ms ease-in-out;
+  transform: scale(1, 1);
   transition: 500ms ease-in-out;
 }
 
@@ -128,5 +149,4 @@ a {
     color: white;
     background: black;
   }
-}
-/*# sourceMappingURL=global.css.map */
+}/*# sourceMappingURL=global.css.map */

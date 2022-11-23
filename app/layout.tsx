@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import '../styles/global.css';
 export default function RootLayout({
@@ -13,8 +14,13 @@ export default function RootLayout({
       </head>
       <body>
         <header>
-          <Link className={`hoverLink`} href={`/`}>Next.js</Link>
-          <Link className={`hoverLink`} href={`/about`}>About</Link>
+          <Link className={`logo hoverLink`} href={`/`}>
+            <Image className={`logo reactLogo`} priority src={`/react.svg`} alt={`Logo`} width={`75`} height={`75`} /> Home
+          </Link>
+          <div className="menu">
+            <Link className={`hoverLink`} href={`/about`}>About</Link>
+            <Link className={`hoverLink`} href={`/contact`}>Contact</Link>
+          </div>
         </header>
         <main>{children}</main>
       </body>

@@ -55,20 +55,53 @@ header {
     display: flex;
     height: 200px;
     margin: 0 auto;
+    font-weight: 500;
+    font-size: 1.2em;
     position: sticky;
     align-items: center;
-    justify-content: flex-end;
     width: var(--containerWidth);
+    justify-content: space-between;
+    .logo {
+        display: flex;
+        grid-gap: 1em;
+        font-weight: 700;
+        font-size: 1.3em;
+        align-items: center;
+        justify-content: center;
+        &.reactLogo {
+            animation: logo-spin infinite 20s linear;
+        }
+    }
+    .menu {
+        display: flex;
+        grid-gap: 2em;
+        align-items: center;
+        justify-content: flex-end;
+    }
 }
 
 main {
     margin: 0 auto;
+    padding: 0 5em;
     width: var(--containerWidth);
+}
+
+h1 {
+    font-size: 3.5em;
 }
 
 a {
     color: inherit;
     text-decoration: none;
+}
+
+@keyframes logo-spin {
+    0% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .hoverLink {
