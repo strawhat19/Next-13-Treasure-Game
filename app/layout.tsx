@@ -8,10 +8,10 @@ import { useEffect, useState } from 'react';
 export default function RootLayout({ children, } : { children: React.ReactNode; }) {
 
   let [page, setPage] = useState(``);
+  let [state, setState] = useState({ });
   let [updates, setUpdates] = useState(0);
   let [devEnv, setDevEnv] = useState(false);
   let [year, setYear] = useState(new Date().getFullYear());
-  let [state, setState] = useState({ page: page, updates: updates, devEnv: devEnv });
   
   useEffect(() => {
     setYear(new Date().getFullYear());
