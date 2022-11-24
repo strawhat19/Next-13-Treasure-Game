@@ -1,6 +1,6 @@
 'use client';
+import { StateContext } from '../app';
 import { useContext, useEffect } from 'react';
-import { capitalizeAllWords, StateContext } from '../app';
 
 export default function About() {
     const { state, setState } = useContext(StateContext);
@@ -10,6 +10,6 @@ export default function About() {
     }, []);
 
     return <>
-        <h1>{capitalizeAllWords(state.page)}</h1>
+        <h1>About</h1>
     </>
 }
