@@ -1,5 +1,5 @@
 'use client';
-import { capitalizeAllWords, StateContext } from '../app';
+import { StateContext } from '../app';
 import { useContext, useEffect } from 'react';
 
 export default function Projects() {
@@ -10,6 +10,6 @@ export default function Projects() {
     }, []);
 
     return <>
-        <h1>{capitalizeAllWords(state.page)}</h1>
+        <h1>Projects</h1>
     </>
 }
