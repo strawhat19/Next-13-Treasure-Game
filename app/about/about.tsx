@@ -11,6 +11,7 @@ export default function About() {
         page: window.location.pathname.replace(`/`,``), 
         devEnv: window.location.host.includes(`localhost`)
       });
+      console.log(`About`, state);
     }, [])
 
     return <div className={`inner`}>

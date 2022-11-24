@@ -11,6 +11,7 @@ export default function Contact() {
         page: window.location.pathname.replace(`/`,``), 
         devEnv: window.location.host.includes(`localhost`)
       });
+      console.log(`Contact`, state);
     }, [])
 
     return <div className={`inner`}>
