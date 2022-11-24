@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import '../styles/global.css';
 import Image from 'next/image';
-import { StateContext } from './app';
+import { StateContext } from './home';
 import { useEffect, useState } from 'react';
 
 export default function RootLayout({ children, } : { children: React.ReactNode; }) {
@@ -12,7 +12,6 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
   
   useEffect(() => {
     setYear(new Date().getFullYear());
-    setState({ page: window.location.pathname.replace(`/`,``) });
   }, [])
 
   return (

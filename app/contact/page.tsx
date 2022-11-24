@@ -1,5 +1,4 @@
-export default function Contact() {
-    return <>
-        <h1>Contact</h1>
-    </>
+import Contact from "./contact";
+export default function ContactPage() {
+    return <Contact />
 }

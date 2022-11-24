@@ -11,16 +11,13 @@ body {
     margin: 0;
     padding: 0;
     color: white;
-    background: var(--piratechs);
+    background: var(--mainTeal);
     font-family: Montserrat, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
         Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 :root {
-    --containerWidth: 75%;
-    @media (width < 768px) {
-        --containerWidth: 90%;
-    }
+    --containerWidth: 90%;
 
     --html: #f16529;
     --css: #2862e9;
@@ -47,6 +44,7 @@ body {
     --piratechsDark: #10141d;
     --main: rgb(0, 216, 255);
     --authGlass: rgba(0, 0, 0, 0.05);
+    --mainTeal: rgba(32, 143, 163, 1);
     --blackGlass: rgba(0, 0, 0, 0.75);
     --silverGlass: rgba(0, 0, 0, 0.35);
     --mainGlass: rgba(255, 28, 11, 0.75);
@@ -97,9 +95,9 @@ header {
 }
 
 main {
+    width: 100%;
     padding: 5em;
     margin: 0 auto;
-    width: var(--containerWidth);
 }
 
 h1 {

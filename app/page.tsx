@@ -1,5 +1,4 @@
-export default function App() {
-    return <>
-        <h1>App</h1>
-    </>
+import Home from "./home";
+export default function HomePage() {
+    return <Home />
 }
