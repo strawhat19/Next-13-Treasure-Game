@@ -2,12 +2,16 @@
 import Link from 'next/link';
 import '../styles/global.css';
 import Image from 'next/image';
-import { useState, createContext } from 'react';
-export const StateContext = createContext<any>({});
+import { StateContext } from './app';
+import { useEffect, useState } from 'react';
 
 export default function RootLayout({ children, } : { children: React.ReactNode; }) {
 
-  let [state, setState] = useState({ page: window.location.pathname.replace(`/`,``) });
+  let [state, setState] = useState({});
+  
+  useEffect(() => {
+    setState({ page: window.location.pathname.replace(`/`,``) });
+  }, [])
 
   return (
     <html lang="en">
