@@ -2,7 +2,7 @@
 ![State](https://img.shields.io/github/deployments/strawhat19/next-13/Production)
 ![Total Lines](https://img.shields.io/tokei/lines/github/strawhat19/next-13)
 ![Repo Size](https://img.shields.io/github/repo-size/strawhat19/next-13)
-![Release](https://img.shields.io/github/v/release/strawhat19/next-13)
+![Release](https://img.shields.io/github/release/strawhat19/next-13)
 
 ![NextJS](https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
