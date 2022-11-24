@@ -94,6 +94,15 @@ header {
     justify-content: space-between;
 }
 
+.column {
+    display: flex;
+    flex-direction: column;
+    &.rightColumn {
+        text-align: right;
+        justify-content: flex-end;
+    }
+}
+
 main {
     width: 100%;
     padding: 5em;
@@ -102,6 +111,11 @@ main {
 
 h1 {
     font-size: 3.5em;
+    font-weight: 500;
+}
+
+h2 {
+    font-weight: 400;
 }
 
 a {

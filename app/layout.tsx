@@ -7,11 +7,17 @@ import { useEffect, useState } from 'react';
 
 export default function RootLayout({ children, } : { children: React.ReactNode; }) {
 
-  let [state, setState] = useState({});
+  let [updates, setUpdates] = useState(0);
   let [year, setYear] = useState(new Date().getFullYear());
+  let [page, setPage] = useState((window.location.pathname.replace(`/`,``)));
+  let [devEnv, setDevEnv] = useState(window.location.host.includes(`localhost`));
+  let [state, setState] = useState({ page: page, updates: updates, devEnv: devEnv });
   
   useEffect(() => {
     setYear(new Date().getFullYear());
+    setPage(window.location.pathname.replace(`/`,``));
+    setDevEnv(window.location.host.includes(`localhost`));
+    setState({ page: page, updates: updates, devEnv: devEnv });
   }, [])
 
   return (
@@ -44,7 +50,7 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
               <div className="left">
                   <a href="https://github.com/strawhat19" target="_blank" className="hoverLink" title="GitHub"><i className="fab fa-github"></i> | Rakib Ahmed</a> 
                   <span className="vertical-sep">|</span>
-                  <Link className={`hoverLink`} href={`/`}>Restart <i className="fas fa-undo"></i></Link>
+                  <Link className={`hoverLink`} href={`/`}>Home  <i className="fas fa-undo"></i></Link>
               </div>
               <div className="right">Copyright <i className="fas fa-copyright"></i> 
                 {year}

@@ -1,6 +1,6 @@
 'use client';
-import { createContext } from "react";
 import { useContext, useEffect } from 'react';
+import { createContext } from "react";
 
 export const StateContext = createContext<any>({});
 
@@ -11,14 +11,22 @@ export const capitalizeAllWords = (string: any) => {
 };
 
 export default function Home() {
-    const { state, setState } = useContext(StateContext);
+  const { state, setState } = useContext(StateContext);
 
-    useEffect(() => {
-      setState({ page: window.location.pathname.replace(`/`,``) });
-    }, [])
+  useEffect(() => {
+    setState({ 
+      updates: state.updates++, 
+      page: window.location.pathname.replace(`/`,``), 
+      devEnv: window.location.host.includes(`localhost`)
+    });
+  }, [])
 
-    return <div className={`inner`}>
-        <h1>Home</h1>
-        <h2>{state.page == `` ? `Home` : capitalizeAllWords(state.page)}</h2>
-    </div>
+  return <div className={`inner`}>
+      <h1>Home</h1>
+      <div className="column rightColumn">
+        <h2>Clicks: {state.updates}</h2>
+        <h2>Env: {state.devEnv ? `Dev` : `Prod`}</h2>
+        <h2>State: {state.page == `` ? `Home` : capitalizeAllWords(state.page)}</h2>
+      </div>
+  </div>
 }
