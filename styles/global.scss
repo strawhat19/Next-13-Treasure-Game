@@ -10,12 +10,17 @@ html,
 body {
     margin: 0;
     padding: 0;
+    color: white;
+    background: var(--piratechs);
     font-family: Montserrat, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
         Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 :root {
     --containerWidth: 75%;
+    @media (width < 768px) {
+        --containerWidth: 90%;
+    }
 
     --html: #f16529;
     --css: #2862e9;
@@ -51,15 +56,17 @@ body {
 
 header {
     top: 0;
+    width: 100%;
     grid-gap: 2em;
     display: flex;
-    height: 200px;
+    height: 150px;
     margin: 0 auto;
     font-weight: 500;
     font-size: 1.2em;
     position: sticky;
     align-items: center;
-    width: var(--containerWidth);
+    backdrop-filter: blur(8px);
+    background: var(--blackGlass);
     justify-content: space-between;
     .logo {
         display: flex;
@@ -80,9 +87,18 @@ header {
     }
 }
 
-main {
+.inner {
+    display: flex;
+    grid-gap: 1em;
     margin: 0 auto;
-    padding: 0 5em;
+    align-items: center;
+    width: var(--containerWidth);
+    justify-content: space-between;
+}
+
+main {
+    padding: 5em;
+    margin: 0 auto;
     width: var(--containerWidth);
 }
 
@@ -93,6 +109,46 @@ h1 {
 a {
     color: inherit;
     text-decoration: none;
+}
+
+footer {
+    left: 50%;
+    bottom: 0;
+    z-index: 1;
+    height: 40px;
+    display: flex;
+    grid-gap: 10px;
+    width: 100.1vw;
+    font-size: 13px;
+    flex-wrap: wrap;
+    position: fixed;
+    align-items: center;
+    backdrop-filter: blur(8px);
+    transform: translateX(-50%);
+    font-weight: 300 !important;
+    background: var(--blackGlass);
+    justify-content: space-between;
+
+    .hoverLink {
+        &::before {
+            bottom: -5px;
+            height: 1px;
+        }
+    }
+
+    div {
+        display: flex;
+        grid-gap: 1em;
+        align-items: center;
+    }
+
+    .vertical-sep, i {
+        color: var(--main);
+        &.fas.fa-undo {
+            font-size: 0.8em;
+            margin-bottom: 0em;
+        }
+    }
 }
 
 @keyframes logo-spin {
@@ -136,9 +192,5 @@ a {
 @media (prefers-color-scheme: dark) {
     html {
         color-scheme: dark;
-    }
-    body {
-        color: white;
-        background: black;
     }
 }

@@ -1,17 +1,17 @@
-/* Montserrat */
 *,
 *::before,
 *::after {
   margin: 0;
   padding: 0;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html,
 body {
   margin: 0;
   padding: 0;
+  color: white;
+  background: var(--piratechs);
   font-family: Montserrat, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
@@ -48,64 +48,60 @@ body {
   --softWhite: rgba(255, 255, 255, 0.87);
   --transition: 0.24s cubic-bezier(0.77, 0.2, 0.05, 1) !important;
 }
+@media (width < 768px) {
+  :root {
+    --containerWidth: 90%;
+  }
+}
 
 header {
   top: 0;
+  width: 100%;
   grid-gap: 2em;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  height: 200px;
+  height: 150px;
   margin: 0 auto;
   font-weight: 500;
   font-size: 1.2em;
   position: -webkit-sticky;
   position: sticky;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  width: var(--containerWidth);
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  align-items: center;
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  background: var(--blackGlass);
+  justify-content: space-between;
 }
-
 header .logo {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   grid-gap: 1em;
   font-weight: 700;
   font-size: 1.3em;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  align-items: center;
+  justify-content: center;
 }
-
 header .logo.reactLogo {
   -webkit-animation: logo-spin infinite 20s linear;
           animation: logo-spin infinite 20s linear;
 }
-
 header .menu {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   grid-gap: 2em;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.inner {
+  display: flex;
+  grid-gap: 1em;
+  margin: 0 auto;
+  align-items: center;
+  width: var(--containerWidth);
+  justify-content: space-between;
 }
 
 main {
+  padding: 5em;
   margin: 0 auto;
-  padding: 0 5em;
   width: var(--containerWidth);
 }
 
@@ -118,41 +114,66 @@ a {
   text-decoration: none;
 }
 
+footer {
+  left: 50%;
+  bottom: 0;
+  z-index: 1;
+  height: 40px;
+  display: flex;
+  grid-gap: 10px;
+  width: 100.1vw;
+  font-size: 13px;
+  flex-wrap: wrap;
+  position: fixed;
+  align-items: center;
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  transform: translateX(-50%);
+  font-weight: 300 !important;
+  background: var(--blackGlass);
+  justify-content: space-between;
+}
+footer .hoverLink::before {
+  bottom: -5px;
+  height: 1px;
+}
+footer div {
+  display: flex;
+  grid-gap: 1em;
+  align-items: center;
+}
+footer .vertical-sep, footer i {
+  color: var(--main);
+}
+footer .vertical-sep.fas.fa-undo, footer i.fas.fa-undo {
+  font-size: 0.8em;
+  margin-bottom: 0em;
+}
+
 @-webkit-keyframes logo-spin {
   0% {
-    -webkit-transform: rotate(0);
-            transform: rotate(0);
+    transform: rotate(0);
   }
   100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
 @keyframes logo-spin {
   0% {
-    -webkit-transform: rotate(0);
-            transform: rotate(0);
+    transform: rotate(0);
   }
   100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
-
 .hoverLink {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   grid-gap: 0.3em;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
   position: relative;
-  -webkit-transition: var(--transition);
   transition: var(--transition);
 }
-
 .hoverLink::before {
   content: "" !important;
   background: var(--main);
@@ -163,23 +184,15 @@ a {
   bottom: -10px;
   right: 0;
   z-index: 0;
-  -webkit-transform-origin: 0% 100%;
-          transform-origin: 0% 100%;
-  -webkit-transform: scale(0, 1);
-          transform: scale(0, 1);
-  -webkit-transition: var(--transition);
+  transform-origin: 0% 100%;
+  transform: scale(0, 1);
   transition: var(--transition);
 }
-
 .hoverLink:hover {
-  -webkit-transition: var(--transition);
   transition: var(--transition);
 }
-
 .hoverLink:hover::before {
-  -webkit-transform: scale(1, 1);
-          transform: scale(1, 1);
-  -webkit-transition: 500ms ease-in-out;
+  transform: scale(1, 1);
   transition: 500ms ease-in-out;
 }
 
@@ -187,9 +200,4 @@ a {
   html {
     color-scheme: dark;
   }
-  body {
-    color: white;
-    background: black;
-  }
-}
-/*# sourceMappingURL=global.css.map */
+}/*# sourceMappingURL=global.css.map */
