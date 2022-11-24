@@ -7,10 +7,10 @@ import { useEffect, useState } from 'react';
 
 export default function RootLayout({ children, } : { children: React.ReactNode; }) {
 
+  let [page, setPage] = useState(``);
   let [updates, setUpdates] = useState(0);
+  let [devEnv, setDevEnv] = useState(false);
   let [year, setYear] = useState(new Date().getFullYear());
-  let [page, setPage] = useState((window.location.pathname.replace(`/`,``)));
-  let [devEnv, setDevEnv] = useState(window.location.host.includes(`localhost`));
   let [state, setState] = useState({ page: page, updates: updates, devEnv: devEnv });
   
   useEffect(() => {
