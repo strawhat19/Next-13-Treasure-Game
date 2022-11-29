@@ -92,6 +92,22 @@ header {
     align-items: center;
     width: var(--containerWidth);
     justify-content: space-between;
+    &.pageInner {
+        flex-direction: column;
+    }
+    section {
+        width: 100%;
+        display: flex;
+        grid-gap: 1em;
+        margin: 0 auto;
+        align-items: center;
+        justify-content: space-between;
+        article {
+            display: flex;
+            grid-gap: 1em;
+            flex-direction: column;
+        }
+    }
 }
 
 .column {

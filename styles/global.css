@@ -3,7 +3,8 @@
 *::after {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 html,
@@ -54,6 +55,8 @@ header {
   top: 0;
   width: 100%;
   grid-gap: 2em;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   height: 150px;
   margin: 0 auto;
@@ -61,47 +64,113 @@ header {
   font-size: 1.2em;
   position: -webkit-sticky;
   position: sticky;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   -webkit-backdrop-filter: blur(8px);
           backdrop-filter: blur(8px);
   background: var(--blackGlass);
-  justify-content: space-between;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
+
 header .logo {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   grid-gap: 1em;
   font-weight: 700;
   font-size: 1.3em;
-  align-items: center;
-  justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
+
 header .logo.reactLogo {
   -webkit-animation: logo-spin infinite 20s linear;
           animation: logo-spin infinite 20s linear;
 }
+
 header .menu {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   grid-gap: 2em;
-  align-items: center;
-  justify-content: flex-end;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
 }
 
 .inner {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   grid-gap: 1em;
   margin: 0 auto;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   width: var(--containerWidth);
-  justify-content: space-between;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.inner.pageInner {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.inner section {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  grid-gap: 1em;
+  margin: 0 auto;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.inner section article {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  grid-gap: 1em;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 
 .column {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
+
 .column.rightColumn {
   text-align: right;
-  justify-content: flex-end;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
 }
 
 main {
@@ -129,32 +198,48 @@ footer {
   bottom: 0;
   z-index: 1;
   height: 40px;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   grid-gap: 10px;
   width: 100.1vw;
   font-size: 13px;
-  flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   position: fixed;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   -webkit-backdrop-filter: blur(8px);
           backdrop-filter: blur(8px);
-  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
   font-weight: 300 !important;
   background: var(--blackGlass);
-  justify-content: space-between;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
+
 footer .hoverLink::before {
   bottom: -5px;
   height: 1px;
 }
+
 footer div {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   grid-gap: 1em;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
+
 footer .vertical-sep, footer i {
   color: var(--main);
 }
+
 footer .vertical-sep.fas.fa-undo, footer i.fas.fa-undo {
   font-size: 0.8em;
   margin-bottom: 0em;
@@ -162,28 +247,39 @@ footer .vertical-sep.fas.fa-undo, footer i.fas.fa-undo {
 
 @-webkit-keyframes logo-spin {
   0% {
-    transform: rotate(0);
+    -webkit-transform: rotate(0);
+            transform: rotate(0);
   }
   100% {
-    transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
   }
 }
 
 @keyframes logo-spin {
   0% {
-    transform: rotate(0);
+    -webkit-transform: rotate(0);
+            transform: rotate(0);
   }
   100% {
-    transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
   }
 }
+
 .hoverLink {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   grid-gap: 0.3em;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   position: relative;
+  -webkit-transition: var(--transition);
   transition: var(--transition);
 }
+
 .hoverLink::before {
   content: "" !important;
   background: var(--main);
@@ -194,15 +290,23 @@ footer .vertical-sep.fas.fa-undo, footer i.fas.fa-undo {
   bottom: -10px;
   right: 0;
   z-index: 0;
-  transform-origin: 0% 100%;
-  transform: scale(0, 1);
+  -webkit-transform-origin: 0% 100%;
+          transform-origin: 0% 100%;
+  -webkit-transform: scale(0, 1);
+          transform: scale(0, 1);
+  -webkit-transition: var(--transition);
   transition: var(--transition);
 }
+
 .hoverLink:hover {
+  -webkit-transition: var(--transition);
   transition: var(--transition);
 }
+
 .hoverLink:hover::before {
-  transform: scale(1, 1);
+  -webkit-transform: scale(1, 1);
+          transform: scale(1, 1);
+  -webkit-transition: 500ms ease-in-out;
   transition: 500ms ease-in-out;
 }
 
@@ -210,4 +314,5 @@ footer .vertical-sep.fas.fa-undo, footer i.fas.fa-undo {
   html {
     color-scheme: dark;
   }
-}/*# sourceMappingURL=global.css.map */
+}
+/*# sourceMappingURL=global.css.map */
