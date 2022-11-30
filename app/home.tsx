@@ -11,11 +11,34 @@ export const capitalizeAllWords = (string: any) => {
 };
 
 export default function Home() {
-  const { state, setState } = useContext(StateContext);
   const custom = (e: any) => console.log(e);
+  const { state, setState } = useContext(StateContext);
+
+  const shuffle = (array: any) => {
+    let currentIndex = array.length, randomIndex;
+    // While there remain elements to shuffle.
+    while (currentIndex != 0) {
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+    return array;
+  }
+
+  const randomize = (e?: any) => {
+    setState({ ...state, content: shuffle(state.content.split(` `)).join(` `) });
+  }
+
+  const shufflePara = (para: any) => {
+    return para;
+  }
 
   useEffect(() => {
     setState({ 
+      content: state.content,
       updates: state.updates++, 
       page: window.location.pathname.replace(`/`,``), 
       devEnv: window.location.host.includes(`localhost`)
@@ -35,9 +58,14 @@ export default function Home() {
       <section>
         <article>
           <h2><i>Content</i></h2>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta, illo? Pariatur facilis iusto aspernatur, magnam praesentium quisquam eum, laboriosam nihil odit, fugiat quae ipsam itaque sequi numquam! Tempore, officiis rerum.</p>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta, illo? Pariatur facilis iusto aspernatur, magnam praesentium quisquam eum, laboriosam nihil odit, fugiat quae ipsam itaque sequi numquam! Tempore, officiis rerum.</p>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta, illo? Pariatur facilis iusto aspernatur, magnam praesentium quisquam eum, laboriosam nihil odit, fugiat quae ipsam itaque sequi numquam! Tempore, officiis rerum.</p>
+          <div className="grid">
+            <div className="gridItem">{state?.content ?? `Loading...`}</div>
+            <div className="gridItem">{state?.content ?? `Loading...`}</div>
+            <div className="gridItem">{state?.content ?? `Loading...`}</div>
+            <div className="gridItem">{state?.content ?? `Loading...`}</div>
+            <div className="gridItem">{state?.content ?? `Loading...`}</div>
+            <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
+          </div>
         </article>
       </section>
   </div>

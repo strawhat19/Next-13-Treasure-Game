@@ -193,6 +193,43 @@ a {
   text-decoration: none;
 }
 
+.grid {
+  width: 100%;
+  padding: 1em 0;
+  grid-gap: 1em;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (25%)[4];
+      grid-template-columns: repeat(4, 25%);
+}
+
+button {
+  border: 0;
+  padding: 1em;
+  outline: none;
+  cursor: pointer;
+  background: var(--blackGlass);
+  -webkit-transition: var(--transition);
+  transition: var(--transition);
+}
+
+button:hover {
+  -webkit-box-shadow: 0 0 8px 0px black;
+          box-shadow: 0 0 8px 0px black;
+}
+
+button:focus {
+  -webkit-filter: invert(1);
+          filter: invert(1);
+}
+
+button:active {
+  -webkit-box-shadow: inset 0 0 8px 0px black;
+          box-shadow: inset 0 0 8px 0px black;
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+}
+
 footer {
   left: 50%;
   bottom: 0;
