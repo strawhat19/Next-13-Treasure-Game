@@ -15,7 +15,7 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
 
   const content = `
   Hey, I’m Rakib, a web developer. I probably could have just used my name, but ultimately I decided on Piratechs.
-Maybe it’s because having a symbol to stand for and work towards helps me achieve my goals, more than working to glorify my own name. Also pirates are cool. This website is dedicated to art, tech, video, music, animations and games. Thanks for visiting!
+Maybe it’s because having a symbol to stand for and work towards helps me achieve my goals, more than working to glorify my own name. This website is dedicated to art, tech, video, music, animations and games. Thanks for visiting!
   `;
   
   useEffect(() => {

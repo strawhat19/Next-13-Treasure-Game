@@ -7,9 +7,9 @@ export default function Contact() {
 
     useEffect(() => {
       setState({ 
+        ...state,
         updates: state.updates++, 
-        page: window.location.pathname.replace(`/`,``), 
-        devEnv: window.location.host.includes(`localhost`)
+        page: window.location.pathname.replace(`/`,``),
       });
       console.log(`Contact`, state);
     }, [])

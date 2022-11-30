@@ -23,6 +23,8 @@ npm run dev
 yarn dev
 ```
 
+Prod [https://next-13-vite-comparison.vercel.app/](https://next-13-vite-comparison.vercel.app/) to see the prod build.
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
