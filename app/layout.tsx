@@ -20,7 +20,7 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
     setPage(window.location.pathname.replace(`/`,``));
     setDevEnv(window.location.host.includes(`localhost`));
     setState({ page, updates, devEnv, content });
-  }, [updates])
+  }, [])
 
   return (
     <html lang="en">
