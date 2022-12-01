@@ -11,7 +11,7 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
   let [updates, setUpdates] = useState(0);
   let [devEnv, setDevEnv] = useState(false);
   let [year, setYear] = useState(new Date().getFullYear());
-  let content = `Hey, I’m Rakib, a web developer. I probably could have just used my name, but ultimately I decided on Piratechs. Maybe it’s because having a symbol to stand for and work towards helps me achieve my goals, more than working to glorify my own name. This website is dedicated to art, tech, video, music, animations and games. Thanks for visiting!`;
+  let [content, setContent] = useState(`Hey, I’m Rakib, a web developer. I probably could have just used my name, but ultimately I decided on Piratechs. Maybe it’s because having a symbol to stand for and work towards helps me achieve my goals, more than working to glorify my own name. This website is dedicated to art, tech, video, music, animations and games. Thanks for visiting!`);
   let [state, setState] = useState({ page, updates, devEnv, content });
   
   useEffect(() => {
@@ -20,7 +20,7 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
     setPage(window.location.pathname.replace(`/`,``));
     setDevEnv(window.location.host.includes(`localhost`));
     setState({ page, updates, devEnv, content });
-  }, [])
+  }, [updates])
 
   return (
     <html lang="en">

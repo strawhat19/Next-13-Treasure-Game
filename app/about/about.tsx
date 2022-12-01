@@ -8,11 +8,11 @@ export default function About() {
     useEffect(() => {
       setState({ 
         ...state,
-        updates: state.updates++, 
+        updates: state.updates+1, 
         page: window.location.pathname.replace(`/`,``),
       });
       console.log(`About`, state);
-    }, [])
+    }, [setState])
 
     return <div className={`inner`}>
         <h1>About</h1>

@@ -8,7 +8,7 @@ export default function Projects() {
     useEffect(() => {
       setState({ 
         ...state,
-        updates: state.updates++, 
+        updates: state.updates+1, 
         page: window.location.pathname.replace(`/`,``),
       });
       console.log(`Projects`, state);

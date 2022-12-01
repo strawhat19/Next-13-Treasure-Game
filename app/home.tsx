@@ -26,17 +26,17 @@ export default function Home() {
   }
 
   const randomize = (e?: any) => {
-    setState({ ...state, content: shuffle(state.content.split(` `)).join(` `) });
+    setState({ ...state, updates: state.updates+1, content: shuffle(state.content.split(` `)).join(` `) });
   }
 
   useEffect(() => {
     setState({ 
       ...state,
-      updates: state.updates++, 
+      updates: state.updates+1, 
       page: window.location.pathname.replace(`/`,``),
     });
     console.log(`Home`, state);
-  }, [])
+  }, [setState])
 
   return <div className={`inner pageInner`}>
     <section className={`topContent`}>
