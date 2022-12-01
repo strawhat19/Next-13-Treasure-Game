@@ -80,6 +80,7 @@ header {
     .menu {
         display: flex;
         grid-gap: 2em;
+        list-style: none;
         align-items: center;
         justify-content: flex-end;
     }
@@ -93,16 +94,21 @@ header {
     width: var(--containerWidth);
     justify-content: space-between;
     &.pageInner {
+        width: 100%;
         flex-direction: column;
     }
     section {
         width: 100%;
+        height: 100%;
         display: flex;
         grid-gap: 1em;
         margin: 0 auto;
+        padding: 2em 0;
         align-items: center;
         justify-content: space-between;
         article {
+            width: 100%;
+            height: 100%;
             display: flex;
             grid-gap: 1em;
             flex-direction: column;
@@ -121,7 +127,8 @@ header {
 
 main {
     width: 100%;
-    padding: 5em;
+    height: 100%;
+    padding: 0em;
     margin: 0 auto;
 }
 
@@ -140,11 +147,11 @@ a {
 }
 
 .grid {
+    gap: 3%;
+    padding: 0;
     width: 100%;
     display: grid;
-    grid-gap: 1em;
-    padding: 1em 0;
-    grid-template-columns: repeat(3, 33%);
+    grid-template-columns: repeat(3, minmax(30%, 1fr));
 }
 
 button {
@@ -154,18 +161,16 @@ button {
     cursor: pointer;
     background: var(--blackGlass);
     transition: var(--transition);
-
-    &:hover {
+    &:hover { // Mouse Over
+        filter: invert(1);
         box-shadow: 0 0 8px 0px black;
     }
-
-    &:focus {
-        filter: invert(1);
+    &:focus { // Active or Was Pushed
+        filter: invert(1) brightness(1.5);
     }
-
-    &:active {
-        box-shadow: inset 0 0 8px 0px black;
+    &:active { // On Click
         transform: scale(1.1);
+        box-shadow: inset 0 0 8px 0px black;
     }
 }
 

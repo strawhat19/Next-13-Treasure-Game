@@ -82,6 +82,7 @@ header .logo.reactLogo {
 header .menu {
   display: flex;
   grid-gap: 2em;
+  list-style: none;
   align-items: center;
   justify-content: flex-end;
 }
@@ -95,17 +96,22 @@ header .menu {
   justify-content: space-between;
 }
 .inner.pageInner {
+  width: 100%;
   flex-direction: column;
 }
 .inner section {
   width: 100%;
+  height: 100%;
   display: flex;
   grid-gap: 1em;
   margin: 0 auto;
+  padding: 2em 0;
   align-items: center;
   justify-content: space-between;
 }
 .inner section article {
+  width: 100%;
+  height: 100%;
   display: flex;
   grid-gap: 1em;
   flex-direction: column;
@@ -122,7 +128,8 @@ header .menu {
 
 main {
   width: 100%;
-  padding: 5em;
+  height: 100%;
+  padding: 0em;
   margin: 0 auto;
 }
 
@@ -141,11 +148,11 @@ a {
 }
 
 .grid {
+  gap: 3%;
+  padding: 0;
   width: 100%;
   display: grid;
-  grid-gap: 1em;
-  padding: 1em 0;
-  grid-template-columns: repeat(3, 33%);
+  grid-template-columns: repeat(3, minmax(30%, 1fr));
 }
 
 button {
@@ -157,14 +164,15 @@ button {
   transition: var(--transition);
 }
 button:hover {
+  filter: invert(1);
   box-shadow: 0 0 8px 0px black;
 }
 button:focus {
-  filter: invert(1);
+  filter: invert(1) brightness(1.5);
 }
 button:active {
-  box-shadow: inset 0 0 8px 0px black;
   transform: scale(1.1);
+  box-shadow: inset 0 0 8px 0px black;
 }
 
 footer {

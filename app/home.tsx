@@ -12,7 +12,7 @@ export const capitalizeAllWords = (string: any) => {
 
 export default function Home() {
   const custom = (e: any) => console.log(e);
-  const { state, setState } = useContext(StateContext);
+  const { state, setState, page, setPage } = useContext(StateContext);
 
   const shuffle = (array: any) => {
     let currentIndex = array.length, randomIndex;
@@ -35,19 +35,24 @@ export default function Home() {
       updates: state.updates+1, 
       page: window.location.pathname.replace(`/`,``),
     });
+    setPage(window.location.pathname.replace(`/`,``));
     console.log(`Home`, state);
   }, [])
 
   return <div className={`inner pageInner`}>
     <section className={`topContent`}>
+      <div className="inner">
         <h1>Home</h1>
-      <div className={`column rightColumn`}>
-          <h2>Clicks: {state.updates}</h2>
-          <h2>State: {state.page == `` ? `Home` : capitalizeAllWords(state.page)}</h2>
+        <div className={`column rightColumn`}>
+            <h2>Clicks: {state.updates}</h2>
+            <h2>State: Home</h2>
+            <h2>State: {state.page == `` ? `Home` : capitalizeAllWords(state.page)}</h2>
         </div>
-      </section>
-      <section>
-        <article>
+      </div>
+    </section>
+    <section>
+     <div className="inner">
+      <article>
           <h2><i>Content</i></h2>
           <div className="grid">
             <div className="gridItem">{state?.content ?? `Loading...`}</div>
@@ -62,9 +67,11 @@ export default function Home() {
               <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
               <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
               <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
+              <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
             </div>
           </div>
         </article>
-      </section>
+      </div>
+    </section>
   </div>
 }

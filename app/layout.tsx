@@ -35,16 +35,16 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
         </head>
         <body>
           <header>
-            <div className="inner">
+            <nav className="inner">
               <Link className={`logo hoverLink`} href={`/`}>
                 <Image className={`logo reactLogo`} priority src={`/react.svg`} alt={`Logo`} width={`75`} height={`75`} /> Home
               </Link>
-              <div className="menu">
-                <Link className={`hoverLink`} href={`/about`}>About</Link>
-                <Link className={`hoverLink`} href={`/projects`}>Projects</Link>
-                <Link className={`hoverLink`} href={`/contact`}>Contact</Link>
-              </div>
-            </div>
+              <ul className="menu">
+                <li><Link className={`hoverLink`} href={`/about`}>About</Link></li>
+                <li><Link className={`hoverLink`} href={`/projects`}>Projects</Link></li>
+                <li><Link className={`hoverLink`} href={`/contact`}>Contact</Link></li>
+              </ul>
+            </nav>
           </header>
           <main>{children}</main>
           <footer>
