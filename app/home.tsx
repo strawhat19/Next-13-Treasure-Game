@@ -16,12 +16,9 @@ export default function Home() {
 
   const shuffle = (array: any) => {
     let currentIndex = array.length, randomIndex;
-    // While there remain elements to shuffle.
     while (currentIndex != 0) {
-      // Pick a remaining element.
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex--;
-      // And swap it with the current element.
       [array[currentIndex], array[randomIndex]] = [
         array[randomIndex], array[currentIndex]];
     }
@@ -32,16 +29,11 @@ export default function Home() {
     setState({ ...state, content: shuffle(state.content.split(` `)).join(` `) });
   }
 
-  const shufflePara = (para: any) => {
-    return para;
-  }
-
   useEffect(() => {
     setState({ 
-      content: state.content,
+      ...state,
       updates: state.updates++, 
-      page: window.location.pathname.replace(`/`,``), 
-      devEnv: window.location.host.includes(`localhost`)
+      page: window.location.pathname.replace(`/`,``),
     });
     console.log(`Home`, state);
   }, [])
@@ -50,9 +42,9 @@ export default function Home() {
     <section className={`topContent`}>
         <h1>Home</h1>
       <div className={`column rightColumn`}>
-          {state.devEnv && <h2>Clicks: {state.updates}</h2>}
+          <h2>Clicks: {state.updates}</h2>
           <h2>Env: {state.devEnv ? `Dev` : `Prod`}</h2>
-          {state.devEnv && <h2>State: {state.page == `` ? `Home` : capitalizeAllWords(state.page)}</h2>}
+          <h2>State: {state.page == `` ? `Home` : capitalizeAllWords(state.page)}</h2>
         </div>
       </section>
       <section>

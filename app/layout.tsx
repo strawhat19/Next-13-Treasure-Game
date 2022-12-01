@@ -8,21 +8,18 @@ import { useEffect, useState } from 'react';
 export default function RootLayout({ children, } : { children: React.ReactNode; }) {
 
   let [page, setPage] = useState(``);
-  let [state, setState] = useState({ });
   let [updates, setUpdates] = useState(0);
   let [devEnv, setDevEnv] = useState(false);
   let [year, setYear] = useState(new Date().getFullYear());
-
-  const content = `
-  Hey, I’m Rakib, a web developer. I probably could have just used my name, but ultimately I decided on Piratechs.
-Maybe it’s because having a symbol to stand for and work towards helps me achieve my goals, more than working to glorify my own name. This website is dedicated to art, tech, video, music, animations and games. Thanks for visiting!
-  `;
+  let content = `Hey, I’m Rakib, a web developer. I probably could have just used my name, but ultimately I decided on Piratechs. Maybe it’s because having a symbol to stand for and work towards helps me achieve my goals, more than working to glorify my own name. This website is dedicated to art, tech, video, music, animations and games. Thanks for visiting!`;
+  let [state, setState] = useState({ page, updates, devEnv, content });
   
   useEffect(() => {
+    setUpdates(updates);
     setYear(new Date().getFullYear());
     setPage(window.location.pathname.replace(`/`,``));
     setDevEnv(window.location.host.includes(`localhost`));
-    setState({ page: page, updates: updates, devEnv: devEnv, content });
+    setState({ page, updates, devEnv, content });
   }, [])
 
   return (
