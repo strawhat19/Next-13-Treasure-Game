@@ -147,18 +147,23 @@ a {
 }
 
 .grid {
-    gap: 3%;
+    gap: 1%;
     padding: 0;
     width: 100%;
     display: grid;
     grid-template-columns: repeat(3, minmax(30%, 1fr));
+    div {
+        margin: 3px;
+    }
 }
 
 button {
     border: 0;
-    padding: 1em;
+    padding: 10px;
     outline: none;
     cursor: pointer;
+    border-radius: 4px;
+    font-family: 'Montserrat';
     background: var(--blackGlass);
     transition: var(--transition);
     &:hover { // Mouse Over
