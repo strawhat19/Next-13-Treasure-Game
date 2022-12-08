@@ -7,7 +7,10 @@
 }
 
 :root {
-    --containerWidth: 90%;
+    --containerWidth: 90vw;
+    // @media (max-width: 992px) {
+    //     --containerWidth: 95%;
+    // }
 
     --html: #f16529;
     --css: #2862e9;
@@ -46,11 +49,14 @@ html,
 body {
     margin: 0;
     padding: 0;
+    width: 100%;
     color: white;
     background: var(--mainTeal);
     font-family: Montserrat, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
         Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
+
+body { min-height: 100vh; }
 
 header {
     top: 0;
@@ -113,6 +119,15 @@ header {
         }
     }
 }
+
+// @media (max-width: 992px) {
+//     body {
+//         font-size: 1.1em;
+//     }
+//     header {
+//         height: 200px;
+//     }
+// }
   
 #menuToggle {
     margin: 0px;
@@ -201,7 +216,7 @@ header {
     }
     section {
         width: 100%;
-        height: 100%;
+        height: auto;
         display: flex;
         grid-gap: 1em;
         margin: 0 auto;
@@ -211,7 +226,7 @@ header {
         justify-content: space-between;
         article {
             width: 100%;
-            height: 100%;
+            height: auto;
             display: flex;
             grid-gap: 1em;
             flex-direction: column;
@@ -231,7 +246,7 @@ header {
 
 main {
     width: 100%;
-    height: 100%;
+    height: auto;
     padding: 0em;
     margin: 0 auto;
     transition: var(--transition);
@@ -253,7 +268,7 @@ a {
 
 .flex {
     width: 100%;
-    height: 100%;
+    height: auto;
     display: flex;
     grid-gap: 1em;
     align-items: center;
@@ -266,6 +281,7 @@ a {
     gap: 1%;
     padding: 0;
     width: 100%;
+    height: auto;
     display: grid;
     transition: var(--transition);
     grid-template-columns: repeat(3, minmax(30%, 1fr));
@@ -274,7 +290,7 @@ a {
     }
     &.formGrid {
         gap: 15px;
-        height: 100%;
+        height: auto;
         padding: 0.3em 0 0;
         grid-template-rows: repeat(3, minmax(15px, 1fr));
         grid-template-columns: repeat(1, minmax(100%, 1fr));
