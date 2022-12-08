@@ -11,12 +11,12 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
 
   let [page, setPage] = useState(``);
   let [width, setWidth] = useState(0);
+  let [user, setUser] = useState(null);
   let [height, setHeight] = useState(0);
   let [updates, setUpdates] = useState(0);
   let [devEnv, setDevEnv] = useState(false);
   let [mobileMenu, setMobileMenu] = useState(false);
   let [year, setYear] = useState(new Date().getFullYear());
-  let [user, setUser] = useState(JSON.parse(localStorage.getItem(`user`) as any) || null);
   let [content, setContent] = useState(`Hey, I’m Rakib, a web developer. I probably could have just used my name, but ultimately I decided on Piratechs. Maybe it’s because having a symbol to stand for and work towards helps me achieve my goals, more than working to glorify my own name. This website is dedicated to art, tech, video, music, animations and games. Thanks for visiting!`);
 
   const toggleMobileMenu = (e: any) => {
@@ -28,6 +28,7 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
     setYear(new Date().getFullYear());
     setPage(window.location.pathname.replace(`/`,``));
     setDevEnv(window.location.host.includes(`localhost`));
+    setUser(JSON.parse(localStorage.getItem(`user`) as any) || null);
 
     const windowEvents = () => {
       setWidth(window.innerWidth);
