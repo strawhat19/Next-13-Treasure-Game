@@ -12,29 +12,29 @@ export default function Profile() {
     }, [])
 
     return <div className={`inner pageInner`}>
-        <section className={`topContent`}>
-          <div className="inner">
-            <h1>Profile</h1>
-            <div className={`column rightColumn`}>
-              <h2>Updates: {updates}</h2>
-              <h2>Width: {width}</h2>
+      <section className={`topContent`}>
+        <div className="inner">
+          <h1>Profile</h1>
+          <div className={`column rightColumn`}>
+            <h2>Updates: {updates}</h2>
+            <h2>Width: {width}</h2>
+          </div>
+        </div>
+      </section>
+      <section>
+        <div className="inner">
+          <article>
+            <h2><i>User is {user ? user?.name : `Signed Out`}</i></h2>
+            {user ? <div className="profile flex">
+              <span>Name: {user.name}</span>
+              <span>Email: {user.email}</span>
+              <span>Password: {user.password}</span>
+            </div> : `Please Sign In to View Content on this Page`}
+            <div className="flex auth">
+              <AuthForm />
             </div>
-          </div>
-        </section>
-        <section>
-          <div className="inner">
-            <article>
-              <h2><i>User is {user ? user?.email : `Signed Out`}</i></h2>
-              {user && <div className="profile flex">
-                <span>Name: {capitalizeAllWords(user.email.split(`@`)[0])}</span>
-                <span>Email: {user.email}</span>
-                <span>Password: {user.password}</span>
-              </div>}
-              <div className="flex auth">
-                <AuthForm />
-              </div>
-            </article>
-          </div>
-        </section>
+          </article>
+        </div>
+      </section>
     </div>
 }

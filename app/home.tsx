@@ -57,7 +57,7 @@ export default function Home() {
     <section>
      <div className="inner">
       <article>
-          <h2><i>User is {user ? user?.email : `Signed Out`}</i></h2>
+          <h2><i>User is {user ? user?.name : `Signed Out`}</i></h2>
           <div className="grid">
             <div className="gridItem">
               <div className="auth">

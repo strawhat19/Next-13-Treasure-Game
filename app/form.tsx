@@ -1,6 +1,6 @@
 'use client';
 import { useContext } from 'react';
-import { StateContext } from './home';
+import { capitalizeAllWords, StateContext } from './home';
 
 export default function AuthForm() {
     const { user, setUser, updates, setUpdates } = useContext(StateContext);
@@ -12,10 +12,12 @@ export default function AuthForm() {
         
         if (submit == `Sign In`) {
           let email = formFields.email.value ?? `email`;
+          let name = capitalizeAllWords(email.split(`@`)[0]);
           let password = formFields.password.value ?? `password`;
 
           let userObj = {
             id: 0,
+            name,
             email,
             password
           };
