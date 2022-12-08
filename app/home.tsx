@@ -21,7 +21,7 @@ export const getFormValuesFromFields = (formFields: any) => {
 }
 
 export default function Home() {
-  const { state, setState, user, setPage } = useContext(StateContext);
+  const { state, setState, width, user, setPage } = useContext(StateContext);
 
   const shuffle = (array: any) => {
     let currentIndex = array.length, randomIndex;
@@ -42,10 +42,10 @@ export default function Home() {
     setState({ 
       ...state,
       user,
+      page: `home`,
       updates: state.updates+1, 
-      page: window.location.pathname.replace(`/`,``),
     });
-    setPage(window.location.pathname.replace(`/`,``));
+    setPage(`home`);
     console.log(`Home`, state);
   }, [])
 
@@ -55,7 +55,7 @@ export default function Home() {
         <h1>Home</h1>
         <div className={`column rightColumn`}>
             <h2>Clicks: {state.updates}</h2>
-            <h2>State: Home</h2>
+            <h2>Width: {width}</h2>
             <h2>State: {state.page == `` ? `Home` : capitalizeAllWords(state.page)}</h2>
         </div>
       </div>
