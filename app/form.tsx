@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { StateContext } from './home';
 
 export default function AuthForm() {
-    const { user, setUser } = useContext(StateContext);
+    const { user, setUser, updates, setUpdates } = useContext(StateContext);
 
     const authForm = (e?: any) => {
         e.preventDefault();
@@ -13,15 +13,19 @@ export default function AuthForm() {
         if (submit == `Sign In`) {
           let email = formFields.email.value ?? `email`;
           let password = formFields.password.value ?? `password`;
-          setUser({
+
+          let userObj = {
             id: 0,
             email,
             password
-          });
-        //   setState({ ...state, updates: state.updates+1, user: user });
+          };
+
+          setUser(userObj);
+          localStorage.setItem(`user`, JSON.stringify(userObj));
+          setUpdates(updates+1);
         } else {
           setUser(null);
-        //   setState({ ...state, updates: state.updates+1, user: user });
+          setUpdates(updates+1);
         }
     }
 

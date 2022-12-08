@@ -202,7 +202,7 @@ header .menu.mobileNav li a {
   display: flex;
   grid-gap: 1em;
   margin: 0 auto;
-  padding: 2em 0;
+  padding: 1em 0;
   align-items: center;
   transition: var(--transition);
   justify-content: space-between;

@@ -1,42 +1,35 @@
 'use client';
 import AuthForm from '../form';
+import { StateContext } from '../home';
 import { useContext, useEffect } from 'react';
-import { capitalizeAllWords, StateContext } from '../home';
 
 export default function Projects() {
-    const { state, setState, user, page, setPage } = useContext(StateContext);
+  const { updates, setUpdates, width, user, setPage } = useContext(StateContext);
 
     useEffect(() => {
-      setState({ 
-        ...state,
-        updates: state.updates+1, 
-        page: window.location.pathname.replace(`/`,``),
-      });
-      setPage(window.location.pathname.replace(`/`,``));
-      console.log(`Projects`, state);
+      setPage(`Projects`);
+      setUpdates(updates+1);
     }, [])
 
     return <div className={`inner pageInner`}>
-      <section className={`topContent`}>
-        <div className="inner">
-          <h1>Projects</h1>
-          <div className="column rightColumn">
-              <h2>Clicks: {state.updates}</h2>
-              <h2>State: {capitalizeAllWords(page)}</h2>
-              <h2>State: {state.page == `` ? `Home` : capitalizeAllWords(state.page)}</h2>
-          </div>
-        </div>
-      </section>
-      <section>
-        <div className="inner">
-          <article>
-            <h2><i>Projects Auth State</i></h2>
-            <div className="flex auth">
-              <h3>User is {user ? user?.email : `Signed Out`}</h3>
-              <AuthForm />
+        <section className={`topContent`}>
+          <div className="inner">
+            <h1>Projects</h1>
+            <div className={`column rightColumn`}>
+              <h2>Updates: {updates}</h2>
+              <h2>Width: {width}</h2>
             </div>
-          </article>
-        </div>
-      </section>
-  </div>
+          </div>
+        </section>
+        <section>
+          <div className="inner">
+            <article>
+              <h2><i>User is {user ? user?.email : `Signed Out`}</i></h2>
+              <div className="flex auth">
+                <AuthForm />
+              </div>
+            </article>
+          </div>
+        </section>
+    </div>
 }

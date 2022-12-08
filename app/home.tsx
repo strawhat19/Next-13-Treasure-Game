@@ -1,7 +1,7 @@
 'use client';
-import { useContext, useEffect } from 'react';
-import { createContext } from "react";
 import AuthForm from './form';
+import { createContext } from "react";
+import { useContext, useEffect } from 'react';
 
 export const StateContext = createContext<any>({});
 
@@ -21,7 +21,7 @@ export const getFormValuesFromFields = (formFields: any) => {
 }
 
 export default function Home() {
-  const { state, setState, width, user, setPage } = useContext(StateContext);
+  const { updates, setUpdates, content, setContent, width, user, setPage } = useContext(StateContext);
 
   const shuffle = (array: any) => {
     let currentIndex = array.length, randomIndex;
@@ -35,18 +35,13 @@ export default function Home() {
   }
 
   const randomize = (e?: any) => {
-    setState({ ...state, updates: state.updates+1, content: shuffle(state.content.split(` `)).join(` `) });
+    setUpdates(updates+1);
+    setContent(shuffle(content.split(` `)).join(` `));
   }
 
   useEffect(() => {
-    setState({ 
-      ...state,
-      user,
-      page: `home`,
-      updates: state.updates+1, 
-    });
-    setPage(`home`);
-    console.log(`Home`, state);
+    setPage(`Home`);
+    setUpdates(updates+1);
   }, [])
 
   return <div className={`inner pageInner`}>
@@ -54,27 +49,25 @@ export default function Home() {
       <div className="inner">
         <h1>Home</h1>
         <div className={`column rightColumn`}>
-            <h2>Clicks: {state.updates}</h2>
-            <h2>Width: {width}</h2>
-            <h2>State: {state.page == `` ? `Home` : capitalizeAllWords(state.page)}</h2>
+          <h2>Updates: {updates}</h2>
+          <h2>Width: {width}</h2>
         </div>
       </div>
     </section>
     <section>
      <div className="inner">
       <article>
-          <h2><i>Home Auth State</i></h2>
+          <h2><i>User is {user ? user?.email : `Signed Out`}</i></h2>
           <div className="grid">
             <div className="gridItem">
               <div className="auth">
-                <h3>User is {user ? user?.email : `Signed Out`}</h3>
                 <AuthForm />
               </div>
             </div>
-            <div className="gridItem">{state?.content ?? `Loading...`}</div>
-            <div className="gridItem">{state?.content ?? `Loading...`}</div>
-            <div className="gridItem">{state?.content ?? `Loading...`}</div>
-            <div className="gridItem">{state?.content ?? `Loading...`}</div>
+            <div className="gridItem">{content ?? `Loading...`}</div>
+            <div className="gridItem">{content ?? `Loading...`}</div>
+            <div className="gridItem">{content ?? `Loading...`}</div>
+            <div className="gridItem">{content ?? `Loading...`}</div>
             <div className="grid">
               <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
               <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
