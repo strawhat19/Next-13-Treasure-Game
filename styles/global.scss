@@ -24,6 +24,7 @@
     --git: #e94e31;
     --swift: #f4993a;
     --discord: #7289DA;
+    --skeleton: #4c4c4c;
     --bg: #1f1f1f;
     --posterH: 250px;
     --posterW: 165px;
@@ -199,6 +200,40 @@ header {
                 transform: rotate(0deg) scale(0.2, 0.2);
             }
         }
+    }
+}
+
+.skeleton {
+    width: 100%;
+    transition: var(--transition);
+    * {
+       * {
+        position: relative;
+        filter: blur(5px) brightness(1.35);
+        background: var(--skeleton) !important;
+        animation: skeleton 1.5s var(--transition) infinite alternate;
+        &::before {
+            content: 'Loading...';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--skeleton) !important;
+        }
+       }
+    }
+}
+
+@keyframes skeleton {
+    0% {
+        filter: blur(5px) brightness(1.35);
+    }
+    100% {
+        filter: blur(3px) brightness(1);
     }
 }
 

@@ -42,10 +42,12 @@ export default function AuthForm() {
         {!user && <input placeholder="Email" type="email" name="email" autoComplete={`email`} required />}
         {!user && <input placeholder="Password" type="password" name="password" autoComplete={`current-password`} required />}
         <input type="submit" name="authFormSubmit" value={user ? `Sign Out` : `Sign In`} />
-      </form> : <form id="authForm" className={`grid formGrid`} onSubmit={authForm}>
-        <input placeholder="Email" type="email" name="email" autoComplete={`email`} required />
-        <input placeholder="Password" type="password" name="password" autoComplete={`current-password`} required />
-        <input type="submit" name="authFormSubmit" value={`Loading`} disabled />
-      </form>}
+      </form> : <div className={`skeleton`}>
+          <form id="authForm" className={`grid formGrid`} onSubmit={authForm}>
+            <input placeholder="Email" type="email" name="email" autoComplete={`email`} required />
+            <input placeholder="Password" type="password" name="password" autoComplete={`current-password`} required />
+            <input type="submit" name="authFormSubmit" value={user ? `Sign Out` : `Sign In`} />
+          </form>
+      </div>}
     </>
 }

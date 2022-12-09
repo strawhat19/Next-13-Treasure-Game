@@ -21,6 +21,7 @@
   --git: #e94e31;
   --swift: #f4993a;
   --discord: #7289DA;
+  --skeleton: #4c4c4c;
   --bg: #1f1f1f;
   --posterH: 250px;
   --posterW: 165px;
@@ -264,6 +265,62 @@ header .menu.mobileNav li a {
   opacity: 0;
   -webkit-transform: rotate(0deg) scale(0.2, 0.2);
           transform: rotate(0deg) scale(0.2, 0.2);
+}
+
+.skeleton {
+  width: 100%;
+  -webkit-transition: var(--transition);
+  transition: var(--transition);
+}
+
+.skeleton * * {
+  position: relative;
+  -webkit-filter: blur(5px) brightness(1.35);
+          filter: blur(5px) brightness(1.35);
+  background: var(--skeleton) !important;
+  -webkit-animation: skeleton 1.5s var(--transition) infinite alternate;
+          animation: skeleton 1.5s var(--transition) infinite alternate;
+}
+
+.skeleton * *::before {
+  content: 'Loading...';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: var(--skeleton) !important;
+}
+
+@-webkit-keyframes skeleton {
+  0% {
+    -webkit-filter: blur(5px) brightness(1.35);
+            filter: blur(5px) brightness(1.35);
+  }
+  100% {
+    -webkit-filter: blur(3px) brightness(1);
+            filter: blur(3px) brightness(1);
+  }
+}
+
+@keyframes skeleton {
+  0% {
+    -webkit-filter: blur(5px) brightness(1.35);
+            filter: blur(5px) brightness(1.35);
+  }
+  100% {
+    -webkit-filter: blur(3px) brightness(1);
+            filter: blur(3px) brightness(1);
+  }
 }
 
 .inner {
