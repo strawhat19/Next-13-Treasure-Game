@@ -58,14 +58,16 @@ export default function Home() {
      <div className="inner">
       <article>
           <h2><i>User is {user ? user?.name : `Signed Out`}</i></h2>
-          <div className="grid">
-            <div className="gridItem">
-              <div className="auth">
-                <AuthForm />
-              </div>
-            </div>
-            <div className="gridItem">{content ?? `Loading...`}</div>
-            <div className="gridItem">{content ?? `Loading...`}</div>
+          <div className="flex auth">
+            <AuthForm />
+          </div>
+        </article>
+      </div>
+    </section>
+    <section>
+     <div className="inner">
+      <article>
+      <div className="grid">
             <div className="gridItem">{content ?? `Loading...`}</div>
             <div className="gridItem">{content ?? `Loading...`}</div>
             <div className="grid">

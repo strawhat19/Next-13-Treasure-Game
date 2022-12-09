@@ -57,7 +57,7 @@ body {
         Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-body { min-height: 100vh; }
+body { min-height: 100vh; letter-spacing: .5px; }
 
 header {
     top: 0;
@@ -72,7 +72,6 @@ header {
     align-items: center;
     backdrop-filter: blur(8px);
     background: var(--blackGlass);
-    transition: var(--transition);
     justify-content: space-between;
     .logo {
         display: flex;
@@ -81,7 +80,6 @@ header {
         font-size: 1.3em;
         align-items: center;
         justify-content: center;
-        transition: var(--transition);
         &.reactLogo {
             animation: logo-spin infinite 20s linear;
         }
@@ -92,7 +90,6 @@ header {
         list-style: none;
         align-items: center;
         justify-content: flex-end;
-        transition: var(--transition);
         animation: fadeIn var(--transition);
         &.hide {
             display: none;
@@ -203,10 +200,16 @@ header {
     }
 }
 
+.blur {
+    filter: blur(3px);
+}
+
 .skeleton {
     width: 100%;
     transition: var(--transition);
     * {
+        width: 100%;
+        transition: var(--transition);
        * {
         position: relative;
         filter: blur(5px) brightness(1.35);
@@ -239,11 +242,9 @@ header {
 
 .inner {
     display: flex;
-    grid-gap: 1em;
     margin: 0 auto;
     align-items: center;
     width: var(--containerWidth);
-    transition: var(--transition);
     justify-content: space-between;
     &.pageInner {
         width: 100%;
@@ -257,7 +258,6 @@ header {
         margin: 0 auto;
         padding: 1em 0;
         align-items: center;
-        transition: var(--transition);
         justify-content: space-between;
         article {
             width: 100%;
@@ -265,7 +265,6 @@ header {
             display: flex;
             grid-gap: 1em;
             flex-direction: column;
-            transition: var(--transition);
         }
     }
 }
@@ -284,7 +283,6 @@ main {
     height: auto;
     padding: 0em;
     margin: 0 auto;
-    transition: var(--transition);
 }
 
 h1 {
@@ -293,7 +291,7 @@ h1 {
 }
 
 h2 {
-    font-weight: 400;
+    font-weight: 600;
 }
 
 a {
@@ -302,14 +300,24 @@ a {
 }
 
 .flex {
-    width: 100%;
     height: auto;
     display: flex;
     grid-gap: 1em;
     align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    transition: var(--transition);
+    &:not(.start) {
+        justify-content: center;
+    }
+    &.stretch {
+        width: 100%;
+    }
+    &:not(.row) {
+        flex-direction: column;
+    }
+    * {
+        &:not(.contain) {
+            width: 100%;
+        }
+    }
 }
 
 .grid {
@@ -318,18 +326,15 @@ a {
     width: 100%;
     height: auto;
     display: grid;
-    transition: var(--transition);
     grid-template-columns: repeat(3, minmax(30%, 1fr));
     div {
-        margin: 3px;
+        margin: 0px;
+        height: 100%;
     }
-    &.formGrid {
-        gap: 15px;
-        height: auto;
-        padding: 0.3em 0 0;
-        grid-template-rows: repeat(3, minmax(15px, 1fr));
-        grid-template-columns: repeat(1, minmax(100%, 1fr));
-    }
+}
+
+form {
+    height: 100% !important;
 }
 
 input {
@@ -362,7 +367,7 @@ button, input[type="submit"] {
         filter: invert(1) brightness(1.5);
     }
     &:active { // On Click
-        transform: scale(1.1);
+        transform: scale(1.01);
         box-shadow: inset 0 0 8px 0px black;
     }
 }

@@ -27,8 +27,10 @@ export default function Profile() {
             <h2><i>User is {user ? user?.name : `Signed Out`}</i></h2>
             {user ? <div className="profile flex">
               <span>Name: {user.name}</span>
-              <span>Email: {user.email}</span>
-              <span>Password: {user.password}</span>
+              {user.email && <span>Email: {user.email}</span>}
+              {user.password && <span className={`flex row start`}>Password: <span className={`flex row contain`}>{user?.password?.split(``).map((char: any, i: any) => {
+                return <span key={i} className={`blur`}>X</span>
+              })}</span></span>}
             </div> : `Please Sign In to View Content on this Page`}
             <div className="flex auth">
               <AuthForm />

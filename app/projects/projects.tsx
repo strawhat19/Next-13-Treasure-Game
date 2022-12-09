@@ -1,12 +1,14 @@
 'use client';
 import AuthForm from '../form';
+import Project from './project';
 import { StateContext } from '../home';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useRef } from 'react';
 
 export default function Projects() {
+  const initialLoad = useRef(false);
   const [loaded, setLoaded] = useState(false);
-  const { updates, setUpdates, width, user, setPage } = useContext(StateContext);
   const [projects, setProjects] = useState<any>([]);
+  const { updates, setUpdates, width, user, setPage, setUser } = useContext(StateContext);
 
   function formatDate(date: any) {
     let hours = date.getHours();
@@ -41,69 +43,74 @@ export default function Projects() {
         const filteredRepo = { name, owner, url: html_url, topics, date: created_at, license, updated: updated_at, homepage, language, deployment: deployments_url, description };
         repositories.push(filteredRepo);
       });
-      const user = { name, url: html_url, bio, projects: repositories.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()), website: blog, avatar: avatar_url, login, repoLink: repos_url, repoNum: public_repos, starred: starred_url, followers, following, lastUpdated: formatDate(new Date()) };
+      const gitUser = { name, url: html_url, bio, projects: repositories.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()), website: blog, avatar: avatar_url, login, repoLink: repos_url, repoNum: public_repos, starred: starred_url, followers, following, lastUpdated: formatDate(new Date()) };
 
-      setProjects(user.projects);
-      console.log(`Updated Projects`, user.projects);
-      localStorage.setItem(`projects`, JSON.stringify(user.projects));
+      setUser({...user, ...gitUser});
+      setProjects(gitUser.projects);
+      console.log(`Updated User`, gitUser);
+      console.log(`Updated Projects`, gitUser.projects);
+      localStorage.setItem(`user`, JSON.stringify({...user, ...gitUser}));
+      localStorage.setItem(`projects`, JSON.stringify(gitUser.projects));
     };
   }
 
-    useEffect(() => {
+  useEffect(() => {
+    let firstLoad = !initialLoad.current;
+    let updated = initialLoad.current;
+    let cachedUser = JSON.parse(localStorage.getItem(`user`) as any);
+    let cachedProjects = JSON.parse(localStorage.getItem(`projects`) as any) || [];
+
+    if (firstLoad) {
       setLoaded(true);
       setPage(`Projects`);
       setUpdates(updates+1);
-      setProjects(JSON.parse(localStorage.getItem(`projects`) as any));
-      if (loaded) {
-        if (projects.length == 0) {
-          getGithubData();
-        } else {
-          console.log(`Projects`, projects);
-        };
-      }
-    }, [])
+      if (!cachedUser || cachedProjects.length == 0) {
+        getGithubData();
+      } else {
+        setProjects(cachedProjects);
+        setUser({...user, ...cachedUser});
+        console.log(`Cached Projects`, cachedProjects);
+      };
+    }
 
-    return <div className={`inner pageInner`}>
-      <section className={`topContent`}>
-        <div className="inner">
-          <h1>Projects</h1>
-          <div className={`column rightColumn`}>
-            <h2>Updates: {updates}</h2>
-            <h2>Width: {width}</h2>
+    if (updated) {
+      if (cachedUser) console.log(`Cached User`, cachedUser);
+    }
+
+    return () => {initialLoad.current = true;};
+  }, [])
+
+  return <div className={`inner pageInner`}>
+    <section className={`topContent`}>
+      <div className="inner">
+        <h1>Projects</h1>
+        <div className={`column rightColumn`}>
+          <h2>Updates: {updates}</h2>
+          <h2>Width: {width}</h2>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div className="inner">
+        <article>
+          <h2><i>User is {user ? user?.name : `Signed Out`}</i></h2>
+          {!user && <div className="flex auth">
+            <AuthForm />
+          </div>}
+        </article>
+      </div>
+    </section>
+    <section>
+      <div className="inner">
+        <article>
+          <h2><i>Projects</i></h2>
+          <div className="flex projects">
+            {loaded && projects && projects.length > 0 ? projects.map((project: any, index: any) => <Project key={index} project={project} />) : <div className={`skeleton`}>
+              <h4>Loading...</h4>  
+            </div>}
           </div>
-        </div>
-      </section>
-      <section>
-        <div className="inner">
-          <article>
-            <h2><i>User is {user ? user?.name : `Signed Out`}</i></h2>
-            <div className="flex auth">
-              <AuthForm />
-            </div>
-          </article>
-        </div>
-      </section>
-      <section>
-        <div className="inner">
-          <article>
-            <h2><i>Projects</i></h2>
-            <div className="flex projects">
-              {loaded ? projects.map((pr: any) => {
-                return (
-                  <div key={pr.name} className={`project`}>{pr.name}</div>
-                )
-              }) : <div className={`skeleton`}>
-                {
-                    projects.map((pr: any) => {
-                      return (
-                        <div key={pr.name} className={`project`}>{pr.name}</div>
-                      )
-                    })
-                }
-                </div>}
-            </div>
-          </article>
-        </div>
-      </section>
-    </div>
+        </article>
+      </div>
+    </section>
+  </div>
 }
