@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from 'react';
 export default function Projects() {
   const [loaded, setLoaded] = useState(false);
   const { updates, setUpdates, width, user, setPage } = useContext(StateContext);
-  const [projects, setProjects] = useState<any>(JSON.parse(localStorage.getItem(`projects`) as any) || []);
+  const [projects, setProjects] = useState<any>([]);
 
   function formatDate(date: any) {
     let hours = date.getHours();
@@ -53,6 +53,7 @@ export default function Projects() {
       setLoaded(true);
       setPage(`Projects`);
       setUpdates(updates+1);
+      setProjects(JSON.parse(localStorage.getItem(`projects`) as any));
       if (loaded) {
         if (projects.length == 0) {
           getGithubData();
