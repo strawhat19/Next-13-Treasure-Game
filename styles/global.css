@@ -8,7 +8,7 @@
 }
 
 :root {
-  --containerWidth: 90vw;
+  --containerWidth: 90%;
   --html: #f16529;
   --css: #2862e9;
   --js: #f7df1e;

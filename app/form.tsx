@@ -1,8 +1,9 @@
 'use client';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { capitalizeAllWords, StateContext } from './home';
 
 export default function AuthForm() {
+    const [loaded, setLoaded] = useState(false);
     const { user, setUser, updates, setUpdates } = useContext(StateContext);
 
     const authForm = (e?: any) => {
@@ -28,12 +29,23 @@ export default function AuthForm() {
         } else {
           setUser(null);
           setUpdates(updates+1);
+          localStorage.setItem(`user`, JSON.stringify(null));
         }
     }
 
-    return <form id="authForm" className={`grid formGrid`} onSubmit={authForm}>
+    useEffect(() => {
+      setLoaded(true);
+    }, [])
+
+    return <>
+      {loaded ? <form id="authForm" className={`grid formGrid`} onSubmit={authForm}>
         {!user && <input placeholder="Email" type="email" name="email" autoComplete={`email`} required />}
-        {!user && <input placeholder="Password" type="password" name="password" required />}
+        {!user && <input placeholder="Password" type="password" name="password" autoComplete={`current-password`} required />}
         <input type="submit" name="authFormSubmit" value={user ? `Sign Out` : `Sign In`} />
-    </form>
+      </form> : <form id="authForm" className={`grid formGrid`} onSubmit={authForm}>
+        <input placeholder="Email" type="email" name="email" autoComplete={`email`} required />
+        <input placeholder="Password" type="password" name="password" autoComplete={`current-password`} required />
+        <input type="submit" name="authFormSubmit" value={`Loading`} disabled />
+      </form>}
+    </>
 }
