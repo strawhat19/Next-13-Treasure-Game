@@ -1,6 +1,6 @@
 'use client';
 import { useContext, useEffect, useState } from 'react';
-import { capitalizeAllWords, StateContext } from './home';
+import { capitalizeAllWords, StateContext } from '../home';
 
 export default function AuthForm() {
     const [loaded, setLoaded] = useState(false);

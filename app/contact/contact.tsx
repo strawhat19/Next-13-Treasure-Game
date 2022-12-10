@@ -1,6 +1,7 @@
 'use client';
-import AuthForm from '../form';
 import { StateContext } from '../home';
+import AuthForm from '../components/form';
+import Banner from '../components/banner';
 import { useContext, useEffect } from 'react';
 
 export default function Contact() {
@@ -12,15 +13,7 @@ export default function Contact() {
     }, [])
 
     return <div className={`inner pageInner`}>
-      <section className={`topContent`}>
-        <div className="inner">
-          <h1>Contact</h1>
-          <div className={`column rightColumn`}>
-            <h2>Updates: {updates}</h2>
-            <h2>Width: {width}</h2>
-          </div>
-        </div>
-      </section>
+      <Banner id={`contactBanner`} />
       <section>
         <div className="inner">
           <article>

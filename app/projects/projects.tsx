@@ -1,7 +1,8 @@
 'use client';
-import AuthForm from '../form';
 import Project from './project';
 import { StateContext } from '../home';
+import Banner from '../components/banner';
+import AuthForm from '../components/form';
 import { useContext, useEffect, useState, useRef } from 'react';
 
 export default function Projects() {
@@ -81,15 +82,7 @@ export default function Projects() {
   }, [])
 
   return <div className={`inner pageInner`}>
-    <section className={`topContent`}>
-      <div className="inner">
-        <h1>Projects</h1>
-        <div className={`column rightColumn`}>
-          <h2>Updates: {updates}</h2>
-          <h2>Width: {width}</h2>
-        </div>
-      </div>
-    </section>
+    <Banner id={`projectsBanner`} />
     <section>
       <div className="inner">
         <article>

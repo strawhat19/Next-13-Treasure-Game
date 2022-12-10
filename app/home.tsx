@@ -1,7 +1,8 @@
 'use client';
-import AuthForm from './form';
+import AuthForm from './components/form';
 import { createContext } from "react";
 import { useContext, useEffect } from 'react';
+import Banner from './components/banner';
 
 export const StateContext = createContext<any>({});
 
@@ -45,15 +46,7 @@ export default function Home() {
   }, [])
 
   return <div className={`inner pageInner`}>
-    <section className={`topContent`}>
-      <div className="inner">
-        <h1>Home</h1>
-        <div className={`column rightColumn`}>
-          <h2>Updates: {updates}</h2>
-          <h2>Width: {width}</h2>
-        </div>
-      </div>
-    </section>
+    <Banner id={`homeBanner`} />
     <section>
      <div className="inner">
       <article>

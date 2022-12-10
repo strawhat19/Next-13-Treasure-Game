@@ -1,10 +1,11 @@
 'use client';
-import AuthForm from '../form';
 import { StateContext } from '../home';
+import Banner from '../components/banner';
+import AuthForm from '../components/form';
 import { useContext, useEffect } from 'react';
 
 export default function About() {
-  const { updates, setUpdates, width, user, setPage } = useContext(StateContext);
+  const { updates, setUpdates, user, setPage } = useContext(StateContext);
 
     useEffect(() => {
       setPage(`About`);
@@ -12,15 +13,7 @@ export default function About() {
     }, [])
 
     return <div className={`inner pageInner`}>
-      <section className={`topContent`}>
-        <div className="inner">
-          <h1>About</h1>
-          <div className={`column rightColumn`}>
-            <h2>Updates: {updates}</h2>
-            <h2>Width: {width}</h2>
-          </div>
-        </div>
-      </section>
+      <Banner id={`aboutBanner`} />
       <section>
         <div className="inner">
           <article>

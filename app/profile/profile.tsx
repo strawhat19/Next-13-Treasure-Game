@@ -1,7 +1,8 @@
 'use client';
-import AuthForm from '../form';
+import { StateContext } from '../home';
+import Banner from '../components/banner';
+import AuthForm from '../components/form';
 import { useContext, useEffect } from 'react';
-import { capitalizeAllWords, StateContext } from '../home';
 
 export default function Profile() {
   const { updates, setUpdates, width, user, setPage } = useContext(StateContext);
@@ -12,15 +13,7 @@ export default function Profile() {
     }, [])
 
     return <div className={`inner pageInner`}>
-      <section className={`topContent`}>
-        <div className="inner">
-          <h1>Profile</h1>
-          <div className={`column rightColumn`}>
-            <h2>Updates: {updates}</h2>
-            <h2>Width: {width}</h2>
-          </div>
-        </div>
-      </section>
+      <Banner id={`profileBanner`} />
       <section>
         <div className="inner">
           <article>
