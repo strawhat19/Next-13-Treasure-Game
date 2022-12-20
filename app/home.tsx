@@ -1,8 +1,8 @@
 'use client';
-import AuthForm from './components/form';
 import { createContext } from "react";
-import { useContext, useEffect } from 'react';
 import Banner from './components/banner';
+import AuthForm from './components/form';
+import { useContext, useEffect } from 'react';
 
 export const StateContext = createContext<any>({});
 
@@ -22,7 +22,7 @@ export const getFormValuesFromFields = (formFields: any) => {
 }
 
 export default function Home() {
-  const { updates, setUpdates, content, setContent, width, user, setPage } = useContext(StateContext);
+  const { updates, setUpdates, content, setContent, user, setPage } = useContext(StateContext);
 
   const shuffle = (array: any) => {
     let currentIndex = array.length, randomIndex;
@@ -40,10 +40,17 @@ export default function Home() {
     setContent(shuffle(content.split(` `)).join(` `));
   }
 
+  let loaded = false;
   useEffect(() => {
     setPage(`Home`);
     setUpdates(updates+1);
-  }, [])
+    loaded = !loaded;
+    if (loaded) {
+      return;
+    } else {
+      console.log(`App Loaded`);
+    };
+  }, []);
 
   return <div className={`inner pageInner`}>
     <Banner id={`homeBanner`} />
