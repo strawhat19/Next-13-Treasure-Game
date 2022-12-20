@@ -38,7 +38,7 @@ export default function AuthForm() {
       }
   }
 
-  const formatDate = (date) => {
+  const formatDate = (date: any) => {
     let hours = date.getHours();
     let minutes = date.getMinutes();
     let ampm = hours >= 12 ? 'PM' : 'AM';
@@ -49,7 +49,7 @@ export default function AuthForm() {
     return (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + " " + strTime;
   }
 
-  const addUser = (name, email, password) => {
+  const addUser = (name: any, email: any, password: any) => {
     client.read({ limit: 99999 }).then(function (data: any) {
       let users = JSON.parse(data);
       let dataToAdd = { id: users.length + 1, name: name, email: email, password: password };
