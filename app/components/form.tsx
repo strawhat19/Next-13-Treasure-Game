@@ -64,7 +64,7 @@ export default function AuthForm() {
     });
   }
 
-  const updateUser = (fieldName, fieldValue, valueToUpdateObj) => {
+  const updateUser = (fieldName: any, fieldValue: any, valueToUpdateObj: any) => {
     client.update(fieldName, fieldValue, valueToUpdateObj).then(function (data: any) {
       console.log(data);
     });
