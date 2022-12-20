@@ -5,22 +5,22 @@ import Banner from '../components/banner';
 import AuthForm from '../components/form';
 import { useContext, useEffect, useState, useRef } from 'react';
 
+export const formatDate = (date: any) => {
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  let strTime = hours + ':' + minutes + ' ' + ampm;
+  return strTime + ` ` + (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear();
+}
+
 export default function Projects() {
   const initialLoad = useRef(false);
   const [loaded, setLoaded] = useState(false);
   const [projects, setProjects] = useState<any>([]);
   const { updates, setUpdates, width, user, setPage, setUser } = useContext(StateContext);
-
-  function formatDate(date: any) {
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-    let ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    let strTime = hours + ':' + minutes + ' ' + ampm;
-    return (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + " " + strTime;
-  }
 
   // Github
   const getGithubData = async () => {

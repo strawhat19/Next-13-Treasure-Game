@@ -1,10 +1,13 @@
 'use client';
 const sheetdb = require('sheetdb-node');
-import { useContext, useEffect, useState } from 'react';
+import { formatDate } from '../projects/projects';
 import { capitalizeAllWords, StateContext } from '../home';
 export const client = sheetdb({ address: 'zq3w3fff2pbsd' });
+import { useContext, useEffect, useRef, useState } from 'react';
 
 export default function AuthForm() {
+  const loadedRef = useRef(false);
+  const [users, setUsers] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const { user, setUser, updates, setUpdates } = useContext(StateContext);
 
@@ -17,51 +20,34 @@ export default function AuthForm() {
         let email = formFields.email.value ?? `email`;
         let name = capitalizeAllWords(email.split(`@`)[0]);
         let password = formFields.password.value ?? `password`;
+        let updated = formatDate(new Date());
+        let lastSignin = formatDate(new Date());
+        let registered = formatDate(new Date());
 
-        let userObj = {
-          id: 1,
-          name,
-          email,
-          password
-        };
+        client.read({ limit: 99999 }).then(function (data: any) {
+          let latestUsers = JSON.parse(data);
+          let potentialUser = { id: latestUsers.length + 1, name: name, email: email, password: password, updated: updated, lastSignin: lastSignin, registered: registered, roles: [`user`] };
 
-        setUser(userObj);
-        // addUser(name, email, password);
-        updateUser(`id`, 1, { updated: formatDate(new Date()) });
-
-        localStorage.setItem(`user`, JSON.stringify(userObj));
-        setUpdates(updates+1);
+          client.create(potentialUser).then(function (data: any) {
+            setUser(potentialUser);
+            localStorage.setItem(`user`, JSON.stringify(potentialUser));
+            setUpdates(updates + 1);
+            client.read({ limit: 99999 }).then(function (data: any) {
+              let databaseData = JSON.parse(data);
+              console.log(`Updated Users`, databaseData, `with Data`, potentialUser);
+            });
+          }, function (err: any) {
+            console.log(err);
+          });
+        }, function (err: any) {
+          console.log(err);
+        });
+        // updateUser(`id`, 1, { updated: formatDate(new Date()) });
       } else {
         setUser(null);
         setUpdates(updates+1);
         localStorage.removeItem(`user`);
       }
-  }
-
-  const formatDate = (date: any) => {
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-    let ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    let strTime = hours + ':' + minutes + ' ' + ampm;
-    return (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + " " + strTime;
-  }
-
-  const addUser = (name: any, email: any, password: any) => {
-    client.read({ limit: 99999 }).then(function (data: any) {
-      let users = JSON.parse(data);
-      let dataToAdd = { id: users.length + 1, name: name, email: email, password: password };
-      client.create(dataToAdd).then(function (data: any) {
-        client.read({ limit: 99999 }).then(function (data: any) {
-          let databaseData = JSON.parse(data);
-          console.log(`Updated Users`, databaseData, `with Data`, dataToAdd);
-        });
-      }, function (err: any) {
-        console.log(err);
-      });
-    });
   }
 
   const updateUser = (fieldName: any, fieldValue: any, valueToUpdateObj: any) => {
@@ -70,18 +56,11 @@ export default function AuthForm() {
     });
   }
 
-  let isLoaded = false;
   useEffect(() => {
+    if (loadedRef.current) return;
+    loadedRef.current = true;
     setLoaded(true);
-    isLoaded = !isLoaded;
-    if (isLoaded) {
-      return;
-    } else {
-      client.read({ limit: 99999 }).then(function (data: any) {
-        let databaseData = JSON.parse(data);
-        console.log(`Initial Users`, databaseData);
-      });
-    };
+    client.read({ limit: 99999 }).then(function (data: any) { setUsers(JSON.parse(data)) });
   }, [])
 
   return <>

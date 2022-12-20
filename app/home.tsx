@@ -40,16 +40,9 @@ export default function Home() {
     setContent(shuffle(content.split(` `)).join(` `));
   }
 
-  let loaded = false;
   useEffect(() => {
     setPage(`Home`);
     setUpdates(updates+1);
-    loaded = !loaded;
-    if (loaded) {
-      return;
-    } else {
-      console.log(`App Loaded`);
-    };
   }, []);
 
   return <div className={`inner pageInner`}>
