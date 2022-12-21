@@ -204,6 +204,13 @@ header {
     filter: blur(3px);
 }
 
+.subBanner {
+    *:nth-child(2) {
+        font-weight: 400;
+        text-align: right;
+    }
+}
+
 .skeleton {
     width: 100%;
     transition: var(--transition);
@@ -369,6 +376,48 @@ button, input[type="submit"] {
     &:active { // On Click
         transform: scale(1.01);
         box-shadow: inset 0 0 8px 0px black;
+    }
+}
+
+[type="submit"] {
+    &[name="authFormSubmit"].half {
+        width: 49% !important;
+        margin-right: auto;
+        margin-bottom: -26px;
+    }
+    &[name="authFormSave"] {
+        width: 49% !important;
+        margin-left: auto;
+        margin-top: -26px;
+    }
+}
+
+.alert {
+    top: 50%;
+    left: 50%;
+    width: 450px;
+    height: 450px;
+    display: flex;
+    padding: 40px;
+    position: fixed;
+    border-radius: 4px;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+    background: var(--blackGlass);
+    transition: var(--transition);
+    box-shadow: 0 0 8px 0px black;
+    transform: translate(-50%, -50%);
+    button {
+        position: absolute;
+        filter: invert(1);
+        right: 15px;
+        top: 15px;
+    }
+    h3, p {
+        padding: 5px 0;
+        text-align: center;
     }
 }
 

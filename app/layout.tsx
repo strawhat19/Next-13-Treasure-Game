@@ -2,10 +2,8 @@
 import Link from 'next/link';
 import '../styles/global.css';
 import Image from 'next/image';
-import { db } from '../firebase';
 import { StateContext } from './home';
 import { useRef, useEffect, useState } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
 
 export default function RootLayout({ children, } : { children: React.ReactNode; }) {
   const mobileMenuBreakPoint = 697;
@@ -22,20 +20,6 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
   let [year, setYear] = useState(new Date().getFullYear());
   let [content, setContent] = useState(`Hey, I’m Rakib, a web developer. I probably could have just used my name, but ultimately I decided on Piratechs. Maybe it’s because having a symbol to stand for and work towards helps me achieve my goals, more than working to glorify my own name. This website is dedicated to art, tech, video, music, animations and games. Thanks for visiting!`);
 
-  const getDBUsers = async () => {
-    let latestUsers;
-    try {
-      getDocs(collection(db, `users`)).then((snapshot) => {
-        latestUsers = snapshot.docs.map((doc: any) => doc.data());
-        setUsers(latestUsers);
-        return latestUsers;
-      });
-    } catch (err:any) {
-      console.log(err);
-    }
-    return latestUsers;
-  }
-
   const toggleMobileMenu = (e: any) => {
     setMobileMenu(!mobileMenu);
   }
@@ -48,8 +32,6 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
     setPage(window.location.pathname.replace(`/`,``));
     setDevEnv(window.location.host.includes(`localhost`));
     setUser(JSON.parse(localStorage.getItem(`user`) as any) || null);  
-
-    getDBUsers();
 
     const windowEvents = () => {
       setWidth(window.innerWidth);
