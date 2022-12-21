@@ -27,7 +27,6 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
     try {
       getDocs(collection(db, `users`)).then((snapshot) => {
         latestUsers = snapshot.docs.map((doc: any) => doc.data());
-        console.log(`Latest Users`, latestUsers);
         setUsers(latestUsers);
         return latestUsers;
       });
@@ -50,11 +49,7 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
     setDevEnv(window.location.host.includes(`localhost`));
     setUser(JSON.parse(localStorage.getItem(`user`) as any) || null);  
 
-    getDocs(collection(db, `users`)).then((snapshot) => {
-      let latestUsers = snapshot.docs.map((doc: any) => doc.data());
-      console.log(`Latest Users`, latestUsers);
-      setUsers(latestUsers);
-    });
+    getDBUsers();
 
     const windowEvents = () => {
       setWidth(window.innerWidth);

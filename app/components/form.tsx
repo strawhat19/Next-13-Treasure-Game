@@ -1,8 +1,8 @@
 'use client';
 import { db } from '../../firebase';
-import { doc, setDoc } from 'firebase/firestore';
 import { formatDate } from '../projects/projects';
 import { capitalizeAllWords, StateContext } from '../home';
+import { collection, doc, getDocs, setDoc } from 'firebase/firestore';
 
 import { useContext, useEffect, useRef, useState } from 'react';
 
@@ -16,6 +16,7 @@ export default function AuthForm() {
       ...user,
       id,
     }).then(newSub => {
+      console.log(`New User Added`, newSub);
       return newSub;
     }).catch(error => console.log(error));
   }
@@ -52,7 +53,12 @@ export default function AuthForm() {
         localStorage.setItem(`user`, JSON.stringify(potentialUser));
         setUpdates(updates + 1);
 
-        // Add User
+        getDocs(collection(db, `users`)).then((snapshot) => {
+          let latestUsers = snapshot.docs.map((doc: any) => doc.data());   
+          console.log(`Latest Users`, latestUsers);
+          let uuid = `${latestUsers.length + 1} ${potentialUser?.name} ${potentialUser?.registered.split(` `)[0] + ` ` + potentialUser?.registered.split(` `)[1] + ` ` + potentialUser?.registered.split(` `)[2]}`;
+          addOrUpdateUser(potentialUser, uuid);
+        });
 
       } else {
         setUser(null);
