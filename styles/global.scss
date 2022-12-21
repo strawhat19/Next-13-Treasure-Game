@@ -57,7 +57,10 @@ body {
         Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-body { min-height: 100vh; letter-spacing: .5px; }
+body { 
+    // min-height: 100vh; 
+    letter-spacing: .5px; 
+}
 
 header {
     top: 0;
@@ -337,7 +340,7 @@ form {
     height: 100% !important;
 }
 
-input {
+input, textarea {
     border: 0;
     padding: 10px;
     outline: none;

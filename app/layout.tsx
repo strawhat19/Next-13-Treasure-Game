@@ -10,9 +10,9 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
 
   let [page, setPage] = useState(``);
   let [width, setWidth] = useState(0);
-  let [user, setUser] = useState(null);
   let [height, setHeight] = useState(0);
   let [updates, setUpdates] = useState(0);
+  let [user, setUser] = useState<any>(null);
   let [devEnv, setDevEnv] = useState(false);
   let [mobileMenu, setMobileMenu] = useState(false);
   let [year, setYear] = useState(new Date().getFullYear());
@@ -63,7 +63,7 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
                 <Image className={`logo reactLogo`} priority src={`/react.svg`} alt={`Logo`} width={`50`} height={`50`} /> Home
               </Link>
               <ul className={`menu ${(mobileMenu && width < mobileMenuBreakPoint) ? `grid mobileNav` : width < mobileMenuBreakPoint ? `hide` : `show`}`}>
-                {user && <li><Link className={`hoverLink`} href={`/profile`}>Profile</Link></li>}
+                {user && <li><Link className={`hoverLink`} href={`/profile`}>{user?.name}</Link></li>}
                 <li><Link className={`hoverLink`} href={`/about`}>About</Link></li>
                 <li><Link className={`hoverLink`} href={`/projects`}>Projects</Link></li>
                 <li><Link className={`hoverLink`} href={`/contact`}>Contact</Link></li>

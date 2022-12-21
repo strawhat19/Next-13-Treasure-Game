@@ -65,14 +65,14 @@ export default function Home() {
             <div className="gridItem">{content ?? `Loading...`}</div>
             <div className="grid">
               <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
+              {/* <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
               <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
               <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
               <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
               <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
               <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
               <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
-              <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
-              <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
+              <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div> */}
             </div>
           </div>
         </article>

@@ -24,6 +24,9 @@ export default function Profile() {
               {user.password && <span className={`flex row start`}>Password: <span className={`flex row contain`}>{user?.password?.split(``).map((char: any, i: any) => {
                 return <span key={i} className={`blur`}>X</span>
               })}</span></span>}
+              <span className="flex row start">
+                Bio: <textarea id="bio" placeholder="Enter your Bio" />
+              </span>
             </div> : `Please Sign In to View Content on this Page`}
             <div className="flex auth">
               <AuthForm />
