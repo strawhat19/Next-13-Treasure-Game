@@ -1,15 +1,24 @@
 'use client';
-const sheetdb = require('sheetdb-node');
+import { db } from '../../firebase';
+import { doc, setDoc } from 'firebase/firestore';
 import { formatDate } from '../projects/projects';
 import { capitalizeAllWords, StateContext } from '../home';
-export const client = sheetdb({ address: 'zq3w3fff2pbsd' });
+
 import { useContext, useEffect, useRef, useState } from 'react';
 
 export default function AuthForm() {
   const loadedRef = useRef(false);
-  const [users, setUsers] = useState([]);
   const [loaded, setLoaded] = useState(false);
-  const { user, setUser, updates, setUpdates } = useContext(StateContext);
+  const { user, setUser, updates, setUpdates, users } = useContext(StateContext);
+
+  const addOrUpdateUser = async (user: any, id: any) => {
+    setDoc(doc(db, `users`, id), {
+      ...user,
+      id,
+    }).then(newSub => {
+      return newSub;
+    }).catch(error => console.log(error));
+  }
 
   const authForm = (e?: any) => {
       e.preventDefault();
@@ -24,38 +33,27 @@ export default function AuthForm() {
         let lastSignin = formatDate(new Date());
         let registered = formatDate(new Date());
 
-        let potentialUser = { id: users.length + 1, name: name, email: email, password: password, updated: updated, lastSignin: lastSignin, registered: registered, roles: [`user`] };
+        let potentialUser = { 
+          id: users.length + 1, 
+          bio: ``,
+          color: ``, 
+          number: 0,
+          status: ``,
+          name: name, 
+          email: email,
+          roles: [`user`],
+          updated: updated, 
+          password: password, 
+          lastSignin: lastSignin, 
+          registered: registered, 
+        };
 
         setUser(potentialUser);
         localStorage.setItem(`user`, JSON.stringify(potentialUser));
         setUpdates(updates + 1);
 
-        // client.read({ limit: 99999 }).then(function (data: any) {
-        //   let latestUsers = JSON.parse(data);
-        //   let existingUsers = latestUsers.filter((usr: any) => usr?.email == email);
-        //   let potentialUser = { id: latestUsers.length + 1, name: name, email: email, password: password, updated: updated, lastSignin: lastSignin, registered: registered, roles: [`user`] };
-          
-        //   if (existingUsers.length == 1) {
-        //     setUser(existingUsers[0]);
-        //     localStorage.setItem(`user`, JSON.stringify(existingUsers[0]));
-        //     setUpdates(updates + 1);
-        //     updateUser(`id`, existingUsers[0]?.id, { updated: formatDate(new Date()) });
-        //   } else {
-        //     client.create(potentialUser).then(function (data: any) {
-        //       setUser(potentialUser);
-        //       localStorage.setItem(`user`, JSON.stringify(potentialUser));
-        //       setUpdates(updates + 1);
-        //       client.read({ limit: 99999 }).then(function (data: any) {
-        //         let databaseData = JSON.parse(data);
-        //         console.log(`Updated Users`, databaseData, `with Data`, potentialUser);
-        //       });
-        //     }, function (err: any) {
-        //       console.log(err);
-        //     });
-        //   }
-        // }, function (err: any) {
-        //   console.log(err);
-        // });
+        // Add User
+
       } else {
         setUser(null);
         setUpdates(updates+1);
@@ -63,18 +61,11 @@ export default function AuthForm() {
       }
   }
 
-  const updateUser = (fieldName: any, fieldValue: any, valueToUpdateObj: any) => {
-    client.update(fieldName, fieldValue, valueToUpdateObj).then(function (data: any) {
-      return;
-    });
-  }
-
   useEffect(() => {
     if (loadedRef.current) return;
     loadedRef.current = true;
     setLoaded(true);
-    // client.read({ limit: 99999 }).then(function (data: any) { setUsers(JSON.parse(data)) });
-  }, [])
+  }, []);
 
   return <>
     {loaded ? <form id="authForm" className={`flex`} onSubmit={authForm}>

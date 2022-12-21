@@ -22,7 +22,7 @@ export const getFormValuesFromFields = (formFields: any) => {
 }
 
 export default function Home() {
-  const { updates, setUpdates, content, setContent, user, setPage } = useContext(StateContext);
+  const { updates, setUpdates, content, setContent, user, setPage, users } = useContext(StateContext);
 
   const shuffle = (array: any) => {
     let currentIndex = array.length, randomIndex;
@@ -64,15 +64,9 @@ export default function Home() {
             <div className="gridItem">{content ?? `Loading...`}</div>
             <div className="gridItem">{content ?? `Loading...`}</div>
             <div className="grid">
-              <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
-              <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
-              <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
-              <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
-              <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
-              <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
-              <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
-              <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
-              <div className="gridItem"><button onClick={randomize}>Randomize Paragraph</button></div>
+              {users.map((usr: any) => {
+                return <div key={usr?.name} className="gridItem"><button onClick={randomize}>Randomize Paragraph {usr?.name}</button></div>
+              })}
             </div>
           </div>
         </article>
