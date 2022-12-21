@@ -282,8 +282,8 @@ header .menu.mobileNav li a {
 main {
   width: 100%;
   height: auto;
-  padding: 0em;
   margin: 0 auto;
+  padding: 0 0 3em;
 }
 
 h1 {

@@ -43,7 +43,7 @@ export default function Home() {
 
   const randomize = (e?: any) => {
     setUpdates(updates+1);
-    setContent(shuffle(content.split(` `)).join(` `));
+    setContent(shuffle(content?.split(` `)).join(` `));
   }
 
   useEffect(() => {
@@ -53,27 +53,45 @@ export default function Home() {
 
   return <div className={`inner pageInner`}>
     <Banner id={`homeBanner`} />
-    <section>
-     <div className="inner">
-      <article>
-          <h2><i>User is {user ? user?.name : `Signed Out`}</i></h2>
-          <div className="flex auth">
-            <AuthForm />
+    {!user && <section>
+      <div className="inner">
+        <article>
+          <div className="flex row">
+            <span>{user?.bio == `` ? `--` : content}</span>
+            <button onClick={randomize}>Randomize Paragraph</button>  
           </div>
+        </article>
+      </div>
+    </section>}
+    <section>
+      <div className="inner">
+        <article>
+          <div className="flex row subBanner">
+            <h2><i>User is {user ? user?.name : `Signed Out`}</i></h2>
+            {user?.updated && <h4><i>Updated {user?.updated}</i></h4>}
+          </div>
+          {user ? <div className="profile flex">
+            <span>Name: {user.name}</span>
+            <span>Status: {user?.status == `` ? `--` : user?.status}</span>
+            <span>Number: {user?.number == `` ? `--` : user?.number}</span>
+            {user?.email && <span>Email: {user?.email}</span>}
+            {user?.color && <span>Color: {user?.color}</span>}
+            {user?.password && <span className={`flex row start`}>Password: <span className={`flex row contain`}>{user?.password?.split(``).map((char: any, i: any) => {
+              return <span key={i} className={`blur`}>X</span>
+            })}</span></span>}
+            <div className="flex row">
+              <span>About You: {user?.bio == `` ? `--` : content}</span>
+              <button onClick={randomize}>Randomize Paragraph</button>  
+            </div>
+          </div> : ``}
         </article>
       </div>
     </section>
     <section>
      <div className="inner">
       <article>
-      <div className="grid">
-            <div className="gridItem">{content ?? `Loading...`}</div>
-            <div className="gridItem">{content ?? `Loading...`}</div>
-            <div className="grid">
-              {users.map((usr: any) => {
-                return <div key={usr?.name} className="gridItem"><button onClick={randomize}>Randomize Paragraph {usr?.name}</button></div>
-              })}
-            </div>
+          <div className="flex auth">
+            <AuthForm />
           </div>
         </article>
       </div>

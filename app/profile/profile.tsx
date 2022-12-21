@@ -31,7 +31,7 @@ export default function Profile() {
                 return <span key={i} className={`blur`}>X</span>
               })}</span></span>}
               <span>About: {user?.bio == `` ? `--` : user?.bio}</span>
-            </div> : `Please Sign In to View Content on this Page`}
+            </div> : `Please Sign In to View Content In This Section`}
           </article>
         </div>
       </section>
