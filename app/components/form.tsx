@@ -24,32 +24,38 @@ export default function AuthForm() {
         let lastSignin = formatDate(new Date());
         let registered = formatDate(new Date());
 
-        client.read({ limit: 99999 }).then(function (data: any) {
-          let latestUsers = JSON.parse(data);
-          let existingUsers = latestUsers.filter((usr: any) => usr?.email == email);
-          let potentialUser = { id: latestUsers.length + 1, name: name, email: email, password: password, updated: updated, lastSignin: lastSignin, registered: registered, roles: [`user`] };
+        let potentialUser = { id: users.length + 1, name: name, email: email, password: password, updated: updated, lastSignin: lastSignin, registered: registered, roles: [`user`] };
+
+        setUser(potentialUser);
+        localStorage.setItem(`user`, JSON.stringify(potentialUser));
+        setUpdates(updates + 1);
+
+        // client.read({ limit: 99999 }).then(function (data: any) {
+        //   let latestUsers = JSON.parse(data);
+        //   let existingUsers = latestUsers.filter((usr: any) => usr?.email == email);
+        //   let potentialUser = { id: latestUsers.length + 1, name: name, email: email, password: password, updated: updated, lastSignin: lastSignin, registered: registered, roles: [`user`] };
           
-          if (existingUsers.length == 1) {
-            setUser(existingUsers[0]);
-            localStorage.setItem(`user`, JSON.stringify(existingUsers[0]));
-            setUpdates(updates + 1);
-            updateUser(`id`, existingUsers[0]?.id, { updated: formatDate(new Date()) });
-          } else {
-            client.create(potentialUser).then(function (data: any) {
-              setUser(potentialUser);
-              localStorage.setItem(`user`, JSON.stringify(potentialUser));
-              setUpdates(updates + 1);
-              client.read({ limit: 99999 }).then(function (data: any) {
-                let databaseData = JSON.parse(data);
-                console.log(`Updated Users`, databaseData, `with Data`, potentialUser);
-              });
-            }, function (err: any) {
-              console.log(err);
-            });
-          }
-        }, function (err: any) {
-          console.log(err);
-        });
+        //   if (existingUsers.length == 1) {
+        //     setUser(existingUsers[0]);
+        //     localStorage.setItem(`user`, JSON.stringify(existingUsers[0]));
+        //     setUpdates(updates + 1);
+        //     updateUser(`id`, existingUsers[0]?.id, { updated: formatDate(new Date()) });
+        //   } else {
+        //     client.create(potentialUser).then(function (data: any) {
+        //       setUser(potentialUser);
+        //       localStorage.setItem(`user`, JSON.stringify(potentialUser));
+        //       setUpdates(updates + 1);
+        //       client.read({ limit: 99999 }).then(function (data: any) {
+        //         let databaseData = JSON.parse(data);
+        //         console.log(`Updated Users`, databaseData, `with Data`, potentialUser);
+        //       });
+        //     }, function (err: any) {
+        //       console.log(err);
+        //     });
+        //   }
+        // }, function (err: any) {
+        //   console.log(err);
+        // });
       } else {
         setUser(null);
         setUpdates(updates+1);
@@ -67,7 +73,7 @@ export default function AuthForm() {
     if (loadedRef.current) return;
     loadedRef.current = true;
     setLoaded(true);
-    client.read({ limit: 99999 }).then(function (data: any) { setUsers(JSON.parse(data)) });
+    // client.read({ limit: 99999 }).then(function (data: any) { setUsers(JSON.parse(data)) });
   }, [])
 
   return <>
