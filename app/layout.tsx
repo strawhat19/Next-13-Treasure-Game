@@ -20,7 +20,7 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
   let [mobileMenu, setMobileMenu] = useState(false);
   let [emailField, setEmailField] = useState<any>(false);
   let [year, setYear] = useState(new Date().getFullYear());
-  let [content, setContent] = useState(`Hey, I’m Rakib, a web developer. I probably could have just used my name, but ultimately I decided on Piratechs. Maybe it’s because having a symbol to stand for and work towards helps me achieve my goals, more than working to glorify my own name. This website is dedicated to art, tech, video, music, animations and games. Thanks for visiting!`);
+  let [content, setContent] = useState(`Hey, I’m Rakib, a Software Engineer @ Mitsubishi Electric Trane HVAC US, or just Mitsubishi Electric for short. Along with my 7 years of experience as a developer, and owner of my own tech and digital media side business, Piratechs. This website is just for me to test out Next.js 13.`);
 
   const toggleMobileMenu = (e: any) => {
     setMobileMenu(!mobileMenu);

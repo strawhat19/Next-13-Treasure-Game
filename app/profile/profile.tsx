@@ -23,10 +23,10 @@ export default function Profile() {
             </div>
             {user ? <div className="profile flex">
               <span>Name: {user.name}</span>
-              <span>Status: {user?.status == `` ? `--` : user?.status}</span>
-              <span>Number: {user?.number == `` ? `--` : user?.number}</span>
               {user?.email && <span>Email: {user?.email}</span>}
               {user?.color && <span>Color: {user?.color}</span>}
+              <span>Number: {user?.number == `` ? `--` : user?.number}</span>
+              <span>Status: {user?.status == `` ? `--` : user?.status}</span>
               {user?.password && <span className={`flex row start`}>Password: <span className={`flex row contain`}>{user?.password?.split(``).map((char: any, i: any) => {
                 return <span key={i} className={`blur`}>X</span>
               })}</span></span>}

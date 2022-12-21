@@ -1,8 +1,8 @@
 'use client';
 import { db } from '../../firebase';
 import { formatDate } from '../projects/projects';
-import { capitalizeAllWords, createXML, StateContext } from '../home';
 import { useContext, useEffect, useRef, useState } from 'react';
+import { capitalizeAllWords, createXML, StateContext } from '../home';
 import { collection, doc, getDocs, setDoc } from 'firebase/firestore';
 
 export default function AuthForm() {
@@ -40,6 +40,7 @@ export default function AuthForm() {
     setUpdates(updates+1);
     let alertDialog = document.createElement(`div`);
     alertDialog.className = `alert`;
+    if ((!alertMessage && !additionalInfo) || additionalInfo.length == 0) alertDialog.classList.add(`slim`);
     alertDialog.innerHTML = `<h3>${alertTitle}</h3>
     ${alertMessage ? additionalInfo ? `` : alertMessage : ``}
     `;
@@ -69,18 +70,22 @@ export default function AuthForm() {
       setUser(null);
       setUpdates(updates+1);
       localStorage.removeItem(`user`);
-      setEmailField(false);
       setAuthState(`Next`);
+      setEmailField(false);
+    } if (clicked?.value == `Back`) {
+      setUpdates(updates+1);
+      setAuthState(`Next`);
+      setEmailField(false);
     } else if (clicked?.classList?.contains(`submit`)) {
       let submissionType = formFields.authFormSubmit.value ?? `submit`;
       let email = formFields.email.value ?? `email`;
       
       if (submissionType == `Next`) {
-        setEmailField(true);
         getDocs(collection(db, `users`)).then((snapshot) => {
           let latestUsers = snapshot.docs.map((doc: any) => doc.data());
           let macthingEmails = latestUsers.filter((usr: any) => usr?.email == email);
           setUsers(latestUsers);
+          setEmailField(true);
           if (macthingEmails.length > 0) {
             localStorage.setItem(`account`, JSON.stringify(macthingEmails[0]));
             setAuthState(`Sign In`);
@@ -88,15 +93,24 @@ export default function AuthForm() {
             setAuthState(`Sign Up`);
           }
         });
+      } else if (submissionType == `Back`) {
+        setAuthState(`Next`);
+        setEmailField(false);
       } else if (submissionType == `Sign In`) {
         let existingAccount = JSON.parse(localStorage.getItem(`account`) as any);
         let password = formFields?.password?.value;
-        
-        if (password == existingAccount?.password) {
-          setUser(existingAccount);
-          setContent(existingAccount?.bio);
+
+        if (password == ``) {
+          showAlert(`Password Required`);
         } else {
-          showAlert(`Invalid Password`);
+          if (password == existingAccount?.password) {
+            setAuthState(`Sign Out`);
+            setUser(existingAccount);
+            setContent(existingAccount?.bio);
+            addOrUpdateUser(existingAccount?.id, {...existingAccount, lastSignin: formatDate(new Date()), roles: [`owner`, `developer`]});
+          } else {
+            showAlert(`Invalid Password`);
+          }
         }
       } else if (submissionType == `Sign Up`) {
         let name = capitalizeAllWords(email.split(`@`)[0]);
@@ -116,24 +130,28 @@ export default function AuthForm() {
           }
 
           let password = formFields?.password?.value;
-
-          let potentialUser = { 
-            id: users.length + 1, 
-            bio: ``,
-            color: ``, 
-            number: 0,
-            status: ``,
-            name: name, 
-            email: email,
-            roles: [`user`],
-            updated: updated, 
-            password: password, 
-            lastSignin: lastSignin, 
-            registered: registered, 
-          };
-
-          let uuid = `${latestUsers.length + 1} ${potentialUser?.name} ${potentialUser?.registered.split(` `)[0] + ` ` + potentialUser?.registered.split(` `)[1] + ` ` + potentialUser?.registered.split(` `)[2]}`;
-          addOrUpdateUser(uuid, potentialUser);
+          if (password == ``) {
+            showAlert(`Password Required`);
+          } else {
+            let potentialUser = { 
+              id: users.length + 1, 
+              bio: ``,
+              color: ``, 
+              number: 0,
+              status: ``,
+              name: name, 
+              email: email,
+              roles: [`user`],
+              updated: updated, 
+              password: password, 
+              lastSignin: lastSignin, 
+              registered: registered, 
+            };
+  
+            let uuid = `${latestUsers.length + 1} ${potentialUser?.name} ${potentialUser?.registered.split(` `)[0] + ` ` + potentialUser?.registered.split(` `)[1] + ` ` + potentialUser?.registered.split(` `)[2]}`;
+            addOrUpdateUser(uuid, potentialUser);
+            setAuthState(`Sign Out`);
+          }
         });
       }
     } else {
@@ -175,13 +193,14 @@ export default function AuthForm() {
   return <>
     {loaded ? <form id="authForm" className={`flex`} onSubmit={authForm}>
       {!user && <input placeholder="Email" type="email" name="email" autoComplete={`email`} required />}
-      {!user && emailField && <input placeholder="Password" type="password" name="password" autoComplete={`current-password`} required />}
-      {user && <>Status <input id="status" className={`status userData`} placeholder="Status" type="text" name="status" /></>}
-      {user && <>About You <input id="bio" className={`bio userData`} placeholder="About You" type="text" name="bio" /></>}
-      {user && <>Favorite Number <input id="number" className={`number userData`} placeholder="Favorite Number" type="number" name="number" /></>}
-      {user && <>Edit Password <input id="password" className={`editPassword userData`} placeholder="Edit Password" type="password" name="editPassword" autoComplete={`current-password`} /></>}
-      <input className={user ? `submit half` : `submit full`} type="submit" name="authFormSubmit" value={user ? `Sign Out` : authState} />
-      {user && <input id={user?.id} className={`save`} type="submit" name="authFormSave" value={`Save`} />}
+      {!user && emailField && <input placeholder="Password" type="password" name="password" autoComplete={`current-password`} />}
+      {user && window?.location?.href?.includes(`profile`) && <input id="status" className={`status userData`} placeholder="Status" type="text" name="status" />}
+      {user && window?.location?.href?.includes(`profile`) && <input id="bio" className={`bio userData`} placeholder="About You" type="text" name="bio" />}
+      {user && window?.location?.href?.includes(`profile`) && <input id="number" className={`number userData`} placeholder="Favorite Number" type="number" name="number" />}
+      {user && window?.location?.href?.includes(`profile`) && <input id="password" className={`editPassword userData`} placeholder="Edit Password" type="password" name="editPassword" autoComplete={`current-password`} />}
+      <input className={(user && window?.location?.href?.includes(`profile`) || (authState == `Sign In` || authState == `Sign Up`)) ? `submit half` : `submit full`} type="submit" name="authFormSubmit" value={user ? `Sign Out` : authState} />
+      {(authState == `Sign In` || authState == `Sign Up`) && <input id={`back`} className={`back`} type="submit" name="authFormBack" value={`Back`} />}
+      {user && window?.location?.href?.includes(`profile`) && <input id={user?.id} className={`save`} type="submit" name="authFormSave" value={`Save`} />}
     </form> : <div className={`skeleton`}>
         <form id="authForm" className={`flex`} onSubmit={authForm}>
           <input placeholder="Email" type="email" name="email" autoComplete={`email`} required />

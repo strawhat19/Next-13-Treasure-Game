@@ -1,9 +1,18 @@
 'use client';
 import Project from './project';
+import { db } from '../../firebase';
 import { StateContext } from '../home';
 import Banner from '../components/banner';
 import AuthForm from '../components/form';
+import { doc, getDoc } from 'firebase/firestore';
 import { useContext, useEffect, useState, useRef } from 'react';
+
+export const getDefaultUser = async () => {
+  const defaultUser = await getDoc(doc(db, `users`, `1 Rakib 5:21 AM 12-21-2022`));
+  if (defaultUser.exists()) {
+    return defaultUser.data();
+  }
+}
 
 export const formatDate = (date: any) => {
   let hours = date.getHours();
@@ -20,7 +29,7 @@ export default function Projects() {
   const initialLoad = useRef(false);
   const [loaded, setLoaded] = useState(false);
   const [projects, setProjects] = useState<any>([]);
-  const { updates, setUpdates, width, user, setPage, setUser } = useContext(StateContext);
+  const { updates, setUpdates, user, setPage, setUser } = useContext(StateContext);
 
   // Github
   const getGithubData = async () => {
@@ -44,14 +53,15 @@ export default function Projects() {
         const filteredRepo = { name, owner, url: html_url, topics, date: created_at, license, updated: updated_at, homepage, language, deployment: deployments_url, description };
         repositories.push(filteredRepo);
       });
-      const gitUser = { name, url: html_url, bio, projects: repositories.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()), website: blog, avatar: avatar_url, login, repoLink: repos_url, repoNum: public_repos, starred: starred_url, followers, following, lastUpdated: formatDate(new Date()) };
+      const gitUser = { id: `1 Rakib 5:21 AM 12-21-2022`, name, url: html_url, bio, projects: repositories.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()), website: blog, avatar: avatar_url, login, repoLink: repos_url, repoNum: public_repos, starred: starred_url, followers, following, lastSignin: formatDate(new Date()) };
 
-      setUser({...user, ...gitUser});
-      setProjects(gitUser.projects);
-      console.log(`Updated User`, gitUser);
-      console.log(`Updated Projects`, gitUser.projects);
-      localStorage.setItem(`user`, JSON.stringify({...user, ...gitUser}));
-      localStorage.setItem(`projects`, JSON.stringify(gitUser.projects));
+      setProjects(gitUser?.projects);
+      localStorage.setItem(`projects`, JSON.stringify(gitUser?.projects));
+      getDefaultUser().then((usr: any) => {
+        setUser({...usr, ...user, ...gitUser, projects: gitUser?.projects});
+        console.log(`Updated User`, {...usr, ...user, ...gitUser, projects: gitUser?.projects});
+        localStorage.setItem(`user`, JSON.stringify({...usr, ...user, ...gitUser, projects: gitUser?.projects}));
+      });
     };
   }
 
@@ -68,9 +78,11 @@ export default function Projects() {
       if (!cachedUser || cachedProjects.length == 0) {
         getGithubData();
       } else {
-        setProjects(cachedProjects);
-        setUser({...user, ...cachedUser});
-        console.log(`Cached Projects`, cachedProjects);
+        getDefaultUser().then((usr: any) => {
+          setUser({...usr, ...user, ...cachedUser});
+          console.log(`Default Projects`, {...usr, ...user, ...cachedUser}?.projects);
+          setProjects({...usr, ...user, ...cachedUser}?.projects);
+        });
       };
     }
 

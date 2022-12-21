@@ -366,6 +366,9 @@ button, input[type="submit"] {
     font-family: 'Montserrat';
     background: var(--blackGlass);
     transition: var(--transition);
+    &.rowButton {
+        margin-top: -17px;
+    }
     &:hover { // Mouse Over
         filter: invert(1);
         box-shadow: 0 0 8px 0px black;
@@ -380,6 +383,11 @@ button, input[type="submit"] {
 }
 
 [type="submit"] {
+    &[name="authFormBack"] {
+        width: 49% !important;
+        margin-left: auto;
+        margin-top: -26px;
+    }
     &[name="authFormSubmit"].half {
         width: 49% !important;
         margin-right: auto;
@@ -409,6 +417,9 @@ button, input[type="submit"] {
     transition: var(--transition);
     box-shadow: 0 0 8px 0px black;
     transform: translate(-50%, -50%);
+    &.slim {
+        height: 120px;
+    }
     button {
         position: absolute;
         filter: invert(1);

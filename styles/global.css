@@ -365,6 +365,9 @@ button, input[type=submit] {
   background: var(--blackGlass);
   transition: var(--transition);
 }
+button.rowButton, input[type=submit].rowButton {
+  margin-top: -17px;
+}
 button:hover, input[type=submit]:hover {
   filter: invert(1);
   box-shadow: 0 0 8px 0px black;
@@ -377,6 +380,11 @@ button:active, input[type=submit]:active {
   box-shadow: inset 0 0 8px 0px black;
 }
 
+[type=submit][name=authFormBack] {
+  width: 49% !important;
+  margin-left: auto;
+  margin-top: -26px;
+}
 [type=submit][name=authFormSubmit].half {
   width: 49% !important;
   margin-right: auto;
@@ -406,6 +414,9 @@ button:active, input[type=submit]:active {
   transition: var(--transition);
   box-shadow: 0 0 8px 0px black;
   transform: translate(-50%, -50%);
+}
+.alert.slim {
+  height: 120px;
 }
 .alert button {
   position: absolute;
