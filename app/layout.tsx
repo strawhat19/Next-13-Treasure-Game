@@ -2,8 +2,10 @@
 import Link from 'next/link';
 import '../styles/global.css';
 import Image from 'next/image';
-import { StateContext } from './home';
 import { useRef, useEffect, useState } from 'react';
+import { capitalizeAllWords, StateContext } from './home';
+
+export const defaultContent = `Hey, I’m Rakib, a Software Engineer @ Mitsubishi Electric Trane HVAC US, or just Mitsubishi Electric for short. Along with my 7 years of experience as a developer, and owner of my own tech and digital media side business, Piratechs. This website is just for me to test out Next.js 13.`;
 
 export default function RootLayout({ children, } : { children: React.ReactNode; }) {
   const mobileMenuBreakPoint = 697;
@@ -20,7 +22,7 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
   let [mobileMenu, setMobileMenu] = useState(false);
   let [emailField, setEmailField] = useState<any>(false);
   let [year, setYear] = useState(new Date().getFullYear());
-  let [content, setContent] = useState(`Hey, I’m Rakib, a Software Engineer @ Mitsubishi Electric Trane HVAC US, or just Mitsubishi Electric for short. Along with my 7 years of experience as a developer, and owner of my own tech and digital media side business, Piratechs. This website is just for me to test out Next.js 13.`);
+  let [content, setContent] = useState(defaultContent);
 
   const toggleMobileMenu = (e: any) => {
     setMobileMenu(!mobileMenu);
@@ -74,7 +76,7 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
                 <Image className={`logo reactLogo`} priority src={`/react.svg`} alt={`Logo`} width={`50`} height={`50`} /> Home
               </Link>
               <ul className={`menu ${(mobileMenu && width < mobileMenuBreakPoint) ? `grid mobileNav` : width < mobileMenuBreakPoint ? `hide` : `show`}`}>
-                {user && <li><Link className={`hoverLink`} href={`/profile`}>Profile</Link></li>}
+                {user && <li><Link className={`hoverLink`} href={`/profile`}>{capitalizeAllWords(user?.email?.split(`@`)[0])}</Link></li>}
                 <li><Link className={`hoverLink`} href={`/about`}>About</Link></li>
                 <li><Link className={`hoverLink`} href={`/projects`}>Projects</Link></li>
                 <li><Link className={`hoverLink`} href={`/contact`}>Contact</Link></li>
@@ -90,7 +92,7 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
               </div>}
             </nav>
           </header>
-          <main>{children}</main>
+          <main className={page}>{children}</main>
           {page != `profile` && <footer>
             <div className="inner">
               <div className="left">

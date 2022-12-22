@@ -14,7 +14,7 @@ export default function Profile() {
 
     return <div className={`inner pageInner`}>
       <Banner id={`profileBanner`} />
-      <section>
+      <section id={`profileSection`}>
         <div className="inner">
           <article>
             <div className="flex row subBanner">

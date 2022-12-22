@@ -63,7 +63,7 @@ export default function Home() {
         </article>
       </div>
     </section>}
-    <section>
+    <section id={`profileSection`}>
       <div className="inner">
         <article>
           <div className="flex row subBanner">

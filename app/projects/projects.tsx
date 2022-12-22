@@ -29,6 +29,7 @@ export default function Projects() {
   const initialLoad = useRef(false);
   const [loaded, setLoaded] = useState(false);
   const [projects, setProjects] = useState<any>([]);
+  const [overrideUser, setOverrideUser] = useState(false);
   const { updates, setUpdates, user, setPage, setUser } = useContext(StateContext);
 
   // Github
@@ -56,12 +57,15 @@ export default function Projects() {
       const gitUser = { id: `1 Rakib 5:21 AM 12-21-2022`, name, url: html_url, bio, projects: repositories.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()), website: blog, avatar: avatar_url, login, repoLink: repos_url, repoNum: public_repos, starred: starred_url, followers, following, lastSignin: formatDate(new Date()) };
 
       setProjects(gitUser?.projects);
+      console.log(`Updated Projects`, gitUser?.projects);
       localStorage.setItem(`projects`, JSON.stringify(gitUser?.projects));
-      getDefaultUser().then((usr: any) => {
-        setUser({...usr, ...user, ...gitUser, projects: gitUser?.projects});
-        console.log(`Updated User`, {...usr, ...user, ...gitUser, projects: gitUser?.projects});
-        localStorage.setItem(`user`, JSON.stringify({...usr, ...user, ...gitUser, projects: gitUser?.projects}));
-      });
+      if (overrideUser) {
+        getDefaultUser().then((usr: any) => {
+          setUser({...usr, ...user, ...gitUser, projects: gitUser?.projects});
+          console.log(`Updated User`, {...usr, ...user, ...gitUser, projects: gitUser?.projects});
+          localStorage.setItem(`user`, JSON.stringify({...usr, ...user, ...gitUser, projects: gitUser?.projects}));
+        });
+      }
     };
   }
 
@@ -75,19 +79,13 @@ export default function Projects() {
       setLoaded(true);
       setPage(`Projects`);
       setUpdates(updates+1);
-      if (!cachedUser || cachedProjects.length == 0) {
-        getGithubData();
-      } else {
-        getDefaultUser().then((usr: any) => {
-          setUser({...usr, ...user, ...cachedUser});
-          console.log(`Default Projects`, {...usr, ...user, ...cachedUser}?.projects);
-          setProjects({...usr, ...user, ...cachedUser}?.projects);
-        });
-      };
-    }
 
-    if (updated) {
-      if (cachedUser) console.log(`Cached User`, cachedUser);
+      if (cachedProjects) {
+        console.log(`Cached Projects`, cachedProjects);
+        setProjects(cachedProjects);
+      } else {
+        getGithubData();
+      };
     }
 
     return () => {initialLoad.current = true;};
@@ -95,7 +93,7 @@ export default function Projects() {
 
   return <div className={`inner pageInner`}>
     <Banner id={`projectsBanner`} />
-    <section>
+    <section id={`projectsAuth`}>
       <div className="inner">
         <article>
           <h2><i>User is {user ? user?.name : `Signed Out`}</i></h2>
@@ -105,13 +103,13 @@ export default function Projects() {
         </article>
       </div>
     </section>
-    <section>
+    <section id={`projectsSection`}>
       <div className="inner">
         <article>
           <h2><i>Projects</i></h2>
           <div className="flex projects">
-            {loaded && projects && projects.length > 0 ? projects.map((project: any, index: any) => <Project key={index} project={project} />) : <div className={`skeleton`}>
-              <h4>Loading...</h4>  
+            {projects.length > 0 ? projects.map((project: any, index: any) => <Project key={index} project={project} />) : <div className={`skeleton`}>
+              <h4 className={`skeletonItem`}>Loading...</h4>  
             </div>}
           </div>
         </article>

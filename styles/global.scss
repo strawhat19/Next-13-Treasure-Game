@@ -214,12 +214,28 @@ header {
 .skeleton {
     width: 100%;
     transition: var(--transition);
+    .skeletonItem {
+        position: relative;
+        filter: blur(1px) brightness(1.35);
+        animation: skeleton 1.5s var(--transition) infinite alternate;
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;    
+        }
+    }
     * {
         width: 100%;
         transition: var(--transition);
        * {
         position: relative;
-        filter: blur(5px) brightness(1.35);
+        filter: blur(1px) brightness(1.35);
         background: var(--skeleton) !important;
         animation: skeleton 1.5s var(--transition) infinite alternate;
         &::before {
@@ -240,10 +256,10 @@ header {
 
 @keyframes skeleton {
     0% {
-        filter: blur(5px) brightness(1.35);
+        filter: blur(1px) brightness(1.35);
     }
     100% {
-        filter: blur(3px) brightness(1);
+        filter: blur(0px) brightness(1);
     }
 }
 
@@ -288,8 +304,8 @@ header {
 main {
     width: 100%;
     height: auto;
+    padding: 3em 0;
     margin: 0 auto;
-    padding: 0 0 3em;
 }
 
 h1 {

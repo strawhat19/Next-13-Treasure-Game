@@ -5,7 +5,7 @@ import Banner from '../components/banner';
 import { useContext, useEffect } from 'react';
 
 export default function Contact() {
-  const { updates, setUpdates, width, user, setPage } = useContext(StateContext);
+  const { updates, setUpdates, user, setPage } = useContext(StateContext);
 
     useEffect(() => {
       setPage(`Contact`);
@@ -14,7 +14,7 @@ export default function Contact() {
 
     return <div className={`inner pageInner`}>
       <Banner id={`contactBanner`} />
-      <section>
+      <section id={`contactAuth`}>
         <div className="inner">
           <article>
             <h2><i>User is {user ? user?.name : `Signed Out`}</i></h2>

@@ -1,7 +1,7 @@
 export default function Project(props: any) {
     const {project} = props;
-    return <div className={`project`}>
+    return <div id={project?.name} className={`project`}>
       <span className={`name`}>{project.name}</span>
-      <span className={`id`}>{project.id}</span>
+      {/* <span className={`topics`}>{project?.topics}</span> */}
     </div>
 }
