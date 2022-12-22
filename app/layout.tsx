@@ -3,9 +3,7 @@ import Link from 'next/link';
 import '../styles/global.css';
 import Image from 'next/image';
 import { useRef, useEffect, useState } from 'react';
-import { capitalizeAllWords, StateContext } from './home';
-
-export const defaultContent = `Hey, I’m Rakib, a Software Engineer @ Mitsubishi Electric Trane HVAC US, or just Mitsubishi Electric for short. Along with my 7 years of experience as a developer, and owner of my own tech and digital media side business, Piratechs. This website is just for me to test out Next.js 13.`;
+import { capitalizeAllWords, defaultContent, StateContext } from './home';
 
 export default function RootLayout({ children, } : { children: React.ReactNode; }) {
   const mobileMenuBreakPoint = 697;

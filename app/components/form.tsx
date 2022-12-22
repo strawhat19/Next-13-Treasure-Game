@@ -1,6 +1,6 @@
 'use client';
 import { db } from '../../firebase';
-import { defaultContent } from '../layout';
+import { defaultContent } from '../home';
 import { formatDate } from '../projects/projects';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { capitalizeAllWords, createXML, StateContext } from '../home';
