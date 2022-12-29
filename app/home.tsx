@@ -96,7 +96,8 @@ export default function Home() {
     </Section>
     {devEnv && <Section>
       <Header title={`Adapt`} subtitle={`This Section`} />
-      This is a new section template im pushing for now and will implement later on
+      This is a new section template im pushing for now and will implement later on.
+      <div id="scroll-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio excepturi iusto saepe aliquam expedita rerum veniam necessitatibus. Delectus culpa provident, accusantium ad hic ea est beatae temporibus omnis distinctio repellat rem! Qui fuga inventore doloremque, ab tempore ipsa minus dolorem vel dolorum excepturi aliquam vitae ducimus soluta autem veniam incidunt!</div>
     </Section>}
   </div>
 }

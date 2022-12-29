@@ -280,6 +280,7 @@ header {
         grid-gap: 1em;
         margin: 0 auto;
         padding: 1em 0;
+        overflow: hidden;
         align-items: center;
         justify-content: space-between;
         article {
@@ -540,5 +541,57 @@ footer {
 @media (prefers-color-scheme: dark) {
     html {
         color-scheme: dark;
+    }
+}
+
+#scroll-text {
+
+    width: 200%;
+    // overflow: hidden;
+    text-overflow: clip;
+    white-space: nowrap;
+
+    /* animation properties */
+    transform: translateX(100%);
+    -moz-transform: translateX(100%);
+    -webkit-transform: translateX(100%);
+    animation: my-animation 10s linear infinite;
+    -moz-animation: my-animation 10s linear infinite;
+    -webkit-animation: my-animation 10s linear infinite;
+
+    /* for Firefox */
+    @-moz-keyframes my-animation {
+        from {
+            -moz-transform: translateX(100%);
+        }
+
+        to {
+            -moz-transform: translateX(-100%);
+        }
+    }
+
+    /* for Chrome */
+    @-webkit-keyframes my-animation {
+        from {
+            -webkit-transform: translateX(100%);
+        }
+
+        to {
+            -webkit-transform: translateX(-100%);
+        }
+    }
+}
+
+@keyframes my-animation {
+    from {
+        -moz-transform: translateX(100%);
+        -webkit-transform: translateX(100%);
+        transform: translateX(100%);
+    }
+
+    to {
+        -moz-transform: translateX(-100%);
+        -webkit-transform: translateX(-100%);
+        transform: translateX(-100%);
     }
 }

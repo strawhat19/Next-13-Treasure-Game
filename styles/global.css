@@ -391,6 +391,7 @@ header .menu.mobileNav li a {
   grid-gap: 1em;
   margin: 0 auto;
   padding: 1em 0;
+  overflow: hidden;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -773,6 +774,41 @@ footer .vertical-sep.fas.fa-undo, footer i.fas.fa-undo {
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
+  }
+}
+
+#scroll-text {
+  width: 200%;
+  text-overflow: clip;
+  white-space: nowrap;
+  /* animation properties */
+  transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  -webkit-transform: translateX(100%);
+  animation: my-animation 10s linear infinite;
+  -moz-animation: my-animation 10s linear infinite;
+  -webkit-animation: my-animation 10s linear infinite;
+  /* for Firefox */
+  /* for Chrome */
+}
+
+@-webkit-keyframes my-animation {
+  from {
+    -webkit-transform: translateX(100%);
+  }
+  to {
+    -webkit-transform: translateX(-100%);
+  }
+}
+
+@keyframes my-animation {
+  from {
+    -webkit-transform: translateX(100%);
+    transform: translateX(100%);
+  }
+  to {
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
   }
 }
 /*# sourceMappingURL=global.css.map */
