@@ -2,6 +2,8 @@
 import { createContext } from "react";
 import Banner from './components/banner';
 import AuthForm from './components/form';
+import Header from "./components/header";
+import Section from "./components/section";
 import { useContext, useEffect } from 'react';
 
 export const defaultContent = `Hey, I’m Rakib, a Software Engineer @ Mitsubishi Electric Trane HVAC US, or just Mitsubishi Electric for short. Along with my 7 years of experience as a developer, and owner of my own tech and digital media side business, Piratechs. This website is just for me to test out Next.js 13.`;
@@ -30,7 +32,7 @@ export const getFormValuesFromFields = (formFields: any) => {
 }
 
 export default function Home() {
-  const { updates, setUpdates, content, setContent, user, setPage, users } = useContext(StateContext);
+  const { updates, setUpdates, content, setContent, user, setPage, devEnv } = useContext(StateContext);
 
   const shuffle = (array: any) => {
     let currentIndex = array.length, randomIndex;
@@ -89,14 +91,12 @@ export default function Home() {
         </article>
       </div>
     </section>
-    <section>
-     <div className="inner">
-      <article>
-          <div className="flex auth">
-            <AuthForm />
-          </div>
-        </article>
-      </div>
-    </section>
+    <Section>
+      <AuthForm />
+    </Section>
+    {devEnv && <Section>
+      <Header title={`Adapt`} subtitle={`This Section`} />
+      This is a new section template im pushing for now and will implement later on
+    </Section>}
   </div>
 }
