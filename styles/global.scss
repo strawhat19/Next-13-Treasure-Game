@@ -52,12 +52,13 @@ body {
     padding: 0;
     width: 100%;
     color: white;
+    overflow-x: hidden;
     background: var(--mainTeal);
     font-family: Montserrat, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
         Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-body { min-height: 100vh; letter-spacing: .5px; }
+body { letter-spacing: .5px; }
 
 header {
     top: 0;
@@ -456,10 +457,10 @@ footer {
     height: 40px;
     display: flex;
     grid-gap: 10px;
-    width: 100.1vw;
+    width: 100vw;
     font-size: 13px;
     flex-wrap: wrap;
-    position: fixed;
+    position: relative;
     align-items: center;
     backdrop-filter: blur(8px);
     transform: translateX(-50%);
