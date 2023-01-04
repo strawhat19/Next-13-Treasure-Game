@@ -163,6 +163,7 @@ header {
 
 #openMenuToggler {
     display: flex;
+    cursor: pointer;
     align-items: center;
     transform: scale(.8);
     flex-direction: column;
@@ -264,6 +265,26 @@ header {
     }
 }
 
+ section {
+     width: 100%;
+     height: auto;
+     display: flex;
+     grid-gap: 1em;
+     margin: 0 auto;
+     padding: 1em 0;
+     overflow: hidden;
+     align-items: center;
+     justify-content: space-between;
+
+     article {
+         width: 100%;
+         height: auto;
+         display: flex;
+         grid-gap: 1em;
+         flex-direction: column;
+     }
+ }
+
 .inner {
     display: flex;
     margin: 0 auto;
@@ -274,24 +295,24 @@ header {
         width: 100%;
         flex-direction: column;
     }
-    section {
-        width: 100%;
-        height: auto;
-        display: flex;
-        grid-gap: 1em;
-        margin: 0 auto;
-        padding: 1em 0;
-        overflow: hidden;
-        align-items: center;
-        justify-content: space-between;
-        article {
-            width: 100%;
-            height: auto;
-            display: flex;
-            grid-gap: 1em;
-            flex-direction: column;
-        }
-    }
+    // section {
+    //     width: 100%;
+    //     height: auto;
+    //     display: flex;
+    //     grid-gap: 1em;
+    //     margin: 0 auto;
+    //     padding: 1em 0;
+    //     overflow: hidden;
+    //     align-items: center;
+    //     justify-content: space-between;
+    //     article {
+    //         width: 100%;
+    //         height: auto;
+    //         display: flex;
+    //         grid-gap: 1em;
+    //         flex-direction: column;
+    //     }
+    // }
 }
 
 .column {
@@ -594,5 +615,23 @@ footer {
         -moz-transform: translateX(-100%);
         -webkit-transform: translateX(-100%);
         transform: translateX(-100%);
+    }
+}
+
+@media (max-width: 697px) {
+    header {
+        height: 150px;
+    }
+    body {
+        font-size: 28px;
+    }
+    main {
+        padding: 1em 0;
+    }
+    #openMenuToggler span {
+        height: 5px;
+    }
+    button, input[type="submit"] {
+        font-size: 0.85em;
     }
 }

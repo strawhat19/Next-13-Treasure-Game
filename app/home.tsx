@@ -33,7 +33,7 @@ export const getFormValuesFromFields = (formFields: any) => {
 
 export default function Home() {
   const loadedRef = useRef(false);
-  const { updates, setUpdates, content, setContent, user, setPage, devEnv } = useContext(StateContext);
+  const { updates, setUpdates, content, setContent, user, setPage, devEnv, mobileMenu, width, mobileMenuBreakPoint } = useContext(StateContext);
 
   const shuffle = (array: any) => {
     let currentIndex = array.length, randomIndex;
@@ -63,7 +63,7 @@ export default function Home() {
     {!user && <section>
       <div className="inner">
         <article>
-          <div className="flex row">
+          <div className={`intro flex ${width < mobileMenuBreakPoint ? `` : `row`}`}>
             <span>{user?.bio == `` ? `--` : content}</span>
             <button onClick={randomize}>Randomize Paragraph</button>  
           </div>
@@ -94,6 +94,7 @@ export default function Home() {
         </article>
       </div>
     </section>
+    <Section>{navigator?.userAgent}</Section>
     <Section>
       <AuthForm />
     </Section>
