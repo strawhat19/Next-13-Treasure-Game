@@ -25,6 +25,11 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
   const toggleMobileMenu = (e: any) => {
     setMobileMenu(!mobileMenu);
   }
+
+  const windowEvents = () => {
+    setWidth(window.innerWidth);
+    setHeight(window.innerHeight);
+  };
   
   useEffect(() => {
     if (loaded.current) return;
@@ -40,20 +45,15 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
       setContent((JSON.parse(localStorage.getItem(`user`) as any)?.bio || null));
     }
 
-    const windowEvents = () => {
-      setWidth(window.innerWidth);
-      setHeight(window.innerHeight);
-    };
+    // windowEvents();
 
-    windowEvents();
+    // window.addEventListener(`resize`, () => windowEvents());
+    // window.addEventListener(`scroll`, () => windowEvents());
 
-    window.addEventListener(`resize`, () => windowEvents());
-    window.addEventListener(`scroll`, () => windowEvents());
-
-    return () => {
-      window.removeEventListener(`resize`, () => windowEvents());
-      window.removeEventListener(`scroll`, () => windowEvents());
-    }
+    // return () => {
+    //   window.removeEventListener(`resize`, () => windowEvents());
+    //   window.removeEventListener(`scroll`, () => windowEvents());
+    // }
   }, [])
 
   return (

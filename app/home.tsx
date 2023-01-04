@@ -1,10 +1,10 @@
 'use client';
-import { createContext } from "react";
 import Banner from './components/banner';
 import AuthForm from './components/form';
 import Header from "./components/header";
 import Section from "./components/section";
 import { useContext, useEffect } from 'react';
+import { createContext, useRef } from "react";
 
 export const defaultContent = `Hey, I’m Rakib, a Software Engineer @ Mitsubishi Electric Trane HVAC US, or just Mitsubishi Electric for short. Along with my 7 years of experience as a developer, and owner of my own tech and digital media side business, Piratechs. This website is just for me to test out Next.js 13.`;
 
@@ -32,6 +32,7 @@ export const getFormValuesFromFields = (formFields: any) => {
 }
 
 export default function Home() {
+  const loadedRef = useRef(false);
   const { updates, setUpdates, content, setContent, user, setPage, devEnv } = useContext(StateContext);
 
   const shuffle = (array: any) => {
@@ -51,6 +52,8 @@ export default function Home() {
   }
 
   useEffect(() => {
+    if (loadedRef.current) return;
+    loadedRef.current = true;
     setPage(`Home`);
     setUpdates(updates+1);
   }, []);
