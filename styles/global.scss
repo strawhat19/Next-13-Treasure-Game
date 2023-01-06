@@ -394,6 +394,7 @@ button, input[type="submit"] {
     cursor: pointer;
     border-radius: 4px;
     font-family: 'Montserrat';
+    color: white !important;
     background: var(--blackGlass);
     transition: var(--transition);
     &.rowButton {
@@ -467,16 +468,17 @@ footer {
     bottom: 0;
     z-index: 1;
     height: 40px;
+    width: 100vw;
     display: flex;
     grid-gap: 10px;
-    width: 100vw;
     font-size: 13px;
     flex-wrap: wrap;
     position: relative;
     align-items: center;
+    color: white !important;
     backdrop-filter: blur(8px);
     transform: translateX(-50%);
-    font-weight: 300 !important;
+    font-weight: 400 !important;
     background: var(--blackGlass);
     justify-content: space-between;
 

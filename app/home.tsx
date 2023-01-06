@@ -33,7 +33,7 @@ export const getFormValuesFromFields = (formFields: any) => {
 
 export default function Home() {
   const loadedRef = useRef(false);
-  const [platform, setPlatform] = useState<any>(null);
+  
   const { updates, setUpdates, content, setContent, user, setPage, devEnv, width, mobileMenuBreakPoint } = useContext(StateContext);
 
   const shuffle = (array: any) => {
@@ -57,7 +57,6 @@ export default function Home() {
     loadedRef.current = true;
     setPage(`Home`);
     setUpdates(updates+1);
-    setPlatform(navigator?.userAgent);
   }, []);
 
   return <div className={`inner pageInner`}>
@@ -66,31 +65,23 @@ export default function Home() {
       <span>{user?.bio == `` ? `--` : content}</span>
       <button onClick={randomize}>Randomize Paragraph</button>
     </div></Section>}
-    <section id={`profileSection`}>
-      <div className="inner">
-        <article>
-          <div className="flex row subBanner">
-            <h2><i>User is {user ? user?.name : `Signed Out`}</i></h2>
-            {user?.updated && <h4><i>Updated {user?.updated}</i></h4>}
-          </div>
-          {user ? <div className="profile flex">
-            <span>Name: {user.name}</span>
-            {user?.email && <span>Email: {user?.email}</span>}
-            {user?.color && <span>Color: {user?.color}</span>}
-            <span>Number: {user?.number == `` ? `--` : user?.number}</span>
-            <span>Status: {user?.status == `` ? `--` : user?.status}</span>
-            {user?.password && <span className={`flex row start`}>Password: <span className={`flex row contain`}>{user?.password?.split(``).map((char: any, i: any) => {
-              return <span key={i} className={`blur`}>X</span>
-            })}</span></span>}
-            <div className="flex row">
-              <span>About You: {user?.bio == `` ? `--` : content}</span>
-              <button className="rowButton" onClick={randomize}>Randomize Paragraph</button>  
-            </div>
-          </div> : ``}
-        </article>
-      </div>
-    </section>
-    <Section>{platform}</Section>
+    <Section id={`profileSection`}>
+      <Header title={`User is ${user ? user?.name : `Signed Out`}`} subtitle={`Updated ${user?.updated}`} subBanner />
+      {user ? <div className="profile flex">
+        <span>Name: {user.name}</span>
+        {user?.email && <span>Email: {user?.email}</span>}
+        {user?.color && <span>Color: {user?.color}</span>}
+        <span>Number: {user?.number == `` ? `--` : user?.number}</span>
+        <span>Status: {user?.status == `` ? `--` : user?.status}</span>
+        {user?.password && <span className={`flex row start`}>Password: <span className={`flex row contain`}>{user?.password?.split(``).map((char: any, i: any) => {
+          return <span key={i} className={`blur`}>X</span>
+        })}</span></span>}
+        <div className="flex row">
+          <span>About You: {user?.bio == `` ? `--` : content}</span>
+          <button className="rowButton" onClick={randomize}>Randomize Paragraph</button>  
+        </div>
+      </div> : ``}
+    </Section>
     <Section>
       <AuthForm />
     </Section>

@@ -80,7 +80,7 @@ export default function Projects() {
       setPage(`Projects`);
       setUpdates(updates+1);
 
-      if (cachedProjects) {
+      if (cachedProjects.length > 0) {
         console.log(`Cached Projects`, cachedProjects);
         setProjects(cachedProjects);
       } else {
