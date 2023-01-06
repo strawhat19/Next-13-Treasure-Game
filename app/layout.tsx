@@ -37,7 +37,6 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
     if (loaded.current) return;
     loaded.current = true;
     setUpdates(updates);
-    console.log(navigator);
     setPlatform(navigator?.userAgent);
     setYear(new Date().getFullYear());
     setPage(window.location.pathname.replace(`/`,``));
@@ -77,13 +76,13 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
               <Link className={`logo hoverLink`} href={`/`}>
                 <Image className={`logo reactLogo`} priority src={`/react.svg`} alt={`Logo`} width={`50`} height={`50`} /> Home
               </Link>
-              <ul className={`menu ${((platform as string)?.includes(`mobile`) || (mobileMenu && width < mobileMenuBreakPoint)) ? `grid mobileNav` : width < mobileMenuBreakPoint ? `hide` : `show`}`}>
+              <ul className={`menu ${((platform as string)?.toLowerCase()?.includes(`mobile`) || (mobileMenu && width < mobileMenuBreakPoint)) ? `grid mobileNav` : width < mobileMenuBreakPoint ? `hide` : `show`}`}>
                 {user && <li><Link className={`hoverLink`} href={`/profile`}>{capitalizeAllWords(user?.email?.split(`@`)[0])}</Link></li>}
                 <li><Link className={`hoverLink`} href={`/about`}>About</Link></li>
                 <li><Link className={`hoverLink`} href={`/projects`}>Projects</Link></li>
                 <li><Link className={`hoverLink`} href={`/contact`}>Contact</Link></li>
               </ul>
-              {((platform as string)?.includes(`mobile`) || width < mobileMenuBreakPoint) && <div className="mobileMenu">
+              {((platform as string)?.toLowerCase()?.includes(`mobile`) || width < mobileMenuBreakPoint) && <div className="mobileMenu">
                 <div id="menuToggle" onClick={toggleMobileMenu}> Menu |
                   <a id="openMenuToggler" className={mobileMenu ? `openMenuToggler clicked` : `openMenuToggler`}>
                       <span id="menuTogglerSpan" className="menuTogglerSpan"></span>
