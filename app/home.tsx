@@ -33,7 +33,6 @@ export const getFormValuesFromFields = (formFields: any) => {
 
 export default function Home() {
   const loadedRef = useRef(false);
-  
   const { updates, setUpdates, content, setContent, user, setPage, devEnv, width, mobileMenuBreakPoint } = useContext(StateContext);
 
   const shuffle = (array: any) => {

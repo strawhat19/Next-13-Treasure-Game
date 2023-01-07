@@ -2,27 +2,25 @@
 import { StateContext } from '../home';
 import AuthForm from '../components/form';
 import Banner from '../components/banner';
-import { useContext, useEffect } from 'react';
+import Section from '../components/section';
+import { useContext, useEffect, useRef } from 'react';
 
 export default function Contact() {
-  const { updates, setUpdates, user, setPage } = useContext(StateContext);
+  let loadedRef = useRef(false);
+  let { updates, setUpdates, user, setPage } = useContext(StateContext);
 
-    useEffect(() => {
-      setPage(`Contact`);
-      setUpdates(updates+1);
-    }, [])
+  useEffect(() => {
+    if (loadedRef.current) return;
+    loadedRef.current = true;
+    setUpdates(updates+1);
+    setPage(`Contact`);
+  }, [])
 
-    return <div className={`inner pageInner`}>
-      <Banner id={`contactBanner`} />
-      <section id={`contactAuth`}>
-        <div className="inner">
-          <article>
-            <h2><i>User is {user ? user?.name : `Signed Out`}</i></h2>
-            <div className="flex auth">
-              <AuthForm />
-            </div>
-          </article>
-        </div>
-      </section>
-    </div>
+  return <div className={`inner pageInner`}>
+    <Banner id={`contactBanner`} />
+    <Section id={`contactAuth`}>
+      <h2><i>User is {user ? user?.name : `Signed Out`}</i></h2>
+      <AuthForm />
+    </Section>
+  </div>
 }

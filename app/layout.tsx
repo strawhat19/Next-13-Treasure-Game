@@ -80,6 +80,7 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
                 {user && <li><Link className={`hoverLink`} href={`/profile`}>{capitalizeAllWords(user?.email?.split(`@`)[0])}</Link></li>}
                 <li><Link className={`hoverLink`} href={`/about`}>About</Link></li>
                 <li><Link className={`hoverLink`} href={`/projects`}>Projects</Link></li>
+                <li><Link className={`hoverLink`} href={`/game`}>Game</Link></li>
                 <li><Link className={`hoverLink`} href={`/contact`}>Contact</Link></li>
               </ul>
               {((platform as string)?.toLowerCase()?.includes(`mobile`) || width < mobileMenuBreakPoint) && <div className="mobileMenu">

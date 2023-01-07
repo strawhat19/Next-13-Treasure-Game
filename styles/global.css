@@ -450,6 +450,55 @@ button:active, input[type=submit]:active {
   text-align: center;
 }
 
+section .game {
+  width: 100%;
+  display: flex;
+  height: 415px;
+  overflow: hidden;
+  max-height: 413px;
+  position: relative;
+  border-radius: 4px;
+  align-items: center;
+  justify-content: center;
+  border: solid 2px black;
+}
+section .game .controls {
+  position: absolute;
+  right: 25px;
+  top: 25px;
+}
+section .game .controls button {
+  height: 20px;
+  padding: 3px 20px;
+}
+section .game .player {
+  transition: var(--transition);
+  position: absolute;
+}
+section .game .enemy {
+  transition: var(--transition);
+  position: absolute;
+}
+section .game .health {
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+  position: absolute;
+  font-size: 0.85em;
+  max-width: 85%;
+  display: flex;
+  left: 25px;
+  top: 25px;
+}
+section .game .ground {
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  position: absolute;
+  bottom: -0.2px;
+  width: 100%;
+  left: 0;
+}
+
 footer {
   left: 50%;
   bottom: 0;
