@@ -483,13 +483,14 @@ section {
             border-radius: 3px;
             position: absolute;
             padding: 0.5em 2em;
+            min-width: 85%;
             max-width: 85%;
             grid-gap: 1em;
             left: 25px;
             top: 25px;
-            button {
-                height: 20px;
-                padding: 3px 20px;
+
+            #jumpSpeed {
+                transform: rotateY(180deg);
             }
         }
 
@@ -533,7 +534,6 @@ section {
         }
     
         .enemy {
-            animation: enemy 3s linear infinite;
             transition: var(--transition);
             position: absolute;
         }
@@ -549,7 +549,7 @@ section {
             max-width: 85%;
             display: flex;
             left: 25px;
-            top: 60px;
+            top: 75px;
         }
     
         .ground {

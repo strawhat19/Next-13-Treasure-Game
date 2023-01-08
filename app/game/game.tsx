@@ -7,14 +7,18 @@ import { useContext, useEffect, useRef, useState } from 'react';
 
 export default function Game() {
   let playerInput: any;
+  let lowHealth = 25;
+  let medHealth = 50;
   let loadedRef = useRef(false);
+  let [hits, setHits] = useState(0);
   let [game, setGame] = useState(false);
-  let [damage, setDamage] = useState(0.25);
+  let [damage, setDamage] = useState(1);
+  let [speed, setSpeed] = useState(3000);
   let [jumpSpeed, setJumpSpeed] = useState(500);
   let { updates, setUpdates, user, setPage } = useContext(StateContext);
-  let initialBounds = {background: `#00b900`, height: 20, width: `${100}%`};
-  let initialPlayer = {background: `black`, height: 15, width: 15, bottom: 19, left: 15};
-  let [enemy, setEnemy] = useState({background: `red`, height: 15, width: 15, bottom: 19, left: 25});
+  let initialBounds = {background: `#00b900`, height: 40, width: `${100}%`, color: `white`, fontWeight: 700};
+  let initialPlayer = {background: `black`, height: 15, width: 15, bottom: initialBounds.height - 1, left: 15};
+  let [enemy, setEnemy] = useState({background: `red`, height: 15, width: 15, bottom: initialBounds.height - 1, left: 25, animation: `enemy ${speed}ms linear infinite`});
   let [ground, setGround] = useState(initialBounds);
   let [health, setHealth] = useState(initialBounds);
   let [player, setPlayer] = useState(initialPlayer);
@@ -55,22 +59,30 @@ export default function Game() {
   }
 
   const checkPlayer = () => {
+    let spd: any = document.querySelector(`#speed`);
     let dmg: any = document.querySelector(`#damage`);
     let jmpSpd: any = document.querySelector(`#jumpSpeed`);
     let hlth: any = document.querySelector(`.healthPoints`);
     let hlthPts: any = parseFloat(hlth?.innerHTML);
     let plyr: any = document.querySelector(`.player`)?.getBoundingClientRect();
     let enmy: any = document.querySelector(`.enemy`)?.getBoundingClientRect();
-    setJumpSpeed(jmpSpd?.value);
-    setDamage(dmg?.value);
+    setJumpSpeed(parseFloat(jmpSpd?.value));
+    setDamage(parseFloat(dmg?.value));
+    setSpeed(parseFloat(spd?.value));
 
     if (plyr && enmy) {
+      setEnemy({...enemy, animation: `enemy ${parseFloat(spd?.value)}ms linear infinite`});
       if (plyr.right >= enmy.left && 
         plyr.left <= enmy.right && 
         plyr.bottom >= enmy.top &&
         plyr.top <= enmy.bottom) {
-          if (hlthPts >= 7.4) {
-            setHealth({...health, width: `${hlthPts - dmg.value}%`, background: hlthPts <= 15 ? `red` : (hlthPts <= 45 ? `#cbcb1c` : initialBounds.background)});
+          if (hlthPts >= 5) {
+            setHealth({...health, width: `${hlthPts - dmg.value}%`, background: hlthPts <= lowHealth ? `red` : (hlthPts <= medHealth ? `#cbcb1c` : initialBounds.background), color: hlthPts <= lowHealth ? `white` : (hlthPts <= medHealth ? `black` : `white`), fontWeight: hlthPts <= lowHealth ? 700 : (hlthPts <= medHealth ? 500 : 700)});
+            setHits(100 - (hlthPts - 1));
+            setTimeout(() => setHits(0), 500);
+            console.log(`Hits`, 100 - (hlthPts - 1));
+            console.log(`Health`, hlthPts - 1);
+            console.log(`Damage`, 100 - (hlthPts - 1));
           } else {
             endGame();
             // startGame();
@@ -100,7 +112,7 @@ export default function Game() {
 
     setInterval(() => {
       checkPlayer();
-    }, 1);
+    }, 10);
   }, [])
 
   return <div className={`inner pageInner`}>
@@ -112,8 +124,9 @@ export default function Game() {
           <button id="startGame" onClick={startGame}>Start Game</button>
         </div> : <div className="level" id="levelOne">
           <div className="gameControls flex row">
-            <div className="flex row">Jump: <input id={`jumpSpeed`} defaultValue={jumpSpeed} type="range" min="150" max="1000" step="50" /> <div className="flex row">{jumpSpeed}</div></div>
-            <div className="flex row">Damage: <input id={`damage`} defaultValue={damage} type="range" min="0.25" max="2.25" step="0.25" /> <div className="flex row">{`${damage * 5} - ${damage * 25}`}</div></div>
+            <div className="flex row">Enemy Speed <input id={`speed`} defaultValue={speed} type="range" min="1000" max="5500" step="500" /> <div className="flex row">{speed / 1000} S</div></div>
+            <div className="flex row">Jump Speed <input id={`jumpSpeed`} defaultValue={jumpSpeed} type="range" min="250" max="900" step="50" /> <div className="flex row">x{1000 - jumpSpeed}</div></div>
+            <div className="flex row">Damage <input id={`damage`} defaultValue={damage} type="range" min="0.25" max="2.25" step="0.25" /> <div className="flex row">{`${((damage * 5) * (speed /4000)).toString().substr(0,4)}% - ${((damage * 12) * (speed /3290)).toString().substr(0,4)}%`}</div></div>
           </div>
           <div className="health" style={health}>Health: <span className="healthPoints">{health.width}</span></div>
           <div className="controls flex">

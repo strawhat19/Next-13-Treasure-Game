@@ -469,14 +469,14 @@ section .game .gameControls {
   border-radius: 3px;
   position: absolute;
   padding: 0.5em 2em;
+  min-width: 85%;
   max-width: 85%;
   grid-gap: 1em;
   left: 25px;
   top: 25px;
 }
-section .game .gameControls button {
-  height: 20px;
-  padding: 3px 20px;
+section .game .gameControls #jumpSpeed {
+  transform: rotateY(180deg);
 }
 section .game .controls {
   position: absolute;
@@ -514,8 +514,6 @@ section .game .player {
   position: absolute;
 }
 section .game .enemy {
-  -webkit-animation: enemy 3s linear infinite;
-          animation: enemy 3s linear infinite;
   transition: var(--transition);
   position: absolute;
 }
@@ -530,7 +528,7 @@ section .game .health {
   max-width: 85%;
   display: flex;
   left: 25px;
-  top: 60px;
+  top: 75px;
 }
 section .game .ground {
   border-bottom-left-radius: 3px;
