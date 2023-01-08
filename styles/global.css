@@ -455,12 +455,28 @@ section .game {
   display: flex;
   height: 415px;
   overflow: hidden;
+  font-weight: 500;
   max-height: 413px;
+  font-size: 0.75em;
   position: relative;
   border-radius: 4px;
   align-items: center;
   justify-content: center;
   border: solid 2px black;
+}
+section .game .gameControls {
+  background: var(--blackGlass);
+  border-radius: 3px;
+  position: absolute;
+  padding: 0.5em 2em;
+  max-width: 85%;
+  grid-gap: 1em;
+  left: 25px;
+  top: 25px;
+}
+section .game .gameControls button {
+  height: 20px;
+  padding: 3px 20px;
 }
 section .game .controls {
   position: absolute;
@@ -471,24 +487,50 @@ section .game .controls button {
   height: 20px;
   padding: 3px 20px;
 }
+section .game input[type=range] {
+  -webkit-appearance: none;
+  background: #00c2ff !important;
+  max-height: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin-left: 0.5em;
+  margin-top: 0.1em;
+  color: white;
+  width: 100%;
+}
+section .game input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 10px;
+  transform: scale(0.8);
+  background: #fff;
+  cursor: pointer;
+  margin-top: -2.9px;
+  box-shadow: 1px 1px 1px #fff, 0px 0px 1px #0d0d0d;
+}
 section .game .player {
   transition: var(--transition);
   position: absolute;
 }
 section .game .enemy {
+  -webkit-animation: enemy 3s linear infinite;
+          animation: enemy 3s linear infinite;
   transition: var(--transition);
   position: absolute;
 }
 section .game .health {
+  transition: var(--transition);
   justify-content: center;
   align-items: center;
   border-radius: 3px;
   position: absolute;
-  font-size: 0.85em;
+  min-width: 150px;
+  grid-gap: 0.5em;
   max-width: 85%;
   display: flex;
   left: 25px;
-  top: 25px;
+  top: 60px;
 }
 section .game .ground {
   border-bottom-left-radius: 3px;
@@ -499,6 +541,23 @@ section .game .ground {
   left: 0;
 }
 
+@-webkit-keyframes enemy {
+  0% {
+    left: 100%;
+  }
+  100% {
+    left: 0;
+  }
+}
+
+@keyframes enemy {
+  0% {
+    left: 100%;
+  }
+  100% {
+    left: 0;
+  }
+}
 footer {
   left: 50%;
   bottom: 0;
