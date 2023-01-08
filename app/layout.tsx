@@ -95,7 +95,7 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
             </nav>
           </header>
           <main className={page}>{children}</main>
-          <Section>{platform}</Section>
+          {page != `game` && <Section>{platform}</Section>}
           {page != `profile` && <footer>
             <div className="inner">
               <div className="left">

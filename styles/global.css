@@ -454,7 +454,6 @@ section .game {
   width: 100%;
   display: flex;
   height: 415px;
-  overflow: hidden;
   font-weight: 500;
   max-height: 413px;
   font-size: 0.75em;
@@ -464,11 +463,19 @@ section .game {
   justify-content: center;
   border: solid 2px black;
 }
+section .game .intro {
+  font-size: 35px;
+  color: transparent;
+  pointer-events: none;
+  -webkit-animation: intro 1500ms ease-in-out;
+          animation: intro 1500ms ease-in-out;
+}
 section .game .gameControls {
   background: var(--blackGlass);
+  font-size: 0.9em;
   border-radius: 3px;
   position: absolute;
-  padding: 0.5em 2em;
+  padding: 0.6em 2em;
   min-width: 85%;
   max-width: 85%;
   grid-gap: 1em;
@@ -478,10 +485,37 @@ section .game .gameControls {
 section .game .gameControls #jumpSpeed {
   transform: rotateY(180deg);
 }
+section .game .dmg {
+  color: transparent;
+  -webkit-animation: damage 1500ms ease-in-out;
+          animation: damage 1500ms ease-in-out;
+}
+section .game .topRow {
+  position: relative;
+  top: -60px;
+}
+section .game .bottomRow {
+  position: relative;
+  top: -30px;
+}
+section .game #playerTimer {
+  min-width: 125px;
+}
+section .game #playerTimer .timer {
+  width: 100%;
+}
 section .game .controls {
   position: absolute;
   right: 25px;
   top: 25px;
+}
+section .game .controls .timer {
+  width: 100%;
+  display: flex;
+  margin: 0 auto;
+  grid-gap: 0.5em;
+  align-items: center;
+  justify-content: center;
 }
 section .game .controls button {
   height: 20px;
@@ -509,13 +543,27 @@ section .game input[type=range]::-webkit-slider-thumb {
   margin-top: -2.9px;
   box-shadow: 1px 1px 1px #fff, 0px 0px 1px #0d0d0d;
 }
+section .game .playerText {
+  transition: var(--transition);
+}
 section .game .player {
+  transition: var(--transition);
+  position: absolute;
+}
+section .game .finish {
   transition: var(--transition);
   position: absolute;
 }
 section .game .enemy {
   transition: var(--transition);
   position: absolute;
+}
+section .game .enemy.moving {
+  background: red !important;
+}
+section .game .enemy.stopped {
+  -webkit-animation-play-state: paused !important;
+          animation-play-state: paused !important;
 }
 section .game .health {
   transition: var(--transition);
@@ -554,6 +602,68 @@ section .game .ground {
   }
   100% {
     left: 0;
+  }
+}
+@-webkit-keyframes intro {
+  0% {
+    color: white;
+  }
+  100% {
+    color: transparent;
+    font-size: 15px;
+  }
+}
+@keyframes intro {
+  0% {
+    color: white;
+  }
+  100% {
+    color: transparent;
+    font-size: 15px;
+  }
+}
+@-webkit-keyframes damage {
+  0% {
+    color: red;
+  }
+  33% {
+    color: red;
+    font-weight: 300;
+    font-size: 0.85em;
+  }
+  66% {
+    color: red;
+    font-weight: 300;
+    font-size: 0.75em;
+    opacity: 0.5;
+  }
+  100% {
+    color: transparent;
+    font-weight: 300;
+    font-size: 0.65em;
+    opacity: 0;
+  }
+}
+@keyframes damage {
+  0% {
+    color: red;
+  }
+  33% {
+    color: red;
+    font-weight: 300;
+    font-size: 0.85em;
+  }
+  66% {
+    color: red;
+    font-weight: 300;
+    font-size: 0.75em;
+    opacity: 0.5;
+  }
+  100% {
+    color: transparent;
+    font-weight: 300;
+    font-size: 0.65em;
+    opacity: 0;
   }
 }
 footer {
@@ -710,5 +820,89 @@ footer .vertical-sep.fas.fa-undo, footer i.fas.fa-undo {
   }
   button, input[type=submit] {
     font-size: 0.85em;
+  }
+}
+/* Show Scores */
+#scoresHover {
+  position: absolute;
+  top: 45px;
+  left: 0;
+  opacity: 0;
+  width: 450%;
+  border-radius: 10px;
+  padding: 2em;
+  background: var(--blackGlass);
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  text-align: left;
+  transform-origin: top;
+  transform: scale(1, 0);
+  display: flex;
+  flex-direction: column;
+  grid-gap: 1em;
+  transition: 300ms ease-in-out;
+}
+
+.showScoresLink:hover #scoresHover {
+  transform: scale(1, 1);
+  opacity: 1;
+}
+
+.fadeInOut {
+  -webkit-animation: fadeInOut 3500ms ease-in-out 1;
+          animation: fadeInOut 3500ms ease-in-out 1;
+}
+
+@-webkit-keyframes fadeInOut {
+  0% {
+    transform: scale(1, 0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0;
+    transform: scale(1, 0.4);
+  }
+  30% {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInOut {
+  0% {
+    transform: scale(1, 0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0;
+    transform: scale(1, 0.4);
+  }
+  30% {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1, 0);
+    opacity: 0;
   }
 }/*# sourceMappingURL=global.css.map */
