@@ -568,6 +568,10 @@ section {
             box-shadow: 1px 1px 1px #fff, 0px 0px 1px #0d0d0d;
         }
 
+        #startGame {
+            font-size: 1.2em;
+        }
+
         .playerText {
             transition: var(--transition);
         }
@@ -575,6 +579,8 @@ section {
         .player {
             transition: var(--transition);
             position: absolute;
+            text-align: center;
+            // font-size: 0.85em;
         }
   
         .finish {
@@ -614,8 +620,27 @@ section {
             bottom: -0.2px;
             width: 100%;
             left: 0;
+            .groundText {
+                position: absolute;
+                right: 25px;
+                top: 12px;
+                .emphasis {
+                    color: var(--main);
+                    filter: brightness(1.5);
+                }
+            }
         }
     }
+}
+
+.emphasis {
+    color: #00c2ff;
+    margin: 0 0.3em;
+    font-size: 1.1em;
+    font-weight: 700;
+    font-style: italic;
+    // -webkit-text-stroke-width: 1px; 
+    // -webkit-text-stroke-color: #00c2ff; 
 }
 
 @keyframes enemy {

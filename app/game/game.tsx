@@ -319,7 +319,7 @@ export default function Game() {
             <button id={`moveRightButton`} onClick={moveRight}>{`>`}</button>
           </div>
           <button style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><div className="timer"><i className="fas fa-stopwatch"></i> Time: <span className="time">{time.toString().substr(0,6)}s</span></div></button>
-          <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-bullseye"></i> Points: <span className="points">{points}</span></button>
+          <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-coins"></i> Coins: <span className="points">{points}</span></button>
           <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-skull-crossbones"></i> Deaths: <span className="deaths">{deaths}</span></button>
           <button className={`flex row`}style={{fontSize: `0.85em`, fontWeight: 500, height: 30, gridGap: 0, display: `none`}} onClick={resetGame}><i className="fas fa-undo"></i> Restart</button>
           <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-signal"></i> Score: <span className="score">{score}</span></button>
@@ -329,12 +329,13 @@ export default function Game() {
           <button id="startGame" onClick={saveAndRestartGame}>Game Over</button>
         </div> : (win ? <div className="win">
           <button id="winGame" onClick={(Event: any) => startGame(Event)}>You Won</button>
-        </div> : <div className="start"><button id="startGame" onClick={(Event: any) => startGame(Event)}>Start Game</button></div>))} 
-        {game && <div className="intro">Try to get to the Finish Line!</div>}
-        <div className="player playerObj" style={player}></div>
+        </div> : <div className="start"><button id="startGame" onClick={(Event: any) => startGame(Event)}>Click Here or <span className={`emphasis`}>Type Enter</span> to Play <span className="emphasis">//</span> You can also <span className="emphasis">Press Ctrl + R</span> to reload the game!</button></div>))} 
+        {game && <div className="intro">Try to get to the Treasure!</div>}
+        <div className="player playerObj" style={player}>1</div>
         <div className={`enemy ${game ? `moving` : `stopped`}`} style={enemy}></div>
-        <button className="finish flex row" style={{...finish, fontWeight: 500, ...(!gameOver && {pointerEvents: `none`})}} onClick={saveScore}><i className={`fas ${gameOver ? `fa-save` : `fa-flag-checkered`}`} style={{width: `5%`}}></i> {gameOver ? `Save` : `Finish`}</button>
+        <button className="finish flex row" style={{...finish, fontWeight: 500, ...(!gameOver && {pointerEvents: `none`})}} onClick={saveScore}><i className={`fas ${gameOver ? `fa-save` : `fa-coins`}`} style={{width: `5%`}}></i> {gameOver ? `Save` : `Treasure`}</button>
         <div className="ground" style={ground}>
+          <div className="groundText">Click Arrow Buttons or Use Left and Right Arrow Keys to Move and Up or Space to jump. Thank you for Playing!</div>
           <div className="playerText playerObj" style={{position: `absolute`, left: player.left - 64, bottom: player.bottom - 64}}>
             <div className="topRow flex row">
               <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-heartbeat"></i>Player<span className="hlth">{health.width}</span></button>

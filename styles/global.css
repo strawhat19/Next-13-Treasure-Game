@@ -543,12 +543,16 @@ section .game input[type=range]::-webkit-slider-thumb {
   margin-top: -2.9px;
   box-shadow: 1px 1px 1px #fff, 0px 0px 1px #0d0d0d;
 }
+section .game #startGame {
+  font-size: 1.2em;
+}
 section .game .playerText {
   transition: var(--transition);
 }
 section .game .player {
   transition: var(--transition);
   position: absolute;
+  text-align: center;
 }
 section .game .finish {
   transition: var(--transition);
@@ -585,6 +589,23 @@ section .game .ground {
   bottom: -0.2px;
   width: 100%;
   left: 0;
+}
+section .game .ground .groundText {
+  position: absolute;
+  right: 25px;
+  top: 12px;
+}
+section .game .ground .groundText .emphasis {
+  color: var(--main);
+  filter: brightness(1.5);
+}
+
+.emphasis {
+  color: #00c2ff;
+  margin: 0 0.3em;
+  font-size: 1.1em;
+  font-weight: 700;
+  font-style: italic;
 }
 
 @-webkit-keyframes enemy {
