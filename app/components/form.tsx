@@ -20,20 +20,6 @@ export default function AuthForm() {
       return newSub;
     }).catch(error => console.log(error));
   }
- 
-  const getDBUsers = async () => {
-    let latestUsers;
-    try {
-      getDocs(collection(db, `users`)).then((snapshot) => {
-        latestUsers = snapshot.docs.map((doc: any) => doc.data());
-        setUsers(latestUsers);
-        return latestUsers;
-      });
-    } catch (err:any) {
-      console.log(err);
-    }
-    return latestUsers;
-  }
 
   const showAlert = async (alertTitle: any, alertMessage?: any, additionalInfo?:any) => {
     if (alertOpen) return;

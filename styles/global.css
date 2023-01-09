@@ -565,6 +565,7 @@ section .game .playerText {
 }
 section .game .player {
   transition: var(--transition);
+  border-radius: 4px;
   position: absolute;
   text-align: center;
 }
@@ -574,6 +575,7 @@ section .game .finish {
 }
 section .game .enemy {
   transition: var(--transition);
+  border-radius: 4px;
   position: absolute;
   text-align: center;
 }

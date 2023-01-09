@@ -36,7 +36,7 @@ export default function Game() {
   let [deathTimer, setDeathTimer] = useState(initialDeathTimer);
   let [controls, setControls] = useState({minWidth: controWidth});
   let [moveSpeed, setMoveSpeed] = useState<any>(initialMoveSpeed);
-  let { updates, setUpdates, user, setPage, setUser, focus, setFocus } = useContext(StateContext);
+  let { updates, setUpdates, user, setPage, setUser, focus, setFocus, users, setUsers } = useContext(StateContext);
   let initialBounds = {background: `#00b900`, height: 40, width: `${initialHealth}%`, color: `white`, fontWeight: 700};
   let initialPlayer = {background: `black`, height: 15, width: 15, bottom: initialBounds.height - 1, left: 25};
   let [finish, setFinish] = useState({background: `var(--blackGlass)`, height: 80, width: controWidth, bottom: initialBounds.height - 1, right: 25, borderRadius: 4});
@@ -48,13 +48,6 @@ export default function Game() {
   const startGame = (Event?: Event) => {
     setUpdates(updates+1);
     if (Event) setGame(true);
-
-    console.log(user);
-
-    if (user) {
-      setDeaths(user?.deaths || deaths);
-      setHighScore(user?.highScore);
-    }
 
     if (playerInput == null) {
       playerInput = window.addEventListener(`keyup`, KeyboardEvent => {
@@ -92,6 +85,28 @@ export default function Game() {
     }
   }
 
+  const getDBUsers = async (user?: any) => {
+    try {
+      await getDocs(collection(db, `users`)).then((snapshot) => {
+        let latestUsers = snapshot.docs.map((doc: any) => doc.data());
+        setUsers(latestUsers);
+        return latestUsers;
+      });
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  }
+  
+  const addOrUpdateUser = async (id: any, user: any) => {
+    setDoc(doc(db, `users`, id), { ...user, id }).then(newSub => {
+      localStorage.setItem(`user`, JSON.stringify({ ...user, id }));
+      setUser({ ...user, id });
+      setUpdates(updates + 1);
+      return newSub;
+    }).catch(error => console.log(error));
+  }
+
   const isElementInView = (element: any) => {
     if (element) {
       let rect = element.getBoundingClientRect();
@@ -104,15 +119,6 @@ export default function Game() {
     } else {
       return false;
     }
-  }
-  
-  const addOrUpdateUser = async (id: any, user: any) => {
-    setDoc(doc(db, `users`, id), { ...user, id }).then(newSub => {
-      localStorage.setItem(`user`, JSON.stringify({ ...user, id }));
-      setUser({ ...user, id });
-      setUpdates(updates + 1);
-      return newSub;
-    }).catch(error => console.log(error));
   }
 
   const moveLeft = () => {
@@ -185,7 +191,7 @@ export default function Game() {
     let enmy: any = document.querySelector(`.enemy`)?.getBoundingClientRect();
     let fnsh: any = document.querySelector(`.finish`)?.getBoundingClientRect();
     let enemies: any =  document.querySelectorAll(`.enemy`);
-    setFinish({...finish, width: ctrls.width});
+    setFinish({...finish, width: ctrls?.width});
     setDeathTimer(parseFloat(dthtm?.value));
     setJumpSpeed(parseFloat(jmpSpd?.value));
     setMoveSpeed(parseFloat(mvspd?.value));
@@ -194,6 +200,8 @@ export default function Game() {
 
     if (plyr && enmy && fnsh) {
       setEnemy({...enemy, animation: `enemy ${parseFloat(spd?.value)}ms linear infinite`});
+
+      // Check for Game Active
       let gameActive = document.querySelector(`.enemy`)?.classList?.contains(`moving`);
       if (gameActive) {
         setTime(parseFloat(tim?.innerHTML) + 0.01);
@@ -237,20 +245,24 @@ export default function Game() {
               calcScore();
           }
       };
-        if (hlthPts <= 0) {
-          setHealth({...health, width: `${0}%`, background: hlthPts <= lowHealth ? `red` : (hlthPts <= medHealth ? `#cbcb1c` : initialBounds.background), color: hlthPts <= lowHealth ? `white` : (hlthPts <= medHealth ? `black` : `white`), fontWeight: hlthPts <= lowHealth ? 700 : (hlthPts <= medHealth ? 500 : 700)});
-          setDeaths(1);
+      
+      // Check for Game Over
+      if (hlthPts <= 0) {
+        setHealth({...health, width: `${0}%`, background: hlthPts <= lowHealth ? `red` : (hlthPts <= medHealth ? `#cbcb1c` : initialBounds.background), color: hlthPts <= lowHealth ? `white` : (hlthPts <= medHealth ? `black` : `white`), fontWeight: hlthPts <= lowHealth ? 700 : (hlthPts <= medHealth ? 500 : 700)});
+        setDeaths(1);
+        setGameOver(true);
+        setGame(false);
+        calcScore();
+        saveScore();
+      } else if ((parseFloat(tim?.innerHTML) + 0.01) > parseFloat((document.querySelector(`.deathTime`) as any)?.innerHTML)) {
+        if (!document.querySelector(`.gameOver`) || !isElementInView(document.querySelector(`.gameOver`))) {
+          setDeaths(parseInt(ded?.innerHTML) + 1);
           setGameOver(true);
-          setGame(false);
+          resetPlayer();
           calcScore();
-        } else if ((parseFloat(tim?.innerHTML) + 0.01) > parseFloat((document.querySelector(`.deathTime`) as any)?.innerHTML)) {
-          if (!document.querySelector(`.gameOver`) || !isElementInView(document.querySelector(`.gameOver`))) {
-            setDeaths(parseInt(ded?.innerHTML) + 1);
-            setGameOver(true);
-            resetPlayer();
-            calcScore();
-          }
+          saveScore();
         }
+      };
     } else {
       endGame();
     }
@@ -342,9 +354,11 @@ export default function Game() {
   }
 
   const saveScore = () => {
+    let currentUser = user || JSON.parse(localStorage.getItem(`user`) as any);
+    console.log(currentUser);
     if (user) {
-      let highestScore = user?.highScore || score;
-      addOrUpdateUser(user?.id, {...user, deaths, highScore: score > highestScore ? score : highestScore});
+      let highestScore = currentUser?.highScore || score;
+      addOrUpdateUser(currentUser?.id, {...currentUser, deaths, highScore: score > highestScore ? score : highestScore});
     } else {
       let emailField: any = document.querySelector(`input[type=email]`);
       setFocus(true);
@@ -355,19 +369,34 @@ export default function Game() {
   }
 
   useEffect(() => {
+    let currentUser = user || JSON.parse(localStorage.getItem(`user`) as any);
     setPage(`Game`);
     if (loadedRef.current) return;
     loadedRef.current = true;
+    if (currentUser) {
+      console.log(`user`, currentUser);
+      getDBUsers(currentUser).then((usrs: any) => {
+        console.log(`users 2`, usrs);
+      })
+      // setHighScore(user?.highScore);
+      // setDeaths(user?.deaths);
+      // setUser(user);
+    };
+
+    startGame();
     setUpdates(updates+1);
     setHealth({...health, width: `${startHP}%`});
-    startGame();
 
     runGame = setInterval(() => {
       updateGame();
     }, 10);
-  }, [])
+  }, [user]);
 
   return <div className={`inner pageInner`}>
+    <Section id={`gameAuth`}>
+      <h2>{focus ? `Please Sign In or Sign Up to Save Your Score!` : <i>User is {user ? user?.name : `Signed Out`}</i>}</h2>
+      <AuthForm />
+    </Section>
     <section id={`gameBanner`} className={`topContent`}>
         <div className="inner">
             <h1>Game</h1>
@@ -431,10 +460,6 @@ export default function Game() {
           </div>
         </div>
       </div>
-    </Section>
-    <Section id={`gameAuth`}>
-      <h2>{focus ? `Please Sign In or Sign Up to Save Your Score!` : <i>User is {user ? user?.name : `Signed Out`}</i>}</h2>
-      <AuthForm />
     </Section>
   </div>
 }

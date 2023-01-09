@@ -592,6 +592,7 @@ section {
     
         .player {
             transition: var(--transition);
+            border-radius: 4px;
             position: absolute;
             text-align: center;
             // font-size: 0.85em;
@@ -604,6 +605,7 @@ section {
     
         .enemy {
             transition: var(--transition);
+            border-radius: 4px;
             position: absolute;
             text-align: center;
             &.moving {
