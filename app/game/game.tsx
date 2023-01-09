@@ -84,25 +84,13 @@ export default function Game() {
       });
     }
   }
-
-  const getDBUsers = async (user?: any) => {
-    try {
-      await getDocs(collection(db, `users`)).then((snapshot) => {
-        let latestUsers = snapshot.docs.map((doc: any) => doc.data());
-        setUsers(latestUsers);
-        return latestUsers;
-      });
-    } catch (error) {
-      console.log(error);
-      return error;
-    }
-  }
   
   const addOrUpdateUser = async (id: any, user: any) => {
     setDoc(doc(db, `users`, id), { ...user, id }).then(newSub => {
       localStorage.setItem(`user`, JSON.stringify({ ...user, id }));
       setUser({ ...user, id });
       setUpdates(updates + 1);
+      console.log(`Saved`);
       return newSub;
     }).catch(error => console.log(error));
   }
@@ -251,6 +239,7 @@ export default function Game() {
         setHealth({...health, width: `${0}%`, background: hlthPts <= lowHealth ? `red` : (hlthPts <= medHealth ? `#cbcb1c` : initialBounds.background), color: hlthPts <= lowHealth ? `white` : (hlthPts <= medHealth ? `black` : `white`), fontWeight: hlthPts <= lowHealth ? 700 : (hlthPts <= medHealth ? 500 : 700)});
         setDeaths(1);
         setGameOver(true);
+        // console.log(`score`, document.querySelector(`#score`));
         setGame(false);
         calcScore();
         saveScore();
@@ -260,6 +249,10 @@ export default function Game() {
           setGameOver(true);
           resetPlayer();
           calcScore();
+          let scoreElem: any = document.querySelector(`#score`);
+          console.log(`score`, scoreElem);
+          console.log(`scoreElem`, scoreElem?.innerHTML);
+          console.log(`score points`, parseFloat(scoreElem?.innerHTML));
           saveScore();
         }
       };
@@ -354,11 +347,9 @@ export default function Game() {
   }
 
   const saveScore = () => {
-    let currentUser = user || JSON.parse(localStorage.getItem(`user`) as any);
-    console.log(currentUser);
     if (user) {
-      let highestScore = currentUser?.highScore || score;
-      addOrUpdateUser(currentUser?.id, {...currentUser, deaths, highScore: score > highestScore ? score : highestScore});
+      let highestScore = user?.highScore || score;
+      addOrUpdateUser(user?.id, {...user, deaths, highScore: score > highestScore ? score : highestScore});
     } else {
       let emailField: any = document.querySelector(`input[type=email]`);
       setFocus(true);
@@ -369,19 +360,24 @@ export default function Game() {
   }
 
   useEffect(() => {
-    let currentUser = user || JSON.parse(localStorage.getItem(`user`) as any);
     setPage(`Game`);
+    if (user) {
+      getDocs(collection(db, `users`)).then((snapshot) => {
+        let latestUsers = snapshot.docs.map((doc: any) => doc.data());
+        let thisUser = latestUsers.filter((usr: any) => usr?.id == user?.id)[0];
+        console.log(`users`, latestUsers);
+        console.log(`user`, thisUser);
+
+        setHighScore(thisUser?.highScore);
+        setDeaths(thisUser?.deaths);
+        setUsers(latestUsers);
+
+        if (loadedRef.current) return;
+        setUser(thisUser);
+      });
+    }
     if (loadedRef.current) return;
     loadedRef.current = true;
-    if (currentUser) {
-      console.log(`user`, currentUser);
-      getDBUsers(currentUser).then((usrs: any) => {
-        console.log(`users 2`, usrs);
-      })
-      // setHighScore(user?.highScore);
-      // setDeaths(user?.deaths);
-      // setUser(user);
-    };
 
     startGame();
     setUpdates(updates+1);
@@ -403,7 +399,7 @@ export default function Game() {
             <div className={`column rightColumn gameStats`}>
                 {/* <h2 className={`flex row`}><span className="label">Total:</span><span className="score">{score}</span><i className="fas fa-coins"></i></h2> */}
                 <h2 className={`flex row`}><span className="label">Deaths:</span><span className="deaths">{deaths}</span><i className="fas fa-skull-crossbones"></i></h2>
-                <h2 className={`flex row`}><span className="label">High Score:</span><span className="score">{highScore}</span><i className="fas fa-signal"></i></h2>
+                <h2 className={`flex row`}><span className="label">High Score:</span><span className="highScore">{highScore}</span><i className="fas fa-signal"></i></h2>
             </div>
         </div>
     </section>
@@ -432,7 +428,7 @@ export default function Game() {
           <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-coins"></i> Coins: <span className="points">{points}</span></button>
           <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-skull-crossbones"></i> Deaths: <span className="deaths">{deaths}</span></button>
           <button className={`flex row`}style={{fontSize: `0.85em`, fontWeight: 500, height: 30, gridGap: 0, display: `none`}} onClick={resetGame}><i className="fas fa-undo"></i> Restart</button>
-          <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-signal"></i> Score: <span className="score">{score}</span></button>
+          <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-signal"></i> Score: <span className="score" id={`score`}>{score}</span></button>
           <button className={`flex row`} style={{fontSize: `0.85em`, fontWeight: 500}} onClick={hardReset}><i style={{width: `15%`}} className="fas fa-door-open"></i> Exit</button>
         </div>
         {!game && (gameOver ? <div className="gameOver">
