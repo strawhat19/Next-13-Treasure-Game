@@ -463,6 +463,20 @@ button, input[type="submit"] {
     }
 }
 
+.gameStats {
+    min-width: 20%;
+    h2 {
+        .label {
+            min-width: 169px;
+            font-size: 0.85em;
+        }
+        font-size: 1.35em;
+        i {
+            font-size: 0.75em;
+        }
+    }
+}
+
 section {
     .game {
         width: 100%;
@@ -591,10 +605,13 @@ section {
         .enemy {
             transition: var(--transition);
             position: absolute;
+            text-align: center;
             &.moving {
                 background: red !important;
             }
             &.stopped {
+                opacity: 0;
+                pointer-events: none;
                 animation-play-state: paused !important;
             }
         }
@@ -695,7 +712,7 @@ footer {
     grid-gap: 10px;
     font-size: 13px;
     flex-wrap: wrap;
-    position: relative;
+    position: fixed;
     align-items: center;
     color: white !important;
     backdrop-filter: blur(8px);
@@ -904,5 +921,31 @@ footer {
     100% {
         transform: scale(1,0);
         opacity: 0;
+    }
+}
+
+.attention {
+    position: relative;
+    border: solid red 3px;
+    box-shadow: 0px 0px 4px 1px red;
+    animation: shake 1s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes shake {
+    0% {
+        left: 0px;
+        top: 0px;
+    }
+    33% {
+        left: -1px;
+        top: -1px;
+    }
+    66% {
+        left: 1px;
+        top: 1px;
+    }
+    100% {
+        left: 0px;
+        top: 0px;
     }
 }

@@ -10,7 +10,7 @@ export default function AuthForm() {
   const loadedRef = useRef(false);
   const [loaded, setLoaded] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false); 
-  const { user, setUser, updates, setUpdates, setUsers, setContent, authState, setAuthState, emailField, setEmailField, users } = useContext(StateContext);
+  const { user, setUser, updates, setUpdates, setUsers, setContent, authState, setAuthState, emailField, setEmailField, users, setFocus } = useContext(StateContext);
 
   const addOrUpdateUser = async (id: any, user: any) => {
     setDoc(doc(db, `users`, id), { ...user, id }).then(newSub => {
@@ -135,6 +135,7 @@ export default function AuthForm() {
           showAlert(`Password Required`);
         } else {
           if (password == existingAccount?.password) {
+            setFocus(false);
             setAuthState(`Sign Out`);
             setUser(existingAccount);
             setContent(existingAccount?.bio);

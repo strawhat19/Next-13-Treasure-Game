@@ -450,6 +450,20 @@ button:active, input[type=submit]:active {
   text-align: center;
 }
 
+.gameStats {
+  min-width: 20%;
+}
+.gameStats h2 {
+  font-size: 1.35em;
+}
+.gameStats h2 .label {
+  min-width: 169px;
+  font-size: 0.85em;
+}
+.gameStats h2 i {
+  font-size: 0.75em;
+}
+
 section .game {
   width: 100%;
   display: flex;
@@ -561,11 +575,14 @@ section .game .finish {
 section .game .enemy {
   transition: var(--transition);
   position: absolute;
+  text-align: center;
 }
 section .game .enemy.moving {
   background: red !important;
 }
 section .game .enemy.stopped {
+  opacity: 0;
+  pointer-events: none;
   -webkit-animation-play-state: paused !important;
           animation-play-state: paused !important;
 }
@@ -697,7 +714,7 @@ footer {
   grid-gap: 10px;
   font-size: 13px;
   flex-wrap: wrap;
-  position: relative;
+  position: fixed;
   align-items: center;
   color: white !important;
   -webkit-backdrop-filter: blur(8px);
@@ -925,5 +942,49 @@ footer .vertical-sep.fas.fa-undo, footer i.fas.fa-undo {
   100% {
     transform: scale(1, 0);
     opacity: 0;
+  }
+}
+.attention {
+  position: relative;
+  border: solid red 3px;
+  box-shadow: 0px 0px 4px 1px red;
+  animation: shake 1s ease-in-out infinite alternate-reverse;
+}
+
+@-webkit-keyframes shake {
+  0% {
+    left: 0px;
+    top: 0px;
+  }
+  33% {
+    left: -1px;
+    top: -1px;
+  }
+  66% {
+    left: 1px;
+    top: 1px;
+  }
+  100% {
+    left: 0px;
+    top: 0px;
+  }
+}
+
+@keyframes shake {
+  0% {
+    left: 0px;
+    top: 0px;
+  }
+  33% {
+    left: -1px;
+    top: -1px;
+  }
+  66% {
+    left: 1px;
+    top: 1px;
+  }
+  100% {
+    left: 0px;
+    top: 0px;
   }
 }/*# sourceMappingURL=global.css.map */
