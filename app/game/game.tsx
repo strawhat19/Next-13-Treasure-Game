@@ -20,7 +20,7 @@ export default function Game() {
   let loadedRef = useRef(false);
   let [hits, setHits] = useState(0);
   let [time, setTime] = useState(0);
-  let [score, setScore] = useState(900000);
+  let [score, setScore] = useState(0);
   let [win, setWin] = useState(false);
   let [points, setPoints] = useState(0);
   let [deaths, setDeaths] = useState(0);
