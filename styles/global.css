@@ -27,6 +27,8 @@
   --steel: #7a7a7a;
   --react: #0fccce;
   --silver: #f2f2f2;
+  --ground: #00b900;
+  --gameBlue: #00c2ff;
   --softBlack: #1a1a1a;
   --secondary: #3c3c3c;
   --piratechs: #2b4261;
@@ -38,6 +40,7 @@
   --blackGlass: rgba(0, 0, 0, 0.75);
   --silverGlass: rgba(0, 0, 0, 0.35);
   --mainGlass: rgba(255, 28, 11, 0.75);
+  --dangerColor: rgba(255, 28, 11, 0.75);
   --softWhite: rgba(255, 255, 255, 0.87);
   --transition: 0.24s cubic-bezier(0.77, 0.2, 0.05, 1) !important;
 }
@@ -296,7 +299,25 @@ section article {
 }
 .column.rightColumn {
   text-align: right;
+  align-items: flex-end;
   justify-content: flex-end;
+}
+
+.overflow article {
+  overflow-x: hidden;
+  overflow-y: overlay;
+  padding-right: 10px;
+  max-height: 110px;
+}
+.overflow article::-webkit-scrollbar {
+  position: relative;
+  border-radius: 4px;
+  width: 4px !important;
+  background: black !important;
+}
+.overflow article::-webkit-scrollbar-thumb {
+  background: var(--gameBlue);
+  border-radius: 4px;
 }
 
 main {
@@ -450,6 +471,15 @@ button:active, input[type=submit]:active {
   text-align: center;
 }
 
+.highScore {
+  max-width: -webkit-fit-content;
+  max-width: -moz-fit-content;
+  max-width: fit-content;
+  position: relative;
+  font-size: 0.95em;
+  top: -1px;
+}
+
 .gameStats {
   min-width: 20%;
 }
@@ -457,11 +487,25 @@ button:active, input[type=submit]:active {
   font-size: 1.35em;
 }
 .gameStats h2 .label {
-  min-width: 169px;
+  min-width: 110px;
   font-size: 0.85em;
 }
 .gameStats h2 i {
   font-size: 0.75em;
+}
+
+.leaderBoard {
+  padding: 10px;
+  margin-top: 75px;
+  max-width: 270px;
+  border-radius: 4px;
+  background: var(--blackGlass);
+}
+.leaderBoard .userScore {
+  grid-gap: 1em;
+}
+.leaderBoard .userScore .score {
+  text-align: right;
 }
 
 section .game {
@@ -477,12 +521,18 @@ section .game {
   justify-content: center;
   border: solid 2px black;
 }
+section .game .fa-coins {
+  color: var(--js);
+}
+section .game .fa-save {
+  color: #00b900;
+}
 section .game .intro {
   font-size: 35px;
   color: transparent;
   pointer-events: none;
-  -webkit-animation: intro 1500ms ease-in-out;
-          animation: intro 1500ms ease-in-out;
+  -webkit-animation: intro 2000ms ease-in-out;
+          animation: intro 2000ms ease-in-out;
 }
 section .game .gameControls {
   background: var(--blackGlass);
@@ -490,14 +540,17 @@ section .game .gameControls {
   border-radius: 3px;
   position: absolute;
   padding: 0.6em 2em;
-  min-width: 85%;
-  max-width: 85%;
-  grid-gap: 1em;
+  grid-gap: 1.5em;
+  min-width: 82%;
+  max-width: 82%;
   left: 25px;
   top: 25px;
 }
 section .game .gameControls #jumpSpeed {
   transform: rotateY(180deg);
+}
+section .game .gameControls i {
+  color: var(--gameBlue);
 }
 section .game .dmg {
   color: transparent;
@@ -518,6 +571,13 @@ section .game #playerTimer {
 section .game #playerTimer .timer {
   width: 100%;
 }
+section .game .moveButton {
+  display: flex;
+  font-weight: 900;
+  align-items: center;
+  justify-content: center;
+  color: var(--gameBlue) !important;
+}
 section .game .controls {
   position: absolute;
   right: 25px;
@@ -531,13 +591,17 @@ section .game .controls .timer {
   align-items: center;
   justify-content: center;
 }
+section .game .controls i {
+  color: var(--gameBlue);
+}
 section .game .controls button {
   height: 20px;
   padding: 3px 20px;
 }
 section .game input[type=range] {
+  min-width: 75px;
   -webkit-appearance: none;
-  background: #00c2ff !important;
+  background: var(--gameBlue) !important;
   max-height: 1px !important;
   height: 1px !important;
   padding: 0 !important;
@@ -545,6 +609,9 @@ section .game input[type=range] {
   margin-top: 0.1em;
   color: white;
   width: 100%;
+}
+section .game .dmgText {
+  min-width: 65px;
 }
 section .game input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -563,6 +630,13 @@ section .game #startGame {
 section .game .playerText {
   transition: var(--transition);
 }
+section .game .playerText button i {
+  color: var(--gameBlue);
+}
+section .game .healthText i.fa-heartbeat {
+  font-size: 2em;
+  color: var(--dangerColor) !important;
+}
 section .game .player {
   transition: var(--transition);
   border-radius: 4px;
@@ -580,7 +654,7 @@ section .game .enemy {
   text-align: center;
 }
 section .game .enemy.moving {
-  background: red !important;
+  background: var(--dangerColor) !important;
 }
 section .game .enemy.stopped {
   opacity: 0;
@@ -596,7 +670,7 @@ section .game .health {
   position: absolute;
   min-width: 150px;
   grid-gap: 0.5em;
-  max-width: 85%;
+  max-width: 82%;
   display: flex;
   left: 25px;
   top: 75px;
@@ -620,7 +694,7 @@ section .game .ground .groundText .emphasis {
 }
 
 .emphasis {
-  color: #00c2ff;
+  color: var(--gameBlue);
   margin: 0 0.3em;
   font-size: 1.1em;
   font-weight: 700;
@@ -664,15 +738,15 @@ section .game .ground .groundText .emphasis {
 }
 @-webkit-keyframes damage {
   0% {
-    color: red;
+    color: var(--dangerColor);
   }
   33% {
-    color: red;
+    color: var(--dangerColor);
     font-weight: 300;
     font-size: 0.85em;
   }
   66% {
-    color: red;
+    color: var(--dangerColor);
     font-weight: 300;
     font-size: 0.75em;
     opacity: 0.5;
@@ -686,15 +760,15 @@ section .game .ground .groundText .emphasis {
 }
 @keyframes damage {
   0% {
-    color: red;
+    color: var(--dangerColor);
   }
   33% {
-    color: red;
+    color: var(--dangerColor);
     font-weight: 300;
     font-size: 0.85em;
   }
   66% {
-    color: red;
+    color: var(--dangerColor);
     font-weight: 300;
     font-size: 0.75em;
     opacity: 0.5;
@@ -948,8 +1022,8 @@ footer .vertical-sep.fas.fa-undo, footer i.fas.fa-undo {
 }
 .attention {
   position: relative;
-  border: solid red 3px;
-  box-shadow: 0px 0px 4px 1px red;
+  border: solid var(--dangerColor) 3px;
+  box-shadow: 0px 0px 4px 1px var(--dangerColor);
   animation: shake 1s ease-in-out infinite alternate-reverse;
 }
 

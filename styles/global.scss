@@ -31,6 +31,8 @@
     --steel: #7a7a7a;
     --react: #0fccce;
     --silver: #f2f2f2;
+    --ground: #00b900;
+    --gameBlue: #00c2ff;
     --softBlack: #1a1a1a;
     --secondary: #3c3c3c;
     --piratechs: #2b4261;
@@ -42,6 +44,7 @@
     --blackGlass: rgba(0, 0, 0, 0.75);
     --silverGlass: rgba(0, 0, 0, 0.35);
     --mainGlass: rgba(255, 28, 11, 0.75);
+    --dangerColor: rgba(255, 28, 11, 0.75);
     --softWhite: rgba(255, 255, 255, 0.87);
     --transition: 0.24s cubic-bezier(0.77, 0.2, 0.05, 1) !important;
 }
@@ -286,24 +289,6 @@ header {
         width: 100%;
         flex-direction: column;
     }
-    // section {
-    //     width: 100%;
-    //     height: auto;
-    //     display: flex;
-    //     grid-gap: 1em;
-    //     margin: 0 auto;
-    //     padding: 1em 0;
-    //     overflow: hidden;
-    //     align-items: center;
-    //     justify-content: space-between;
-    //     article {
-    //         width: 100%;
-    //         height: auto;
-    //         display: flex;
-    //         grid-gap: 1em;
-    //         flex-direction: column;
-    //     }
-    // }
 }
 
 .column {
@@ -311,7 +296,27 @@ header {
     flex-direction: column;
     &.rightColumn {
         text-align: right;
+        align-items: flex-end;
         justify-content: flex-end;
+    }
+}
+
+.overflow {
+    article {
+        overflow-x: hidden;
+        overflow-y: overlay;
+        padding-right: 10px;
+        max-height: 110px;
+        &::-webkit-scrollbar {
+            position: relative;
+            border-radius: 4px;
+            width: 4px !important;
+            background: black !important;
+        }
+        &::-webkit-scrollbar-thumb {
+            background: var(--gameBlue);
+            border-radius: 4px;
+        }
     }
 }
 
@@ -320,6 +325,9 @@ main {
     height: auto;
     padding: 3em 0;
     margin: 0 auto;
+    // &.Game {
+    //     padding: 2em;
+    // }
 }
 
 h1 {
@@ -463,16 +471,37 @@ button, input[type="submit"] {
     }
 }
 
+.highScore {
+    max-width: fit-content;
+    position: relative;
+    font-size: 0.95em;
+    top: -1px;
+}
+
 .gameStats {
     min-width: 20%;
     h2 {
         .label {
-            min-width: 169px;
+            min-width: 110px;
             font-size: 0.85em;
         }
         font-size: 1.35em;
         i {
             font-size: 0.75em;
+        }
+    }
+}
+
+.leaderBoard {
+    padding: 10px;
+    margin-top: 75px;
+    max-width: 270px;
+    border-radius: 4px;         
+    background: var(--blackGlass);
+    .userScore {
+        grid-gap: 1em;
+        .score {
+            text-align: right;
         }
     }
 }
@@ -492,11 +521,19 @@ section {
         justify-content: center;
         border: solid 2px black;
 
+        .fa-coins {
+            color: var(--js);
+        }
+    
+        .fa-save {
+            color: #00b900;
+        }
+
         .intro {
             font-size: 35px;
             color: transparent;
             pointer-events: none;
-            animation: intro 1500ms ease-in-out;
+            animation: intro 2000ms ease-in-out;
         }
     
         .gameControls {
@@ -505,14 +542,18 @@ section {
             border-radius: 3px;
             position: absolute;
             padding: 0.6em 2em;
-            min-width: 85%;
-            max-width: 85%;
-            grid-gap: 1em;
+            grid-gap: 1.5em;
+            min-width: 82%;
+            max-width: 82%;
             left: 25px;
             top: 25px;
 
             #jumpSpeed {
                 transform: rotateY(180deg);
+            }
+
+            i {
+                color: var(--gameBlue);
             }
         }
 
@@ -538,6 +579,14 @@ section {
             }
         }
 
+        .moveButton {
+            display: flex;
+            font-weight: 900;
+            align-items: center;
+            justify-content: center;
+            color: var(--gameBlue) !important;
+        }
+
         .controls {
             position: absolute;
             right: 25px;
@@ -552,6 +601,10 @@ section {
                 justify-content: center;
             }
 
+            i {
+                color: var(--gameBlue);
+            }
+
             button {
                 height: 20px;
                 padding: 3px 20px;
@@ -559,8 +612,9 @@ section {
         }
 
         input[type=range] {
+            min-width: 75px;
             -webkit-appearance: none;
-            background: #00c2ff !important;
+            background: var(--gameBlue) !important;
             max-height: 1px !important;
             height: 1px !important;
             padding: 0 !important;
@@ -568,6 +622,10 @@ section {
             margin-top: .1em;
             color: white;
             width: 100%;
+        }
+
+        .dmgText {
+            min-width: 65px;
         }
         
         input[type=range]::-webkit-slider-thumb {
@@ -588,7 +646,21 @@ section {
 
         .playerText {
             transition: var(--transition);
+            button {
+                i {
+                    color: var(--gameBlue);
+                }
+            }
         }
+
+    .healthText {
+        i {
+            &.fa-heartbeat {
+                font-size: 2em;
+                color: var(--dangerColor) !important;
+            }
+        }
+    }
     
         .player {
             transition: var(--transition);
@@ -609,7 +681,7 @@ section {
             position: absolute;
             text-align: center;
             &.moving {
-                background: red !important;
+                background: var(--dangerColor) !important;
             }
             &.stopped {
                 opacity: 0;
@@ -626,7 +698,7 @@ section {
             position: absolute;
             min-width: 150px;
             grid-gap: 0.5em;
-            max-width: 85%;
+            max-width: 82%;
             display: flex;
             left: 25px;
             top: 75px;
@@ -653,13 +725,13 @@ section {
 }
 
 .emphasis {
-    color: #00c2ff;
+    color: var(--gameBlue);
     margin: 0 0.3em;
     font-size: 1.1em;
     font-weight: 700;
     font-style: italic;
     // -webkit-text-stroke-width: 1px; 
-    // -webkit-text-stroke-color: #00c2ff; 
+    // -webkit-text-stroke-color: var(--gameBlue); 
 }
 
 @keyframes enemy {
@@ -683,15 +755,15 @@ section {
 
 @keyframes damage {
     0% {
-        color: red;
+        color: var(--dangerColor);
     }
     33% {
-        color: red;
+        color: var(--dangerColor);
         font-weight: 300;
         font-size: 0.85em;
     }
     66% {
-        color: red;
+        color: var(--dangerColor);
         font-weight: 300;
         font-size: 0.75em;
         opacity: 0.5;
@@ -928,8 +1000,8 @@ footer {
 
 .attention {
     position: relative;
-    border: solid red 3px;
-    box-shadow: 0px 0px 4px 1px red;
+    border: solid var(--dangerColor) 3px;
+    box-shadow: 0px 0px 4px 1px var(--dangerColor);
     animation: shake 1s ease-in-out infinite alternate-reverse;
 }
 

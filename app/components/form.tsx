@@ -60,8 +60,8 @@ export default function AuthForm() {
         break;
       case `Next`:
         getDocs(collection(db, `users`)).then((snapshot) => {
-          let latestUsers = snapshot.docs.map((doc: any) => doc.data());
-          let macthingEmails = latestUsers.filter((usr: any) => usr?.email == email);
+          let latestUsers = snapshot.docs.map((doc: any) => doc.data()).sort((a: any, b: any) => b?.highScore - a?.highScore);
+          let macthingEmails = latestUsers.filter((usr: any) => usr?.email.toLowerCase() == email.toLowerCase());
           setUsers(latestUsers);
           setEmailField(true);
           if (macthingEmails.length > 0) {
@@ -81,6 +81,8 @@ export default function AuthForm() {
         setUser(null);
         setUpdates(updates+1);
         localStorage.removeItem(`user`);
+        localStorage.removeItem(`score`);
+        localStorage.removeItem(`highScore`);
         setAuthState(`Next`);
         setEmailField(false);
         setContent(defaultContent);
@@ -149,23 +151,28 @@ export default function AuthForm() {
           if (password == ``) {
             showAlert(`Password Required`);
           } else {
+            setFocus(false);
+            let storedHighScore = JSON.parse(localStorage.getItem(`highScore`) as any);
             let potentialUser = { 
               id: users.length + 1, 
               bio: ``,
               color: ``, 
               number: 0,
+              deaths: 0,
               status: ``,
               name: name, 
               email: email,
               roles: [`user`],
               password: password, 
               updated: formatDate(new Date()), 
+              highScore: storedHighScore || 0,
               lastSignin: formatDate(new Date()), 
               registered: formatDate(new Date()), 
             };
   
             let uuid = `${latestUsers.length + 1} ${potentialUser?.name} ${potentialUser?.registered.split(` `)[0] + ` ` + potentialUser?.registered.split(` `)[1] + ` ` + potentialUser?.registered.split(` `)[2]}`;
             addOrUpdateUser(uuid, potentialUser);
+            getDocs(collection(db, `users`)).then((snapshot) => setUsers(snapshot.docs.map((doc: any) => doc.data()).sort((a: any, b: any) => b?.highScore - a?.highScore)));
             setAuthState(`Sign Out`);
           }
         });

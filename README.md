@@ -12,7 +12,13 @@
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+I used Next 13 to make this site and will probably continue to use it since its blazing fast and a good development experience for the most part.
+
+I am also experimenting with making a game in JavaScript, im very new to game development haha.
+
 ![Screenshot of Application](./public/next-13-app.gif)
+
+![Screenshot of Game](./public/GameScreen.png)
 
 ## Getting Started
 
