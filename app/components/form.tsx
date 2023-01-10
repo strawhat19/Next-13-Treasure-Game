@@ -81,7 +81,10 @@ export default function AuthForm() {
         setUser(null);
         setUpdates(updates+1);
         localStorage.removeItem(`user`);
+        localStorage.removeItem(`users`);
         localStorage.removeItem(`score`);
+        localStorage.removeItem(`health`);
+        localStorage.removeItem(`account`);
         localStorage.removeItem(`highScore`);
         setAuthState(`Next`);
         setEmailField(false);
@@ -138,7 +141,7 @@ export default function AuthForm() {
 
         getDocs(collection(db, `users`)).then((snapshot) => {
           let latestUsers = snapshot.docs.map((doc: any) => doc.data());
-          let macthingEmails = latestUsers.filter((usr: any) => usr?.email == email);
+          let macthingEmails = latestUsers.filter((usr: any) => usr?.email.toLowerCase() == email.toLowerCase());
           setUsers(latestUsers);
           if (macthingEmails.length > 0) {
             localStorage.setItem(`account`, JSON.stringify(macthingEmails[0]));
@@ -190,6 +193,7 @@ export default function AuthForm() {
   <form id="authForm" className={`flex`} onSubmit={authForm}>
       {!user && <input placeholder="Email" type="email" name="email" autoComplete={`email`} required />}
       {!user && emailField && <input placeholder="Password" type="password" name="password" autoComplete={`current-password`} />}
+      {user && window?.location?.href?.includes(`profile`) && <input defaultValue={user?.name} id="name" className={`name userData`} placeholder="Name" type="text" name="status" />}
       {user && window?.location?.href?.includes(`profile`) && <input id="status" className={`status userData`} placeholder="Status" type="text" name="status" />}
       {user && window?.location?.href?.includes(`profile`) && <input id="bio" className={`bio userData`} placeholder="About You" type="text" name="bio" />}
       {user && window?.location?.href?.includes(`profile`) && <input id="number" className={`number userData`} placeholder="Favorite Number" type="number" name="number" />}

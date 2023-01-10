@@ -494,8 +494,6 @@ button, input[type="submit"] {
 
 .leaderBoard {
     padding: 10px;
-    margin-top: 75px;
-    max-width: 270px;
     border-radius: 4px;         
     background: var(--blackGlass);
     .userScore {
@@ -520,6 +518,11 @@ section {
         // overflow: hidden;
         justify-content: center;
         border: solid 2px black;
+
+        .leaderBoard {
+            max-width: 270px;
+            margin-top: 75px;
+        }
 
         .fa-coins {
             color: var(--js);
@@ -657,7 +660,7 @@ section {
         i {
             &.fa-heartbeat {
                 font-size: 2em;
-                color: var(--dangerColor) !important;
+                color: red !important;
             }
         }
     }

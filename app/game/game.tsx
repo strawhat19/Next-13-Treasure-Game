@@ -34,13 +34,14 @@ export default function Game() {
   let [totalDamage, setTotalDamage] = useState(0);
   let [damage, setDamage] = useState(startDamage);
   let [prevHealth, setPrevHealth] = useState(100);
+  let [showLeaders, setShowLeaders] = useState(false);
   let [initialHealth, setInitialHealth] = useState(startHP);
   let [deathTimer, setDeathTimer] = useState(initialDeathTimer);
   let [moveSpeed, setMoveSpeed] = useState<any>(initialMoveSpeed);
   let [controls, setControls] = useState({minWidth: controlWidth});
   let { width, updates, setUpdates, user, setPage, setUser, focus, setFocus, users } = useContext(StateContext);
   let initialBounds = {background: `var(--ground)`, height: 40, width: `${initialHealth}%`, color: `white`, fontWeight: 700};
-  let initialPlayer = {background: `black`, height: 15, width: 15, bottom: initialBounds.height - 1, left: 100};
+  let initialPlayer = {background: `black`, height: 15, width: 15, bottom: initialBounds.height - 1, left: 70};
   let [finish, setFinish] = useState({background: `var(--blackGlass)`, height: 80, width: controlWidth, bottom: initialBounds.height - 1, right: 25, borderRadius: 4});
   let [enemy, setEnemy] = useState({background: `transparent`, height: 15, width: 15, bottom: initialBounds.height - 1, left: 25, animation: `enemy ${speed}ms linear infinite`});
   let [ground, setGround] = useState({...initialBounds, width: `100%`});
@@ -88,83 +89,30 @@ export default function Game() {
       });
     }
   }
-  
-  const addOrUpdateUser = async (id: any, user: any) => {
-    setDoc(doc(db, `users`, id), { ...user, id }).then(newSub => {
-      localStorage.setItem(`user`, JSON.stringify({ ...user, id }));
-      setUser({ ...user, id });
-      setUpdates(updates + 1);
-      return newSub;
-    }).catch(error => console.log(error));
-  }
-
-  const isElementInView = (element: any) => {
-    if (element) {
-      let rect = element.getBoundingClientRect();
-      return (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-      );
-    } else {
-      return false;
-    }
-  }
 
   const moveLeft = () => {
-    if (player.left > 100) {
+    if (player.left > 70) {
+      let distance = player.left - (moveSpeed * 35);
       setUpdates(updates+1);
-      setPlayer({...player, left: player.left - (moveSpeed * 35)});
+      setPlayer({...player, left: distance});
     }
   }
 
   const moveRight = () => {
-    if (player.left < (width - (width/8))) {
+    let plyr: any = document.querySelector(`.player`)?.getBoundingClientRect();
+    if (plyr.left < (width - (width/8))) {
+      let distance = plyr.left + (moveSpeed * 35);
       setUpdates(updates+1);
-      setPlayer({...player, left: player.left + (moveSpeed * 35)});
+      setPlayer({...player, left: distance});
     }
   }
 
   const jump = () => {
+    let plyr: any = document.querySelector(`.player`)?.getBoundingClientRect();
+    let distance = (plyr.bottom / 16) + (moveSpeed * 50) > 250 ? 250 : (plyr.bottom / 16) + (moveSpeed * 50);
     setUpdates(updates+1);
-    setPlayer({...player, bottom: player.bottom + (moveSpeed * 50)});
+    setPlayer({...player, bottom: distance});
     setTimeout(() => setPlayer({...player, bottom: initialPlayer.bottom}), jumpSpeed);
-  }
-
-  const changeHP = () => {
-    let hp: any = document.querySelector(`#initialHealth`);
-    setHealth({...health, width: `${parseFloat(hp?.value)}%`});
-    setInitialHealth(parseFloat(hp?.value));
-  }
-
-  const damagePlayerWithMultipleEnemies = (plyr: any, enmy: any, dmg: any, hlthPts: any, ded: any) => {
-    if (plyr.right >= enmy.left && 
-      plyr.left <= enmy.right && 
-      plyr.bottom >= enmy.top &&
-      plyr.top <= enmy.bottom) {
-        if (hlthPts > 0) {
-          setHurt(true);
-          setHealth({...health, width: `${hlthPts - dmg.value}%`, background: hlthPts <= lowHealth ? dangerColor : (hlthPts <= medHealth ? `#cbcb1c` : initialBounds.background), color: hlthPts <= lowHealth ? `white` : (hlthPts <= medHealth ? `black` : `white`), fontWeight: hlthPts <= lowHealth ? 700 : (hlthPts <= medHealth ? 500 : 700)});
-          setHits(JSON.parse(localStorage.getItem(`health`) as any) - (hlthPts - 1) > (((damage * 10) * (speed /3333))/1.5) ? ((JSON.parse(localStorage.getItem(`health`) as any) - (hlthPts - 1)) / 2) : JSON.parse(localStorage.getItem(`health`) as any) - (hlthPts - 1));
-          setTotalDamage(totalDamage + (prevHealth - parseFloat(health.width)));
-          calcScore(true);
-          setTimeout(() => {
-            let hit: any = document.querySelector(`.hits`);
-            if (parseFloat(hit?.innerHTML) != 0) {
-              localStorage.setItem(`health`, JSON.stringify(hlthPts));
-              setPrevHealth(hlthPts);
-            };
-            setHurt(false);
-            setHits(0);
-          }, 500);
-        } else {
-          // localStorage.setItem(`deaths`, JSON.stringify(parseInt(ded?.innerHTML) + 1));
-          setDeaths(parseInt(ded?.innerHTML) + 1);
-          calcScore(true);
-          restartGame();
-        }
-      }
   }
 
   const updateGame = () => {
@@ -327,45 +275,12 @@ export default function Game() {
     setWin(false);
     setGameOver(false);
     if (fast) {     
-      setScore(0); 
+      setScore(0);
       setPlayer(initialPlayer);
       setHealth({...initialBounds, width: `${parseFloat(hp?.value) || startHP}%`});
       localStorage.setItem(`health`, `100`);
     }
     startGame();
-  }
-
-  const calcScore = (decrease?: any) => {
-    let ded: any = document.querySelector(`.deaths`);
-    let hlth: any = document.querySelector(`.healthPoints`);
-    let hlthPts: any = parseFloat(hlth?.innerHTML);
-    let dam: any = (100 - hlthPts) / 2;
-    let dmg: any = document.querySelector(`#damage`);
-    let pnts: any = document.querySelector(`.points`);
-    let tim: any = document.querySelector(`.time`);
-    let dths: any = parseInt(ded?.innerHTML);
-    let pts: any = parseInt(pnts?.innerHTML);
-    let times: any = parseInt(tim?.innerHTML) + 0.01;
-    let scr: any = parseInt((document.querySelector(`#score`) as any)?.innerHTML?.replace(/,/g, ``));
-    let healthBonus = hlthPts < 10 ? 10 : hlthPts;
-    let rawScore: any = pts > 15 ? ((pts - dam) * healthBonus) : ((15 - dam) * healthBonus);
-    let scor = Math.abs(parseInt((rawScore / times) as any));
-    let min = (parseFloat(dmg?.value) * 8) * (speed /4000);
-    let max = (parseFloat(dmg?.value) * 10) * (speed /3333);
-    let scoreVariables = {times, scr, healthBonus, damage, initialHealth, deathTimer, min, max};
-    let bonus = Math.floor(Math.random() * (scoreVariables.max - scoreVariables.min) + scoreVariables.min) * (deathTimer + deathTimer);
-    let scoreToSet: any = 0;
-    if (decrease) {
-      if (scr > 0) {
-        scoreToSet = scr - (bonus * min);
-      } else {
-        scoreToSet = 0;
-      }
-    } else {
-      scoreToSet = scr + (bonus * max);
-    }
-    setScore(scoreToSet);
-    localStorage.setItem(`score`, JSON.stringify(scoreToSet));
   }
 
   const saveScore = (clickEvent?: any) => {
@@ -394,21 +309,113 @@ export default function Game() {
     }
   }
 
+  const calcScore = (decrease?: any) => {
+    let ded: any = document.querySelector(`.deaths`);
+    let hlth: any = document.querySelector(`.healthPoints`);
+    let hlthPts: any = parseFloat(hlth?.innerHTML);
+    let dam: any = (100 - hlthPts) / 2;
+    let dmg: any = document.querySelector(`#damage`);
+    let pnts: any = document.querySelector(`.points`);
+    let tim: any = document.querySelector(`.time`);
+    let dths: any = parseInt(ded?.innerHTML);
+    let pts: any = parseInt(pnts?.innerHTML);
+    let times: any = parseInt(tim?.innerHTML) + 0.01;
+    let scr: any = parseInt((document.querySelector(`#score`) as any)?.innerHTML?.replace(/,/g, ``));
+    let healthBonus = hlthPts < 10 ? 10 : hlthPts;
+    let rawScore: any = pts > 15 ? ((pts - dam) * healthBonus) : ((15 - dam) * healthBonus);
+    let scor = Math.abs(parseInt((rawScore / times) as any));
+    let min = (parseFloat(dmg?.value) * 8) * (speed /8000);
+    let max = (parseFloat(dmg?.value) * 10) * (speed /3333);
+    let scoreVariables = {times, scr, healthBonus, damage, initialHealth, deathTimer, min, max};
+    let bonus = Math.floor(Math.random() * (scoreVariables.max - scoreVariables.min) + scoreVariables.min) * (deathTimer + deathTimer);
+    let scoreToSet: any = 0;
+    if (decrease) {
+      if (scr > 0) {
+        scoreToSet = scr - (bonus * min);
+      } else {
+        scoreToSet = 0;
+      }
+    } else {
+      scoreToSet = scr + (bonus * max);
+    }
+    setScore(scoreToSet);
+    localStorage.setItem(`score`, JSON.stringify(scoreToSet));
+  }
+
+  const changeHP = () => {
+    let hp: any = document.querySelector(`#initialHealth`);
+    setHealth({...health, width: `${parseFloat(hp?.value)}%`});
+    setInitialHealth(parseFloat(hp?.value));
+  }
+  
+  const addOrUpdateUser = async (id: any, user: any) => {
+    setDoc(doc(db, `users`, id), { ...user, id }).then(newSub => {
+      localStorage.setItem(`user`, JSON.stringify({ ...user, id }));
+      setUser({ ...user, id });
+      setUpdates(updates + 1);
+      return newSub;
+    }).catch(error => console.log(error));
+  }
+
+  const isElementInView = (element: any) => {
+    if (element) {
+      let rect = element.getBoundingClientRect();
+      return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+      );
+    } else {
+      return false;
+    }
+  }
+
+  const damagePlayerWithMultipleEnemies = (plyr: any, enmy: any, dmg: any, hlthPts: any, ded: any) => {
+    if (plyr.right >= enmy.left && 
+      plyr.left <= enmy.right && 
+      plyr.bottom >= enmy.top &&
+      plyr.top <= enmy.bottom) {
+        if (hlthPts > 0) {
+          setHurt(true);
+          setHealth({...health, width: `${hlthPts - dmg.value}%`, background: hlthPts <= lowHealth ? dangerColor : (hlthPts <= medHealth ? `#cbcb1c` : initialBounds.background), color: hlthPts <= lowHealth ? `white` : (hlthPts <= medHealth ? `black` : `white`), fontWeight: hlthPts <= lowHealth ? 700 : (hlthPts <= medHealth ? 500 : 700)});
+          setHits(JSON.parse(localStorage.getItem(`health`) as any) - (hlthPts - 1) > (((damage * 10) * (speed /3333))/1.5) ? ((JSON.parse(localStorage.getItem(`health`) as any) - (hlthPts - 1)) / 2) : JSON.parse(localStorage.getItem(`health`) as any) - (hlthPts - 1));
+          setTotalDamage(totalDamage + (prevHealth - parseFloat(health.width)));
+          calcScore(true);
+          setTimeout(() => {
+            let hit: any = document.querySelector(`.hits`);
+            if (parseFloat(hit?.innerHTML) != 0) {
+              localStorage.setItem(`health`, JSON.stringify(hlthPts));
+              setPrevHealth(hlthPts);
+            };
+            setHurt(false);
+            setHits(0);
+          }, 500);
+        } else {
+          // localStorage.setItem(`deaths`, JSON.stringify(parseInt(ded?.innerHTML) + 1));
+          setDeaths(parseInt(ded?.innerHTML) + 1);
+          calcScore(true);
+          restartGame();
+        }
+      }
+  }
+
   useEffect(() => {
     setPage(`Game`);
+    if (loadedRef.current) return;
+    loadedRef.current = true;
 
-    if (user) {
-      setHighScore(user?.highScore);
-      setDeaths(user?.deaths);
+    let storedUser = JSON.parse(localStorage.getItem(`user`) as any);
+    let currentUser = storedUser;
+    if (currentUser) {
+      setHighScore(currentUser?.highScore);
+      setDeaths(currentUser?.deaths);
     } else {
       let storedHighScore = JSON.parse(localStorage.getItem(`highScore`) as any) || 0;
       let storedDeaths = JSON.parse(localStorage.getItem(`deaths`) as any) || 0;
       setHighScore(storedHighScore);
       setDeaths(storedDeaths);
     }
-
-    if (loadedRef.current) return;
-    loadedRef.current = true;
 
     startGame();
     setUpdates(updates+1);
@@ -423,11 +430,11 @@ export default function Game() {
   return <div className={`inner pageInner`}>
     <section id={`gameBanner`} className={`topContent`}>
         <div className="inner">
-            <h1>Get that Treasure Game</h1>
+            <h1 style={{fontSize: `2.1em`}}>Get that Treasure Game</h1>
             <div className={`column rightColumn gameStats`}>
                 {/* <h2 className={`flex row`}><span className="label">Total:</span><span className="score">{score.toLocaleString(`en-US`)}</span><i className="fas fa-coins"></i></h2> */}
                 {/* <h2 className={`flex row`}><span className="label">Deaths:</span><span className="deaths">{deaths}</span><i className="fas fa-skull-crossbones"></i></h2> */}
-                <h2 style={{background: `var(--blackGlass)`, borderRadius: 4, justifyContent: `center`, alignItems: `center`, maxWidth: `fit-content`, padding: `5px 15px`}} className={`flex row`}><i style={{color: `var(--gameBlue)`}} className="fas fa-signal"></i><span className="highScore">{highScore.toLocaleString(`en-US`)}</span><span className="label">High Score</span></h2>
+                <button title="Click to View High Scores" onClick={() => !gameOver && setShowLeaders(!showLeaders)} style={{background: `var(--blackGlass)`, borderRadius: 4, justifyContent: `center`, alignItems: `center`, maxWidth: `fit-content`, padding: `5px 15px`}} className={`flex row`}><h2 className={`flex row`}><i style={{color: `var(--gameBlue)`}} className="fas fa-signal"></i><span className="highScore">{highScore.toLocaleString(`en-US`)}</span><span className="label">High Score</span></h2></button>
             </div>
         </div>
     </section>
@@ -437,7 +444,7 @@ export default function Game() {
           <div style={{display: `none`}} className="flex row">Jump Speed <input id={`jumpSpeed`} defaultValue={jumpSpeed} type="range" min="250" max="900" step="50" /> <div className="flex row">x{1000 - jumpSpeed}</div></div>
           <div className="flex row"><span className={`flex row`}><i style={{width: 15}} className="fas fa-heartbeat"></i><span style={{minWidth: 47, marginLeft: 5}}>Start HP</span></span><input id={`initialHealth`} defaultValue={initialHealth} type="range" min="69" max="100" onInput={changeHP} onKeyDown={(e) => e.preventDefault()} /><span className="startHP">{initialHealth}%</span></div>
           <div style={{display: `none`}} className="flex row">Enemy Speed <input id={`speed`} defaultValue={speed} type="range" min="1000" max="5500" step="500" /> <div className="flex row">{speed / 1000} S</div></div>
-          <div className="flex row"><span className={`flex row`}><i style={{width: 15}} className="fas fa-tachometer-alt"></i><span style={{minWidth: 47, marginLeft: 5}}>Damage</span></span><input id={`damage`} defaultValue={damage} type="range" min="0.50" max="2.25" step="0.25" onKeyDown={(e) => e.preventDefault()} /> <div className="dmgText flex row">{`${((damage * 8) * (speed /4000)).toString().substr(0,4)}% - ${((damage * 10) * (speed /3333)).toString().substr(0,4)}%`}</div></div>
+          <div className="flex row"><span className={`flex row`}><i style={{width: 15}} className="fas fa-tachometer-alt"></i><span style={{minWidth: 47, marginLeft: 5}}>Damage</span></span><input id={`damage`} defaultValue={damage} type="range" min="0.50" max="2.25" step="0.25" onKeyDown={(e) => e.preventDefault()} /> <div className="dmgText flex row">{`${((damage * 8) * (speed /8000)).toString().substr(0,4)}% - ${((damage * 10) * (speed /3333)).toString().substr(0,4)}%`}</div></div>
           <div className="flex row"><span className={`flex row`}><i style={{width: 15}} className="fas fa-tachometer-alt"></i><span style={{minWidth: 47, marginLeft: 5}}>Speed</span></span><input id={`moveSpeed`} defaultValue={moveSpeed} type="range" min="1" max="5" step="0.5" onKeyDown={(e) => e.preventDefault()} /> <div className="flex row">{moveSpeed}x</div></div>
           <div className="flex row"><span className={`flex row`}><i style={{width: 15}} className="fas fa-tachometer-alt"></i><span style={{minWidth: 47, marginLeft: 5}}>Countdown</span></span><input id={`deathTimer`} defaultValue={deathTimer} type="range" min="5" max="128" onKeyDown={(e) => e.preventDefault()} /> <div className="deathTime flex row">{deathTimer}s</div></div>
         </div>
@@ -463,7 +470,7 @@ export default function Game() {
           <button id="startGame" onClick={saveAndRestartGame}><span className={`emphasis`} style={{color: `var(--mainGlass)`}}>GAME OVER,</span> Click Here or <span className={`emphasis`}>Type Enter</span> to Try Again</button>
         </div> : (win ? <div className="win">
           <button id="winGame" onClick={(Event: any) => startGame(Event)}>You Won</button>
-        </div> : <div className="start flex"><button id="startGame" onClick={(Event: any) => startGame(Event)}>Click Here or <span className={`emphasis`}>Type Enter</span> to Play <span className="emphasis">//</span> You can also <span className="emphasis">Press Escape</span> to Reset the Game!</button></div>))} 
+        </div> : <div className="start flex">{showLeaders && <LeaderBoard id={`leaderBoard`} className={`leaderBoard`} />}<button id="startGame" onClick={(Event: any) => startGame(Event)}>Click Here or <span className={`emphasis`}>Type Enter</span> to Play <span className="emphasis">//</span> You can also <span className="emphasis">Press Escape</span> to Reset the Game!</button></div>))} 
         {game && <div className="intro">Try to get to the Treasure!</div>}
         <div className="player playerObj" style={player}>1</div>
         <div className={`enemy ${game ? `moving` : `stopped`}`} style={enemy}>1</div>

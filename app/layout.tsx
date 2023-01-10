@@ -78,7 +78,7 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
                 <Image className={`logo reactLogo`} priority src={`/react.svg`} alt={`Logo`} width={`50`} height={`50`} /> Home
               </Link>
               <ul className={`menu ${((platform as string)?.toLowerCase()?.includes(`mobile`) || (mobileMenu && width < mobileMenuBreakPoint)) ? `grid mobileNav` : width < mobileMenuBreakPoint ? `hide` : `show`}`}>
-                {user && <li><Link className={`hoverLink`} href={`/profile`}>{capitalizeAllWords(user?.email?.split(`@`)[0])}</Link></li>}
+                {user && <li><Link className={`hoverLink`} href={`/profile`}>{capitalizeAllWords(user?.name?.split(` `)[0])}</Link></li>}
                 <li><Link className={`hoverLink`} href={`/about`}>About</Link></li>
                 <li><Link className={`hoverLink`} href={`/projects`}>Projects</Link></li>
                 <li><Link className={`hoverLink`} href={`/game`}>Game</Link></li>
