@@ -44,7 +44,7 @@ export default function LeaderBoard(props: any) {
                 return <div className={`highScoreEntry`} key={usr?.id}>
                     <div className="inner userScore">
                         <div className="scoreField"><span className="emphasis">{index + 1}</span> {usr?.name?.split(` `)[0]}</div>
-                        <div className="scoreField score"><span className="emphasis">{usr?.highScore.toLocaleString(`en-US`)}</span></div>
+                        <div className="scoreField score"><span className="emphasis">{parseInt(usr?.highScore).toLocaleString(`en-US`)}</span></div>
                     </div>
                 </div>
             }) : <div style={{textAlign: `center`}}>... Loading Highest Scores</div>}</Section>

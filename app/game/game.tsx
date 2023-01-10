@@ -20,7 +20,7 @@ export default function Game() {
   let loadedRef = useRef(false);
   let [hits, setHits] = useState(0);
   let [time, setTime] = useState(0);
-  let [score, setScore] = useState(0);
+  let [score, setScore] = useState(900000);
   let [win, setWin] = useState(false);
   let [points, setPoints] = useState(0);
   let [deaths, setDeaths] = useState(0);
@@ -346,7 +346,7 @@ export default function Game() {
     let dths: any = parseInt(ded?.innerHTML);
     let pts: any = parseInt(pnts?.innerHTML);
     let times: any = parseInt(tim?.innerHTML) + 0.01;
-    let scr: any = parseInt((document.querySelector(`#score`) as any)?.innerHTML?.replace(`,`,``));
+    let scr: any = parseInt((document.querySelector(`#score`) as any)?.innerHTML?.replace(/,/g, ``));
     let healthBonus = hlthPts < 10 ? 10 : hlthPts;
     let rawScore: any = pts > 15 ? ((pts - dam) * healthBonus) : ((15 - dam) * healthBonus);
     let scor = Math.abs(parseInt((rawScore / times) as any));
@@ -451,7 +451,7 @@ export default function Game() {
             <button id={`moveLeftButton`} className={`moveButton`} onClick={moveLeft}>{`<`}</button>
             <button id={`moveRightButton`} className={`moveButton`} onClick={moveRight}>{`>`}</button>
           </div>
-          <button style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><div className="timer"><i className="fas fa-stopwatch"></i> Time <span className="time">{time.toString().substr(0,6)}s</span></div></button>
+          <button style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><div className="timer"><i className="fas fa-stopwatch"></i> Time <span className="time">{time.toString().substr(0,8)}s</span></div></button>
           {/* <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-coins"></i> Coins: <span className="points">{points}</span></button>
           <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-skull-crossbones"></i> Deaths: <span className="deaths">{deaths}</span></button> */}
           <button className={`flex row`}style={{fontSize: `0.85em`, fontWeight: 500, height: 30, gridGap: 0, display: `none`}} onClick={resetGame}><i className="fas fa-undo"></i> Restart</button>
@@ -473,7 +473,7 @@ export default function Game() {
           <div className="playerText playerObj" style={{position: `absolute`, left: player.left - 64, bottom: player.bottom - 64}}>
             <div className="topRow flex row">
               <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-heartbeat"></i>{user ? user?.name?.split(` `)[0] : `Player`}<span className="hlth">{health.width}</span></button>
-              <button id={`playerTimer`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><div className="timer flex row">Time<i className="fas fa-stopwatch"></i><span className="time">{time.toString().substr(0,6)}s</span></div></button>
+              <button id={`playerTimer`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><div className="timer flex row">Time<i className="fas fa-stopwatch"></i><span className="time">{time.toString().substr(0,8)}s</span></div></button>
             </div>
             <div className="bottomRow flex row">
               {/* <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-coins
