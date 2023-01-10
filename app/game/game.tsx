@@ -453,7 +453,7 @@ export default function Game() {
           <button id="startGame" onClick={saveAndRestartGame}><span className={`emphasis`} style={{color: `var(--mainGlass)`}}>GAME OVER,</span> Click Here or <span className={`emphasis`}>Type Enter</span> to Try Again</button>
         </div> : (win ? <div className="win">
           <button id="winGame" onClick={(Event: any) => startGame(Event)}>You Won</button>
-        </div> : <div className="start flex"><LeaderBoard id={`leaderBoard`} className={`leaderBoard`} /><button id="startGame" onClick={(Event: any) => startGame(Event)}>Click Here or <span className={`emphasis`}>Type Enter</span> to Play <span className="emphasis">//</span> You can also <span className="emphasis">Press Escape</span> to Reset the Game!</button></div>))} 
+        </div> : <div className="start flex"><button id="startGame" onClick={(Event: any) => startGame(Event)}>Click Here or <span className={`emphasis`}>Type Enter</span> to Play <span className="emphasis">//</span> You can also <span className="emphasis">Press Escape</span> to Reset the Game!</button></div>))} 
         {game && <div className="intro">Try to get to the Treasure!</div>}
         <div className="player playerObj" style={player}>1</div>
         <div className={`enemy ${game ? `moving` : `stopped`}`} style={enemy}>1</div>
