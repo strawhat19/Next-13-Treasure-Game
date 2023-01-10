@@ -40,7 +40,7 @@ export default function Game() {
   let [controls, setControls] = useState({minWidth: controlWidth});
   let { width, updates, setUpdates, user, setPage, setUser, focus, setFocus, users } = useContext(StateContext);
   let initialBounds = {background: `var(--ground)`, height: 40, width: `${initialHealth}%`, color: `white`, fontWeight: 700};
-  let initialPlayer = {background: `black`, height: 15, width: 15, bottom: initialBounds.height - 1, left: 25};
+  let initialPlayer = {background: `black`, height: 15, width: 15, bottom: initialBounds.height - 1, left: 100};
   let [finish, setFinish] = useState({background: `var(--blackGlass)`, height: 80, width: controlWidth, bottom: initialBounds.height - 1, right: 25, borderRadius: 4});
   let [enemy, setEnemy] = useState({background: `transparent`, height: 15, width: 15, bottom: initialBounds.height - 1, left: 25, animation: `enemy ${speed}ms linear infinite`});
   let [ground, setGround] = useState({...initialBounds, width: `100%`});
@@ -113,22 +113,22 @@ export default function Game() {
   }
 
   const moveLeft = () => {
-    if (player.left > 15) {
+    if (player.left > 100) {
       setUpdates(updates+1);
-      setPlayer({...player, left: player.left - (moveSpeed * 15)});
+      setPlayer({...player, left: player.left - (moveSpeed * 35)});
     }
   }
 
   const moveRight = () => {
     if (player.left < (width - (width/8))) {
       setUpdates(updates+1);
-      setPlayer({...player, left: player.left + (moveSpeed * 15)});
+      setPlayer({...player, left: player.left + (moveSpeed * 35)});
     }
   }
 
   const jump = () => {
     setUpdates(updates+1);
-    setPlayer({...player, bottom: player.bottom + (moveSpeed * 35)});
+    setPlayer({...player, bottom: player.bottom + (moveSpeed * 50)});
     setTimeout(() => setPlayer({...player, bottom: initialPlayer.bottom}), jumpSpeed);
   }
 
@@ -138,7 +138,7 @@ export default function Game() {
     setInitialHealth(parseFloat(hp?.value));
   }
 
-  const damagePlayer = (plyr: any, enmy: any, dmg: any, hlthPts: any, ded: any) => {
+  const damagePlayerWithMultipleEnemies = (plyr: any, enmy: any, dmg: any, hlthPts: any, ded: any) => {
     if (plyr.right >= enmy.left && 
       plyr.left <= enmy.right && 
       plyr.bottom >= enmy.top &&
@@ -200,7 +200,7 @@ export default function Game() {
         if (enemies.length > 1) {
           enemies.forEach((enmi: any) => {
             let enmy = enmi?.getBoundingClientRect();
-            damagePlayer(plyr, enmy, dmg, hlthPts, ded);
+            damagePlayerWithMultipleEnemies(plyr, enmy, dmg, hlthPts, ded);
           });
         } else if (plyr.right >= enmy.left && 
           plyr.left <= enmy.right && 
@@ -234,6 +234,11 @@ export default function Game() {
               let gameActive: any = document.querySelector(`.enemy`)?.classList?.contains(`moving`);
               setWin(gameActive ? true : false);
               setTimeout(() => resetPlayer(true), 490);
+              setPoints(parseInt(pnts?.innerHTML) + (gameActive ? 1 : 0));
+              calcScore();
+          } else if (plyr.right >= enmy.left && 
+            plyr.left <= enmy.right) {
+              let gameActive: any = document.querySelector(`.enemy`)?.classList?.contains(`moving`);
               setPoints(parseInt(pnts?.innerHTML) + (gameActive ? 1 : 0));
               calcScore();
           }
@@ -335,24 +340,29 @@ export default function Game() {
     let hlth: any = document.querySelector(`.healthPoints`);
     let hlthPts: any = parseFloat(hlth?.innerHTML);
     let dam: any = (100 - hlthPts) / 2;
+    let dmg: any = document.querySelector(`#damage`);
     let pnts: any = document.querySelector(`.points`);
     let tim: any = document.querySelector(`.time`);
     let dths: any = parseInt(ded?.innerHTML);
     let pts: any = parseInt(pnts?.innerHTML);
     let times: any = parseInt(tim?.innerHTML) + 0.01;
-    let scr: any = parseInt((document.querySelector(`.score`) as any)?.innerHTML);
+    let scr: any = parseInt((document.querySelector(`#score`) as any)?.innerHTML?.replace(`,`,``));
     let healthBonus = hlthPts < 10 ? 10 : hlthPts;
     let rawScore: any = pts > 15 ? ((pts - dam) * healthBonus) : ((15 - dam) * healthBonus);
     let scor = Math.abs(parseInt((rawScore / times) as any));
-    let scoreToSet: any;
+    let min = (parseFloat(dmg?.value) * 8) * (speed /4000);
+    let max = (parseFloat(dmg?.value) * 10) * (speed /3333);
+    let scoreVariables = {times, scr, healthBonus, damage, initialHealth, deathTimer, min, max};
+    let bonus = Math.floor(Math.random() * (scoreVariables.max - scoreVariables.min) + scoreVariables.min) * (deathTimer + deathTimer);
+    let scoreToSet: any = 0;
     if (decrease) {
-      scoreToSet = Math.abs(scor-(scr/(dths > 0 ? dths : 2)));
-    } else {
       if (scr > 0) {
-        scoreToSet = Math.abs(scor+scr);
+        scoreToSet = scr - (bonus * min);
       } else {
-        scoreToSet = Math.abs(scor);
+        scoreToSet = 0;
       }
+    } else {
+      scoreToSet = scr + (bonus * max);
     }
     setScore(scoreToSet);
     localStorage.setItem(`score`, JSON.stringify(scoreToSet));
@@ -427,7 +437,7 @@ export default function Game() {
           <div style={{display: `none`}} className="flex row">Jump Speed <input id={`jumpSpeed`} defaultValue={jumpSpeed} type="range" min="250" max="900" step="50" /> <div className="flex row">x{1000 - jumpSpeed}</div></div>
           <div className="flex row"><span className={`flex row`}><i style={{width: 15}} className="fas fa-heartbeat"></i><span style={{minWidth: 47, marginLeft: 5}}>Start HP</span></span><input id={`initialHealth`} defaultValue={initialHealth} type="range" min="69" max="100" onInput={changeHP} onKeyDown={(e) => e.preventDefault()} /><span className="startHP">{initialHealth}%</span></div>
           <div style={{display: `none`}} className="flex row">Enemy Speed <input id={`speed`} defaultValue={speed} type="range" min="1000" max="5500" step="500" /> <div className="flex row">{speed / 1000} S</div></div>
-          <div className="flex row"><span className={`flex row`}><i style={{width: 15}} className="fas fa-tachometer-alt"></i><span style={{minWidth: 47, marginLeft: 5}}>Damage</span></span><input id={`damage`} defaultValue={damage} type="range" min="0.25" max="2.25" step="0.25" onKeyDown={(e) => e.preventDefault()} /> <div className="dmgText flex row">{`${((damage * 8) * (speed /4000)).toString().substr(0,4)}% - ${((damage * 10) * (speed /3333)).toString().substr(0,4)}%`}</div></div>
+          <div className="flex row"><span className={`flex row`}><i style={{width: 15}} className="fas fa-tachometer-alt"></i><span style={{minWidth: 47, marginLeft: 5}}>Damage</span></span><input id={`damage`} defaultValue={damage} type="range" min="0.50" max="2.25" step="0.25" onKeyDown={(e) => e.preventDefault()} /> <div className="dmgText flex row">{`${((damage * 8) * (speed /4000)).toString().substr(0,4)}% - ${((damage * 10) * (speed /3333)).toString().substr(0,4)}%`}</div></div>
           <div className="flex row"><span className={`flex row`}><i style={{width: 15}} className="fas fa-tachometer-alt"></i><span style={{minWidth: 47, marginLeft: 5}}>Speed</span></span><input id={`moveSpeed`} defaultValue={moveSpeed} type="range" min="1" max="5" step="0.5" onKeyDown={(e) => e.preventDefault()} /> <div className="flex row">{moveSpeed}x</div></div>
           <div className="flex row"><span className={`flex row`}><i style={{width: 15}} className="fas fa-tachometer-alt"></i><span style={{minWidth: 47, marginLeft: 5}}>Countdown</span></span><input id={`deathTimer`} defaultValue={deathTimer} type="range" min="5" max="128" onKeyDown={(e) => e.preventDefault()} /> <div className="deathTime flex row">{deathTimer}s</div></div>
         </div>
