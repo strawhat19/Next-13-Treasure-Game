@@ -14,7 +14,7 @@ export default function Game() {
   let medHealth = 50;
   let startDamage = 2;
   let controlWidth = 115;
-  let initialDeathTimer = 10;
+  let initialDeathTimer = 25;
   let initialMoveSpeed = 2.5;
   let playerInput: any = null;
   let loadedRef = useRef(false);
