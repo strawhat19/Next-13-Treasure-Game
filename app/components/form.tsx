@@ -10,7 +10,7 @@ export default function AuthForm() {
   const loadedRef = useRef(false);
   const [loaded, setLoaded] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false); 
-  const { user, setUser, updates, setUpdates, setUsers, setContent, authState, setAuthState, emailField, setEmailField, users, setFocus } = useContext(StateContext);
+  const { user, setUser, updates, setUpdates, setUsers, setContent, authState, setAuthState, emailField, setEmailField, users, setFocus, highScore, setHighScore } = useContext(StateContext);
 
   const addOrUpdateUser = async (id: any, user: any) => {
     setDoc(doc(db, `users`, id), { ...user, id }).then(newSub => {
@@ -79,16 +79,17 @@ export default function AuthForm() {
         break;
       case `Sign Out`:
         setUser(null);
+        setHighScore(0);
+        setAuthState(`Next`);
+        setEmailField(false);
         setUpdates(updates+1);
+        setContent(defaultContent);
         localStorage.removeItem(`user`);
         localStorage.removeItem(`users`);
         localStorage.removeItem(`score`);
         localStorage.removeItem(`health`);
         localStorage.removeItem(`account`);
         localStorage.removeItem(`highScore`);
-        setAuthState(`Next`);
-        setEmailField(false);
-        setContent(defaultContent);
         break;
       case `Save`:
         let emptyFields = [];
@@ -130,6 +131,7 @@ export default function AuthForm() {
             setAuthState(`Sign Out`);
             setUser(existingAccount);
             setContent(existingAccount?.bio);
+            setHighScore(existingAccount?.highScore);
             addOrUpdateUser(existingAccount?.id, {...existingAccount, lastSignin: formatDate(new Date())});
           } else {
             showAlert(`Invalid Password`);

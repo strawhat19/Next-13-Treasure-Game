@@ -4,8 +4,30 @@ import { StateContext } from '../home';
 import AuthForm from '../components/form';
 import Section from '../components/section';
 import { doc, setDoc } from 'firebase/firestore';
+import { formatDate } from '../projects/projects';
 import LeaderBoard from '../components/leaderboard';
 import { useContext, useEffect, useRef, useState } from 'react';
+
+// Global Variables
+declare global {
+  interface Anim extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> {
+    src: string;
+    background: string;
+    speed: string;
+    style: {
+      width: number;
+      height: number;
+    };
+    loop?: any;
+    autoplay: true;
+  }
+
+  namespace JSX {
+    interface IntrinsicElements {
+      'lottie-player': Anim,
+    }
+  }
+}
 
 export default function Game() {
   let runGame: any;
@@ -28,7 +50,7 @@ export default function Game() {
   let [game, setGame] = useState(false);
   let [speed, setSpeed] = useState(2500);
   let dangerColor = `var(--dangerColor)`;
-  let [highScore, setHighScore] = useState(0);
+  let [scoring, setScoring] = useState(false);
   let [gameOver, setGameOver] = useState(false);
   let [jumpSpeed, setJumpSpeed] = useState(500);
   let [totalDamage, setTotalDamage] = useState(0);
@@ -39,7 +61,7 @@ export default function Game() {
   let [deathTimer, setDeathTimer] = useState(initialDeathTimer);
   let [moveSpeed, setMoveSpeed] = useState<any>(initialMoveSpeed);
   let [controls, setControls] = useState({minWidth: controlWidth});
-  let { width, updates, setUpdates, user, setPage, setUser, focus, setFocus, users } = useContext(StateContext);
+  let { width, updates, setUpdates, user, setPage, setUser, focus, setFocus, users, highScore, setHighScore } = useContext(StateContext);
   let initialBounds = {background: `var(--ground)`, height: 40, width: `${initialHealth}%`, color: `white`, fontWeight: 700};
   let initialPlayer = {background: `black`, height: 15, width: 15, bottom: initialBounds.height - 1, left: 70};
   let [finish, setFinish] = useState({background: `var(--blackGlass)`, height: 80, width: controlWidth, bottom: initialBounds.height - 1, right: 25, borderRadius: 4});
@@ -156,6 +178,7 @@ export default function Game() {
           plyr.top <= enmy.bottom) {
             if (hlthPts > 0) {
               setHurt(true);
+              setScoring(false);
               setHealth({...health, width: `${hlthPts - dmg.value}%`, background: hlthPts <= lowHealth ? dangerColor : (hlthPts <= medHealth ? `#cbcb1c` : initialBounds.background), color: hlthPts <= lowHealth ? `white` : (hlthPts <= medHealth ? `black` : `white`), fontWeight: hlthPts <= lowHealth ? 700 : (hlthPts <= medHealth ? 500 : 700)});
               setHits(JSON.parse(localStorage.getItem(`health`) as any) - (hlthPts - 1) > (((damage * 10) * (speed /3333))/1.5) ? ((JSON.parse(localStorage.getItem(`health`) as any) - (hlthPts - 1)) / 2) : JSON.parse(localStorage.getItem(`health`) as any) - (hlthPts - 1));
               setTotalDamage(totalDamage + (prevHealth - parseFloat(health.width)));
@@ -172,6 +195,7 @@ export default function Game() {
             } else {
               // localStorage.setItem(`deaths`, JSON.stringify(parseInt(ded?.innerHTML) + 1));
               setDeaths(parseInt(ded?.innerHTML) + 1);
+              setScoring(false);
               calcScore(true);
               restartGame();
             }
@@ -183,11 +207,13 @@ export default function Game() {
               setWin(gameActive ? true : false);
               setTimeout(() => resetPlayer(true), 490);
               setPoints(parseInt(pnts?.innerHTML) + (gameActive ? 1 : 0));
+              setScoring(true);
               calcScore();
           } else if (plyr.right >= enmy.left && 
             plyr.left <= enmy.right) {
               let gameActive: any = document.querySelector(`.enemy`)?.classList?.contains(`moving`);
               setPoints(parseInt(pnts?.innerHTML) + (gameActive ? 1 : 0));
+              setScoring(false);
               calcScore();
           }
       };
@@ -294,7 +320,7 @@ export default function Game() {
       if (currentScore > currentUser?.highScore) {
         // console.log(`New High Score`, currentScore, `Previous Record`, currentUser?.highScore);
         setHighScore(currentScore);
-        addOrUpdateUser(currentUser?.id, {...currentUser, deaths, highScore: currentScore});
+        addOrUpdateUser(currentUser?.id, { ...currentUser, deaths, highScore: currentScore, updated: formatDate(new Date())});
         localStorage.setItem(`highScore`, JSON.stringify(currentScore));
       };
     } else {
@@ -425,7 +451,7 @@ export default function Game() {
       updateGame();
     }, 10);
 
-  }, [users, user, score, highScore]);
+  }, [users, user, score, highScore, scoring]);
 
   return <div className={`inner pageInner`}>
     <section id={`gameBanner`} className={`topContent`}>
@@ -480,16 +506,19 @@ export default function Game() {
           <div className="playerText playerObj" style={{position: `absolute`, left: player.left - 64, bottom: player.bottom - 64}}>
             <div className="topRow flex row">
               <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-heartbeat"></i>{user ? user?.name?.split(` `)[0] : `Player`}<span className="hlth">{health.width}</span></button>
-              <button id={`playerTimer`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><div className="timer flex row">Time<i className="fas fa-stopwatch"></i><span className="time">{time.toString().substr(0,8)}s</span></div></button>
+              <button id={`playerTimer`} style={{ pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30, maxWidth: `fit-content` }}><div className="timer flex row">Time<i style={{ maxWidth: `fit-content` }} className="fas fa-stopwatch"></i><span style={{ maxWidth: `fit-content` }} className="time">{time.toString().substr(0,8)}s</span></div></button>
             </div>
             <div className="bottomRow flex row">
               {/* <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-coins
               "></i> Coins: <span className="points">{points}</span></button> */}
-              <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-signal"></i> Score <span className="score">{score.toLocaleString(`en-US`)}</span></button>
+              <button className={`flex row`} style={{ pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30 }}><i style={{ maxWidth: `fit-content` }} className="fas fa-signal"></i> Score <span style={{ maxWidth: `fit-content` }} className="score">{score.toLocaleString(`en-US`)}</span></button>
             </div>
           </div>
         </div>
-        <button className="finish flex row" style={{...finish, fontWeight: 500, ...(!gameOver && user && {pointerEvents: `none`})}} onClick={saveScore}><i className={`fas ${gameOver && !user ? `fa-save` : `fa-coins`}`} style={{width: `10%`}}></i> {gameOver && !user ? `Save` : `Treasure`}</button>
+        <button className="treasure finish flex row" style={{ ...finish, fontWeight: 500, ...((!game && !gameOver && user || (gameOver && user) || game) && { pointerEvents: `none` }) }} onClick={saveScore}><i className={`fas ${gameOver && !user ? `fa-save` : `fa-coins`}`} style={{ width: `10%` }}></i> {gameOver && !user ? `Save` : `Treasure`}<div style={{ display: scoring && game ? `block` : `none` }} className="coinsAnimation">
+          <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+          <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_smGEjL.json" background="transparent" speed="2" style={{ width: 300, height: 300 }} loop autoplay></lottie-player>
+        </div></button>
       </div>
     </Section>
     <Section id={`gameAuth`}>

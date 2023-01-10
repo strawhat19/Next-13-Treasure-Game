@@ -538,6 +538,13 @@ section {
             pointer-events: none;
             animation: intro 2000ms ease-in-out;
         }
+
+        .coinsAnimation {
+            transform: scale(0.6);
+            position: absolute;
+            bottom: -45px;
+            left: -65px;
+        }
     
         .gameControls {
             background: var(--blackGlass);
