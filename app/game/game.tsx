@@ -11,15 +11,19 @@ import { useContext, useEffect, useRef, useState } from 'react';
 // Global Variables
 declare global {
   interface Anim extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> {
-    src: string;
-    background: string;
-    speed: string;
-    style: {
-      width: number;
-      height: number;
+    src?: string;
+    position?: any;
+    left?: any;
+    right?: any;
+    muted?: any;
+    background?: string;
+    speed?: any;
+    style?: {
+      width?: number;
+      height?: number;
     };
     loop?: any;
-    autoplay: true;
+    autoplay?: any;
   }
 
   namespace JSX {
@@ -35,7 +39,10 @@ export default function Game() {
   let lowHealth = 25;
   let medHealth = 50;
   let startDamage = 2;
+  let enemyScale = 15;
+  let coinsDistance = 1;
   let controlWidth = 115;
+  let coinsPlacement = 80;
   let initialDeathTimer = 25;
   let initialMoveSpeed = 2.5;
   let playerInput: any = null;
@@ -50,6 +57,7 @@ export default function Game() {
   let [game, setGame] = useState(false);
   let [speed, setSpeed] = useState(2500);
   let dangerColor = `var(--dangerColor)`;
+  let [movement, setMovement] = useState(0);
   let [scoring, setScoring] = useState(false);
   let [gameOver, setGameOver] = useState(false);
   let [jumpSpeed, setJumpSpeed] = useState(500);
@@ -57,15 +65,16 @@ export default function Game() {
   let [damage, setDamage] = useState(startDamage);
   let [prevHealth, setPrevHealth] = useState(100);
   let [showLeaders, setShowLeaders] = useState(false);
+  let [direction, setDirection] = useState(`standing`);
   let [initialHealth, setInitialHealth] = useState(startHP);
   let [deathTimer, setDeathTimer] = useState(initialDeathTimer);
   let [moveSpeed, setMoveSpeed] = useState<any>(initialMoveSpeed);
   let [controls, setControls] = useState({minWidth: controlWidth});
   let { width, updates, setUpdates, user, setPage, setUser, focus, setFocus, users, highScore, setHighScore } = useContext(StateContext);
   let initialBounds = {background: `var(--ground)`, height: 40, width: `${initialHealth}%`, color: `white`, fontWeight: 700};
-  let initialPlayer = {background: `black`, height: 15, width: 15, bottom: initialBounds.height - 1, left: 70};
+  let initialPlayer = {background: `black`, height: 55, width: 55, bottom: initialBounds.height - 1, left: 70};
   let [finish, setFinish] = useState({background: `var(--blackGlass)`, height: 80, width: controlWidth, bottom: initialBounds.height - 1, right: 25, borderRadius: 4});
-  let [enemy, setEnemy] = useState({background: `transparent`, height: 15, width: 15, bottom: initialBounds.height - 1, left: 25, animation: `enemy ${speed}ms linear infinite`});
+  let [enemy, setEnemy] = useState({background: `transparent`, height: initialPlayer.height - (enemyScale), width: initialPlayer.width - (enemyScale), bottom: initialBounds.height - 1, left: 25, animation: `enemy ${speed}ms linear infinite`});
   let [ground, setGround] = useState({...initialBounds, width: `100%`});
   let [health, setHealth] = useState(initialBounds);
   let [player, setPlayer] = useState(initialPlayer);
@@ -115,15 +124,19 @@ export default function Game() {
   const moveLeft = () => {
     if (player.left > 70) {
       let distance = player.left - (moveSpeed * 35);
+      setMovement(2);
+      setDirection(`left`);
       setUpdates(updates+1);
       setPlayer({...player, left: distance});
     }
   }
-
+  
   const moveRight = () => {
     let plyr: any = document.querySelector(`.player`)?.getBoundingClientRect();
     if (plyr.left < (width - (width/8))) {
       let distance = plyr.left + (moveSpeed * 35);
+      setMovement(2);
+      setDirection(`right`);
       setUpdates(updates+1);
       setPlayer({...player, left: distance});
     }
@@ -134,7 +147,15 @@ export default function Game() {
     let distance = (plyr.bottom / 16) + (moveSpeed * 50) > 250 ? 250 : (plyr.bottom / 16) + (moveSpeed * 50);
     setUpdates(updates+1);
     setPlayer({...player, bottom: distance});
-    setTimeout(() => setPlayer({...player, bottom: initialPlayer.bottom}), jumpSpeed);
+    setTimeout(() => setPlayer({...player, bottom: initialPlayer.bottom}), (jumpSpeed / (speed / 2000)));
+  }
+
+  const genSeconds = (seconds?:any) => {
+    let date = new Date(seconds * 1000).toLocaleString('en-US', {
+      minimumIntegerDigits: 2,
+      useGrouping: false
+    } as any);
+    return date?.substr(date?.length - 8, 5);
   }
 
   const updateGame = () => {
@@ -280,7 +301,9 @@ export default function Game() {
     setScore(0);
     setPoints(0);
     setWin(false);
+    setMovement(0);
     setGameOver(false);
+    setDirection(`standing`);
     // window.location.reload();
   }
 
@@ -460,7 +483,7 @@ export default function Game() {
             <div className={`column rightColumn gameStats`}>
                 {/* <h2 className={`flex row`}><span className="label">Total:</span><span className="score">{score.toLocaleString(`en-US`)}</span><i className="fas fa-coins"></i></h2> */}
                 {/* <h2 className={`flex row`}><span className="label">Deaths:</span><span className="deaths">{deaths}</span><i className="fas fa-skull-crossbones"></i></h2> */}
-                <button title="Click to View High Scores" onClick={() => !gameOver && setShowLeaders(!showLeaders)} style={{background: `var(--blackGlass)`, borderRadius: 4, justifyContent: `center`, alignItems: `center`, maxWidth: `fit-content`, padding: `5px 15px`}} className={`flex row`}><h2 className={`flex row`}><i style={{color: `var(--gameBlue)`}} className="fas fa-signal"></i><span className="highScore">{highScore.toLocaleString(`en-US`)}</span><span className="label">High Score</span></h2></button>
+                <button title="Click to View High Scores" onClick={() => !gameOver && setShowLeaders(!showLeaders)} style={{background: `var(--blackGlass)`, borderRadius: 4, justifyContent: `center`, alignItems: `center`, maxWidth: `fit-content`, padding: `5px 15px`}} className={`flex row`}><h2 className={`flex row`}><i style={{color: `var(--gameBlue)`}} className="fas fa-signal"></i><span className="highScore">{Math.floor(highScore).toLocaleString(`en-US`)}</span><span className="label">High Score</span></h2></button>
             </div>
         </div>
     </section>
@@ -468,11 +491,11 @@ export default function Game() {
       <div className="game" style={{background: `#74d7ff`}}>
         <div className="gameControls flex row">
           <div style={{display: `none`}} className="flex row">Jump Speed <input id={`jumpSpeed`} defaultValue={jumpSpeed} type="range" min="250" max="900" step="50" /> <div className="flex row">x{1000 - jumpSpeed}</div></div>
-          <div className="flex row"><span className={`flex row`}><i style={{width: 15}} className="fas fa-heartbeat"></i><span style={{minWidth: 47, marginLeft: 5}}>Start HP</span></span><input id={`initialHealth`} defaultValue={initialHealth} type="range" min="69" max="100" onInput={changeHP} onKeyDown={(e) => e.preventDefault()} /><span className="startHP">{initialHealth}%</span></div>
+          <div className="flex row" style={{display: `none`}}><span className={`flex row`}><i style={{width: 15}} className="fas fa-heartbeat"></i><span style={{minWidth: 47, marginLeft: 5}}>Start HP</span></span><input id={`initialHealth`} defaultValue={initialHealth} type="range" min="69" max="100" onInput={changeHP} onKeyDown={(e) => e.preventDefault()} /><span className="startHP">{initialHealth}%</span></div>
           <div style={{display: `none`}} className="flex row">Enemy Speed <input id={`speed`} defaultValue={speed} type="range" min="1000" max="5500" step="500" /> <div className="flex row">{speed / 1000} S</div></div>
-          <div className="flex row"><span className={`flex row`}><i style={{width: 15}} className="fas fa-tachometer-alt"></i><span style={{minWidth: 47, marginLeft: 5}}>Damage</span></span><input id={`damage`} defaultValue={damage} type="range" min="0.50" max="2.25" step="0.25" onKeyDown={(e) => e.preventDefault()} /> <div className="dmgText flex row">{`${((damage * 8) * (speed /8000)).toString().substr(0,4)}% - ${((damage * 10) * (speed /3333)).toString().substr(0,4)}%`}</div></div>
+          <div className="flex row"><span className={`flex row`}><i style={{width: 15}} className="fas fa-tachometer-alt"></i><span style={{minWidth: 47, marginLeft: 5}}>Damage</span></span><input id={`damage`} defaultValue={damage} type="range" min="0.50" max="2.25" step="0.25" onKeyDown={(e) => e.preventDefault()} /> <div className="dmgText flex row">{`${((damage * 8) * (speed /8000)).toString().substr(0,4)}% - ${(Math.floor((damage * 10) * (speed /3333))).toString().substr(0,4)}%`}</div></div>
           <div className="flex row"><span className={`flex row`}><i style={{width: 15}} className="fas fa-tachometer-alt"></i><span style={{minWidth: 47, marginLeft: 5}}>Speed</span></span><input id={`moveSpeed`} defaultValue={moveSpeed} type="range" min="1" max="5" step="0.5" onKeyDown={(e) => e.preventDefault()} /> <div className="flex row">{moveSpeed}x</div></div>
-          <div className="flex row"><span className={`flex row`}><i style={{width: 15}} className="fas fa-tachometer-alt"></i><span style={{minWidth: 47, marginLeft: 5}}>Countdown</span></span><input id={`deathTimer`} defaultValue={deathTimer} type="range" min="5" max="128" onKeyDown={(e) => e.preventDefault()} /> <div className="deathTime flex row">{deathTimer}s</div></div>
+          <div style={{display: `none`}} className="flex row"><span className={`flex row`}><i style={{width: 15}} className="fas fa-tachometer-alt"></i><span style={{minWidth: 47, marginLeft: 5}}>Countdown</span></span><input id={`deathTimer`} defaultValue={deathTimer} type="range" min="15" max="128" onKeyDown={(e) => e.preventDefault()} /> <div className="deathTime flex row">{deathTimer}s</div></div>
         </div>
         <div className="health" style={health}><span className="healthText"><i className="fas fa-heartbeat" style={{marginRight: 10}}></i><span style={{position: `relative`, top: `-4px`}}>Health</span></span><span className="healthPoints">{health.width}</span>{parseFloat(health.width) >= 30 && <div className="damageIndicator flex row" style={{minWidth: 200}}>
           {!hurt && (Math.abs(prevHealth - parseFloat(health.width)) < (((damage * 10) * (speed /3333)))) && <div id="dmg" className="dmg"><span className="damage">-{Math.abs(prevHealth - parseFloat(health.width))}%</span></div>}
@@ -484,11 +507,12 @@ export default function Game() {
             <button id={`moveLeftButton`} className={`moveButton`} onClick={moveLeft}>{`<`}</button>
             <button id={`moveRightButton`} className={`moveButton`} onClick={moveRight}>{`>`}</button>
           </div>
-          <button style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><div className="timer"><i className="fas fa-stopwatch"></i> Time <span className="time">{time.toString().substr(0,8)}s</span></div></button>
+          <button style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30, display: `none`}}><div className="timer"><i className="fas fa-stopwatch"></i> Time <span className="time">{time.toString().substr(0,8)}s</span></div></button>
+          <button style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><div className="timer flex row">Time<i style={{ maxWidth: `fit-content` }} className="fas fa-stopwatch"></i><span style={{ maxWidth: `fit-content` }} className="time">{genSeconds((Math.floor(initialDeathTimer) - Math.floor(time) > 0 ? Math.floor(Math.floor(initialDeathTimer) - Math.floor(time)) : 0))}</span></div></button>
           {/* <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-coins"></i> Coins: <span className="points">{points}</span></button>
           <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-skull-crossbones"></i> Deaths: <span className="deaths">{deaths}</span></button> */}
           <button className={`flex row`}style={{fontSize: `0.85em`, fontWeight: 500, height: 30, gridGap: 0, display: `none`}} onClick={resetGame}><i className="fas fa-undo"></i> Restart</button>
-          <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-signal"></i> Score <span className="score" id={`score`}>{score.toLocaleString(`en-US`)}</span></button>
+          <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-signal"></i> Score <span className="score" id={`score`}>{Math.floor(score).toLocaleString(`en-US`)}</span></button>
           <button className={`flex row`} style={{fontSize: `0.85em`, fontWeight: 500}} onClick={() => window.location.reload()}><i style={{width: `15%`}} className="fas fa-undo"></i> Reset</button>
         </div>
         {!game && (gameOver ? <div className="gameOver flex">
@@ -497,27 +521,38 @@ export default function Game() {
         </div> : (win ? <div className="win">
           <button id="winGame" onClick={(Event: any) => startGame(Event)}>You Won</button>
         </div> : <div className="start flex">{showLeaders && <LeaderBoard id={`leaderBoard`} className={`leaderBoard`} />}<button id="startGame" onClick={(Event: any) => startGame(Event)}>Click Here or <span className={`emphasis`}>Type Enter</span> to Play <span className="emphasis">//</span> You can also <span className="emphasis">Press Escape</span> to Reset the Game!</button></div>))} 
-        {game && <div className="intro">Try to get to the Treasure!</div>}
-        <div className="player playerObj" style={player}>1</div>
+        <div className="gameMessages flex">
+          {game && time < 2 && <div className="intro">Try to get to the Treasure!</div>}
+          {game && time > 2 && time < 10 && <div className="gameMessage" style={{color: `white`}}>Jump over enemies and move by tapping arrow keys!</div>}
+          {game && time > 10 && time < 15 && <div className="gameMessage" style={{color: `white`}}>Getting treasure gives you LOTS of points, but sends you back!</div>}
+          {game && time > 15 && <div className="gameMessage flex row stretch">
+            {/* <span style={{minWidth: `max-content`}}>Your Current Score:</span> */}
+            <span className="emphasis flex row" style={{color: `var(--js)`}}><i style={{color: `var(--js)`, maxWidth: `fit-content`}} className="fas fa-signal"></i> <span style={{maxWidth: `fit-content`}}>{Math.floor(score).toLocaleString(`en-US`)}</span></span></div>}
+        </div>
+        <div className={`player playerObj ${direction}`} style={player}><div className="playerSprite">
+          {/* {movement != `standing` ?  : <img src="/stand.svg" />}   */}
+          <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_9xRdLu.json"  background="transparent" speed={2} style={{width: initialPlayer.width, height: initialPlayer.height}} loop autoplay></lottie-player>
+        </div></div>
         <div className={`enemy ${game ? `moving` : `stopped`}`} style={enemy}>1</div>
         {/* <div className={`enemy ${game ? `moving` : `stopped`}`} style={{...enemy, left: 55 + Math.floor(Math.random() * 400), bottom: enemy.bottom + 15, animationDelay: `3s`}}>2</div> */}
         <div className="ground" style={ground}>
           <div className="groundText">Click Arrow Buttons or Use Left and Right Arrow Keys to Move and Up or Space to jump. Thank you for Playing!</div>
           <div className="playerText playerObj" style={{position: `absolute`, left: player.left - 64, bottom: player.bottom - 64}}>
-            <div className="topRow flex row">
-              <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-heartbeat"></i>{user ? user?.name?.split(` `)[0] : `Player`}<span className="hlth">{health.width}</span></button>
-              <button id={`playerTimer`} style={{ pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30, maxWidth: `fit-content` }}><div className="timer flex row">Time<i style={{ maxWidth: `fit-content` }} className="fas fa-stopwatch"></i><span style={{ maxWidth: `fit-content` }} className="time">{time.toString().substr(0,8)}s</span></div></button>
+            <div className="topRow flex row" style={{top: -40 - (initialPlayer.height)}}>
+               {/* <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-coins
+              "></i> Coins: <span className="points">{points}</span></button> */}
+              <button className={`flex row`} style={{ pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30, maxWidth: `fit-content` }}><i style={{ maxWidth: `fit-content` }} className="fas fa-signal"></i> Score <span style={{ maxWidth: `fit-content` }} className="score">{Math.floor(score).toLocaleString(`en-US`)}</span></button>
             </div>
             <div className="bottomRow flex row">
-              {/* <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-coins
-              "></i> Coins: <span className="points">{points}</span></button> */}
-              <button className={`flex row`} style={{ pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30 }}><i style={{ maxWidth: `fit-content` }} className="fas fa-signal"></i> Score <span style={{ maxWidth: `fit-content` }} className="score">{score.toLocaleString(`en-US`)}</span></button>
+              <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-heartbeat"></i>{user ? user?.name?.split(` `)[0] : `Player`}<span className="hlth">{health.width}</span></button>
+              <button id={`playerTimer`} style={{ pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30, maxWidth: `fit-content` }}><div className="timer flex row">Time<i style={{ maxWidth: `fit-content` }} className="fas fa-stopwatch"></i><span style={{ maxWidth: `fit-content` }} className="time">{genSeconds((Math.floor(initialDeathTimer) - Math.floor(time) > 0 ? Math.floor(Math.floor(initialDeathTimer) - Math.floor(time)) : 0))}</span></div></button>
             </div>
           </div>
         </div>
-        <button className="treasure finish flex row" style={{ ...finish, fontWeight: 500, ...((!game && !gameOver && user || (gameOver && user) || game) && { pointerEvents: `none` }) }} onClick={saveScore}><i className={`fas ${gameOver && !user ? `fa-save` : `fa-coins`}`} style={{ width: `10%` }}></i> {gameOver && !user ? `Save` : `Treasure`}<div style={{ display: scoring && game ? `block` : `none` }} className="coinsAnimation">
-          <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-          <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_smGEjL.json" background="transparent" speed="2" style={{ width: 300, height: 300 }} loop autoplay></lottie-player>
+        <button className="treasure finish flex row" style={{ ...finish, fontWeight: 500, ...((!game && !gameOver && user || (gameOver && user) || game) && { pointerEvents: `none` }) }} onClick={saveScore}><i className={`fas ${gameOver && !user ? `fa-save` : `fa-coins`}`} style={{ width: `10%` }}></i> {gameOver && !user ? `Save` : `Treasure`}<div style={{ display: scoring && game ? `flex` : `none` }} className="coinsAnimation">
+        <div style={{position: `relative`, right: coinsPlacement }}><lottie-player src="https://assets10.lottiefiles.com/packages/lf20_smGEjL.json" background="transparent" speed="2" style={{ width: 300, height: 300 }} loop autoplay></lottie-player></div>
+          <div style={{position: `relative`, right: coinsPlacement + coinsDistance }}><lottie-player src="https://assets10.lottiefiles.com/packages/lf20_smGEjL.json" background="transparent" speed={(coinsDistance + (coinsDistance * 2)).toString()} style={{ width: 300, height: 300 }} loop autoplay></lottie-player></div>
+          <div style={{position: `relative`, right: coinsPlacement + coinsDistance * 2 }}><lottie-player src="https://assets10.lottiefiles.com/packages/lf20_smGEjL.json" background="transparent" speed={`2`} style={{ width: 300, height: 300 }} loop autoplay></lottie-player></div>
         </div></button>
       </div>
     </Section>
@@ -525,8 +560,8 @@ export default function Game() {
       <h2>{focus ? `Please Sign In or Sign Up to Save Your Score!` : <i>User is {user ? user?.name : `Signed Out`}</i>}</h2>
       <AuthForm />
     </Section>
-    {!focus && <Section id={`gameContent`}>
+    {/* {!focus && <Section id={`gameContent`}>
       <p>A game where the player races against time to jump over the enemy and secure treasure! When the player secures treasure, they will however be almost immediately sent back to the start. This game was made by me for fun so its probably super glitchy haha. Feel free to HARD RESET the game anytime by clicking Reset. Have fun and thanks for playing!</p>
-    </Section>}
+    </Section>} */}
   </div>
 }

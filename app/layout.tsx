@@ -2,9 +2,9 @@
 import Link from 'next/link';
 import '../styles/global.css';
 import Image from 'next/image';
+import Section from './components/section';
 import { useRef, useEffect, useState } from 'react';
 import { capitalizeAllWords, defaultContent, StateContext } from './home';
-import Section from './components/section';
 
 export default function RootLayout({ children, } : { children: React.ReactNode; }) {
   const mobileMenuBreakPoint = 697;
@@ -62,7 +62,7 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
   }, [])
 
   return (
-    <html lang="en">
+    <html lang="en" className={page}>
       <StateContext.Provider value={{ updates, setUpdates, content, setContent, width, setWidth, user, setUser, page, setPage, mobileMenu, setMobileMenu, users, setUsers, authState, setAuthState, emailField, setEmailField, devEnv, setDevEnv, mobileMenuBreakPoint, platform, setPlatform, focus, setFocus, highScore, setHighScore }}>
         <head>
           <title>Next.js 13 | Piratechs</title>
@@ -71,6 +71,7 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" />
+          <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js" defer></script>
         </head>
         <body className={page}>
           <header>

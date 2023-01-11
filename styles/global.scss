@@ -59,9 +59,11 @@ body {
     background: var(--mainTeal);
     font-family: Montserrat, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
         Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  
+    &.Game {
+        overflow-y: hidden !important;
+    }
 }
-
-body { letter-spacing: .5px; }
 
 header {
     top: 0;
@@ -539,11 +541,32 @@ section {
             animation: intro 2000ms ease-in-out;
         }
 
+        .controls, .playerText {
+            button {
+                &:not(.moveButton) {
+                    font-size: 0.95em !important;
+                }
+            }
+        }
+
+        .gameMessage {
+            font-size: 25px;
+            pointer-events: none;
+            animation: fadeIn 500ms ease-in-out;
+        }
+
+        // .playerSprite {
+            // position: relative;
+            // top: -163px;
+            // z-index: 0;
+            // transform: scale(0.2);
+        // }
+
         .coinsAnimation {
-            transform: scale(0.6);
+            transform: scale(0.4, 0.6);
             position: absolute;
-            bottom: -45px;
-            left: -65px;
+            bottom: -42px;
+            left: -45px;
         }
     
         .gameControls {
@@ -573,8 +596,8 @@ section {
         }
 
         .topRow {
+            justify-content: flex-start;
             position: relative;
-            top: -60px;
         }
       
         .bottomRow {
@@ -583,9 +606,9 @@ section {
         }
 
         #playerTimer {
-            min-width: 125px;
             .timer {
                 width: 100%;
+                max-width: fit-content;
             }
         }
 
@@ -677,6 +700,14 @@ section {
             border-radius: 4px;
             position: absolute;
             text-align: center;
+            mix-blend-mode: difference;
+            filter: saturate(0);
+            &.right {
+                transform: rotate(0deg);
+            }
+            &.left {
+                transform: rotateY(180deg);
+            }
             // font-size: 0.85em;
         }
   
@@ -686,10 +717,14 @@ section {
         }
     
         .enemy {
-            transition: var(--transition);
+            display: flex;
+            font-size: 2em;
             border-radius: 4px;
             position: absolute;
             text-align: center;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
             &.moving {
                 background: var(--dangerColor) !important;
             }

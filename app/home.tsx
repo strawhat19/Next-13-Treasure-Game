@@ -64,6 +64,7 @@ export default function Home() {
       <span>{user?.bio == `` ? `--` : content}</span>
       <button onClick={randomize}>Randomize Paragraph</button>
     </div></Section>}
+    {/* <Section><iframe width={`100%`} height={`100%`} style={{border: 0, outline: `none`, minHeight: 400}} src="https://piratechs.com/"></iframe></Section> */}
     <Section id={`profileSection`}>
       <Header title={`User is ${user ? user?.name : `Signed Out`}`} subtitle={`Updated ${user?.updated}`} subBanner />
       {user ? <div className="profile flex">
