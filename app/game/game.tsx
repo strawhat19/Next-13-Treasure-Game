@@ -36,8 +36,10 @@ declare global {
 export default function Game() {
   let runGame: any;
   let startHP = 100;
+  let startScore = 0;
   let lowHealth = 25;
   let medHealth = 50;
+  let playerSpeed = 1;
   let startDamage = 2;
   let enemyScale = 15;
   let coinsDistance = 1;
@@ -49,7 +51,6 @@ export default function Game() {
   let loadedRef = useRef(false);
   let [hits, setHits] = useState(0);
   let [time, setTime] = useState(0);
-  let [score, setScore] = useState(0);
   let [win, setWin] = useState(false);
   let [points, setPoints] = useState(0);
   let [deaths, setDeaths] = useState(0);
@@ -59,23 +60,28 @@ export default function Game() {
   let dangerColor = `var(--dangerColor)`;
   let [movement, setMovement] = useState(0);
   let [scoring, setScoring] = useState(false);
+  let [score, setScore] = useState(startScore);
   let [gameOver, setGameOver] = useState(false);
   let [jumpSpeed, setJumpSpeed] = useState(500);
   let [totalDamage, setTotalDamage] = useState(0);
+  let [gameHeight, setGameHeight] = useState(415);
   let [damage, setDamage] = useState(startDamage);
   let [prevHealth, setPrevHealth] = useState(100);
   let [showLeaders, setShowLeaders] = useState(false);
   let [direction, setDirection] = useState(`standing`);
   let [initialHealth, setInitialHealth] = useState(startHP);
   let [deathTimer, setDeathTimer] = useState(initialDeathTimer);
+  let [gameBackground, setGameBackground] = useState( `#74d7ff`);
   let [moveSpeed, setMoveSpeed] = useState<any>(initialMoveSpeed);
   let [controls, setControls] = useState({minWidth: controlWidth});
-  let { width, updates, setUpdates, user, setPage, setUser, focus, setFocus, users, highScore, setHighScore } = useContext(StateContext);
+  let playerAnim = `https://assets7.lottiefiles.com/packages/lf20_9xRdLu.json`;
+  let shipAnim = `https://lottie.host/520bb91b-0130-4949-91d1-3a512fde1751/UGP7Ccvvfl.json`;
+  let { width, updates, setUpdates, user, setPage, setUser, focus, setFocus, users, highScore, setHighScore, authState } = useContext(StateContext);
   let initialBounds = {background: `var(--ground)`, height: 40, width: `${initialHealth}%`, color: `white`, fontWeight: 700};
-  let initialPlayer = {background: `black`, height: 55, width: 55, bottom: initialBounds.height - 1, left: 70};
+  let initialPlayer = {height: 55, width: 55, bottom: initialBounds.height - 1, left: 70};
   let [finish, setFinish] = useState({background: `var(--blackGlass)`, height: 80, width: controlWidth, bottom: initialBounds.height - 1, right: 25, borderRadius: 4});
   let [enemy, setEnemy] = useState({background: `transparent`, height: initialPlayer.height - (enemyScale), width: initialPlayer.width - (enemyScale), bottom: initialBounds.height - 1, left: 25, animation: `enemy ${speed}ms linear infinite`});
-  let [ground, setGround] = useState({...initialBounds, width: `100%`});
+  let [ground, setGround] = useState({...initialBounds, width: `100%`, background: `transparent`});
   let [health, setHealth] = useState(initialBounds);
   let [player, setPlayer] = useState(initialPlayer);
 
@@ -200,7 +206,7 @@ export default function Game() {
             if (hlthPts > 0) {
               setHurt(true);
               setScoring(false);
-              setHealth({...health, width: `${hlthPts - dmg.value}%`, background: hlthPts <= lowHealth ? dangerColor : (hlthPts <= medHealth ? `#cbcb1c` : initialBounds.background), color: hlthPts <= lowHealth ? `white` : (hlthPts <= medHealth ? `black` : `white`), fontWeight: hlthPts <= lowHealth ? 700 : (hlthPts <= medHealth ? 500 : 700)});
+              setHealth({...health, width: `${hlthPts - (dmg.value / 2)}%`, background: hlthPts <= lowHealth ? dangerColor : (hlthPts <= medHealth ? `#cbcb1c` : initialBounds.background), color: hlthPts <= lowHealth ? `white` : (hlthPts <= medHealth ? `black` : `white`), fontWeight: hlthPts <= lowHealth ? 700 : (hlthPts <= medHealth ? 500 : 700)});
               setHits(JSON.parse(localStorage.getItem(`health`) as any) - (hlthPts - 1) > (((damage * 10) * (speed /3333))/1.5) ? ((JSON.parse(localStorage.getItem(`health`) as any) - (hlthPts - 1)) / 2) : JSON.parse(localStorage.getItem(`health`) as any) - (hlthPts - 1));
               setTotalDamage(totalDamage + (prevHealth - parseFloat(health.width)));
               calcScore(true);
@@ -273,6 +279,7 @@ export default function Game() {
     setDeathTimer(initialDeathTimer);
     setPlayer(initialPlayer);
     setDamage(startDamage);
+    setDirection(`left`);
     setJumpSpeed(500);
     setSpeed(2500);
     if (fast) {
@@ -298,7 +305,7 @@ export default function Game() {
   const hardReset = () => {
     endGame();
     setTime(0);
-    setScore(0);
+    setScore(startScore);
     setPoints(0);
     setWin(false);
     setMovement(0);
@@ -324,7 +331,7 @@ export default function Game() {
     setWin(false);
     setGameOver(false);
     if (fast) {     
-      setScore(0);
+      setScore(startScore);
       setPlayer(initialPlayer);
       setHealth({...initialBounds, width: `${parseFloat(hp?.value) || startHP}%`});
       localStorage.setItem(`health`, `100`);
@@ -337,7 +344,7 @@ export default function Game() {
     let storedScore = JSON.parse(localStorage.getItem(`score`) as any);
     let storedUser = JSON.parse(localStorage.getItem(`user`) as any);
     let currentUser = storedUser;
-    let currentScore = storedScore;
+    let currentScore = Math.floor(storedScore);
     if (currentScore > storedHighScore) setHighScore(currentScore);
     if (currentUser) {
       if (currentScore > currentUser?.highScore) {
@@ -389,6 +396,13 @@ export default function Game() {
     }
     setScore(scoreToSet);
     localStorage.setItem(`score`, JSON.stringify(scoreToSet));
+  }
+
+  const clearHighScore = () => {
+    setScore(startScore);
+    setHighScore(startScore);
+    localStorage.removeItem(`score`);
+    localStorage.removeItem(`highScore`);
   }
 
   const changeHP = () => {
@@ -454,18 +468,6 @@ export default function Game() {
     if (loadedRef.current) return;
     loadedRef.current = true;
 
-    let storedUser = JSON.parse(localStorage.getItem(`user`) as any);
-    let currentUser = storedUser;
-    if (currentUser) {
-      setHighScore(currentUser?.highScore);
-      setDeaths(currentUser?.deaths);
-    } else {
-      let storedHighScore = JSON.parse(localStorage.getItem(`highScore`) as any) || 0;
-      let storedDeaths = JSON.parse(localStorage.getItem(`deaths`) as any) || 0;
-      setHighScore(storedHighScore);
-      setDeaths(storedDeaths);
-    }
-
     startGame();
     setUpdates(updates+1);
     setHealth({...health, width: `${startHP}%`});
@@ -474,7 +476,7 @@ export default function Game() {
       updateGame();
     }, 10);
 
-  }, [users, user, score, highScore, scoring]);
+  }, [users, user, score, highScore, scoring, authState]);
 
   return <div className={`inner pageInner`}>
     <section id={`gameBanner`} className={`topContent`}>
@@ -483,12 +485,15 @@ export default function Game() {
             <div className={`column rightColumn gameStats`}>
                 {/* <h2 className={`flex row`}><span className="label">Total:</span><span className="score">{score.toLocaleString(`en-US`)}</span><i className="fas fa-coins"></i></h2> */}
                 {/* <h2 className={`flex row`}><span className="label">Deaths:</span><span className="deaths">{deaths}</span><i className="fas fa-skull-crossbones"></i></h2> */}
-                <button title="Click to View High Scores" onClick={() => !gameOver && setShowLeaders(!showLeaders)} style={{background: `var(--blackGlass)`, borderRadius: 4, justifyContent: `center`, alignItems: `center`, maxWidth: `fit-content`, padding: `5px 15px`}} className={`flex row`}><h2 className={`flex row`}><i style={{color: `var(--gameBlue)`}} className="fas fa-signal"></i><span className="highScore">{Math.floor(highScore).toLocaleString(`en-US`)}</span><span className="label">High Score</span></h2></button>
+                <button title={gameOver && !user ? `Click to Clear High Score` : `Click to View High Scores`} onClick={() => !gameOver ? setShowLeaders(!showLeaders) : !user ? clearHighScore() : setShowLeaders(!showLeaders)} style={{background: `var(--blackGlass)`, borderRadius: 4, justifyContent: `center`, alignItems: `center`, maxWidth: `fit-content`, padding: `5px 15px`}} className={`flex row`}><h2 className={`flex row`}><i style={{color: `var(--gameBlue)`}} className="fas fa-signal"></i><span className="highScore">{Math.floor(highScore).toLocaleString(`en-US`)}</span><span className="label">High Score</span></h2></button>
             </div>
         </div>
     </section>
     <Section id={`gameSection`}>
-      <div className="game" style={{background: `#74d7ff`}}>
+      <div className="game" style={{background: gameBackground, height: gameHeight}}>
+        <div className="gameAnimation" id="gameAnimation">
+          <lottie-player src="https://assets3.lottiefiles.com/datafiles/N8DaINa2dmLOJja/data.json" background="transparent" speed="2" style={{ width: 1000, height: 888 }} loop autoplay></lottie-player>
+        </div>
         <div className="gameControls flex row">
           <div style={{display: `none`}} className="flex row">Jump Speed <input id={`jumpSpeed`} defaultValue={jumpSpeed} type="range" min="250" max="900" step="50" /> <div className="flex row">x{1000 - jumpSpeed}</div></div>
           <div className="flex row" style={{display: `none`}}><span className={`flex row`}><i style={{width: 15}} className="fas fa-heartbeat"></i><span style={{minWidth: 47, marginLeft: 5}}>Start HP</span></span><input id={`initialHealth`} defaultValue={initialHealth} type="range" min="69" max="100" onInput={changeHP} onKeyDown={(e) => e.preventDefault()} /><span className="startHP">{initialHealth}%</span></div>
@@ -531,14 +536,14 @@ export default function Game() {
         </div>
         <div className={`player playerObj ${direction}`} style={player}><div className="playerSprite">
           {/* {movement != `standing` ?  : <img src="/stand.svg" />}   */}
-          <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_9xRdLu.json"  background="transparent" speed={2} style={{width: initialPlayer.width, height: initialPlayer.height}} loop autoplay></lottie-player>
+          <lottie-player src={shipAnim}  background="transparent" speed={playerSpeed} style={{width: initialPlayer.width * 5, height: initialPlayer.height * 5}} loop autoplay></lottie-player>
         </div></div>
         <div className={`enemy ${game ? `moving` : `stopped`}`} style={enemy}>1</div>
         {/* <div className={`enemy ${game ? `moving` : `stopped`}`} style={{...enemy, left: 55 + Math.floor(Math.random() * 400), bottom: enemy.bottom + 15, animationDelay: `3s`}}>2</div> */}
         <div className="ground" style={ground}>
           <div className="groundText">Click Arrow Buttons or Use Left and Right Arrow Keys to Move and Up or Space to jump. Thank you for Playing!</div>
           <div className="playerText playerObj" style={{position: `absolute`, left: player.left - 64, bottom: player.bottom - 64}}>
-            <div className="topRow flex row" style={{top: -40 - (initialPlayer.height)}}>
+            <div className="topRow flex row" style={{top: -90 - (initialPlayer.height)}}>
                {/* <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-coins
               "></i> Coins: <span className="points">{points}</span></button> */}
               <button className={`flex row`} style={{ pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30, maxWidth: `fit-content` }}><i style={{ maxWidth: `fit-content` }} className="fas fa-signal"></i> Score <span style={{ maxWidth: `fit-content` }} className="score">{Math.floor(score).toLocaleString(`en-US`)}</span></button>
@@ -549,7 +554,7 @@ export default function Game() {
             </div>
           </div>
         </div>
-        <button className="treasure finish flex row" style={{ ...finish, fontWeight: 500, ...((!game && !gameOver && user || (gameOver && user) || game) && { pointerEvents: `none` }) }} onClick={saveScore}><i className={`fas ${gameOver && !user ? `fa-save` : `fa-coins`}`} style={{ width: `10%` }}></i> {gameOver && !user ? `Save` : `Treasure`}<div style={{ display: scoring && game ? `flex` : `none` }} className="coinsAnimation">
+        <button className="treasure finish flex row" style={{ ...finish, fontWeight: 500, ...((gameOver && !user) ? false : { pointerEvents: `none` }) }} onClick={saveScore}><i className={`fas ${gameOver && !user ? `fa-save` : `fa-coins`}`} style={{ width: `10%` }}></i> {gameOver && !user ? `Save` : `Treasure`}<div style={{ display: scoring && game ? `flex` : `none` }} className="coinsAnimation">
         <div style={{position: `relative`, right: coinsPlacement }}><lottie-player src="https://assets10.lottiefiles.com/packages/lf20_smGEjL.json" background="transparent" speed="2" style={{ width: 300, height: 300 }} loop autoplay></lottie-player></div>
           <div style={{position: `relative`, right: coinsPlacement + coinsDistance }}><lottie-player src="https://assets10.lottiefiles.com/packages/lf20_smGEjL.json" background="transparent" speed={(coinsDistance + (coinsDistance * 2)).toString()} style={{ width: 300, height: 300 }} loop autoplay></lottie-player></div>
           <div style={{position: `relative`, right: coinsPlacement + coinsDistance * 2 }}><lottie-player src="https://assets10.lottiefiles.com/packages/lf20_smGEjL.json" background="transparent" speed={`2`} style={{ width: 300, height: 300 }} loop autoplay></lottie-player></div>

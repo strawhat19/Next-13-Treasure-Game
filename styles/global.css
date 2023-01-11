@@ -50,14 +50,51 @@ body {
   margin: 0;
   padding: 0;
   width: 100%;
-  color: white;
   overflow-x: hidden;
-  background: var(--mainTeal);
   font-family: Montserrat, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 html.Game,
 body.Game {
   overflow-y: hidden !important;
+}
+html.dark,
+body.dark {
+  color: white;
+}
+html.black input,
+body.black input {
+  border: solid 2px var(--gameBlue);
+}
+html.light,
+body.light {
+  color: black;
+}
+html.light .emphasis.white,
+body.light .emphasis.white {
+  color: black !important;
+}
+html.light button, html.light input[type=submit],
+body.light button,
+body.light input[type=submit] {
+  color: white !important;
+  background: var(--blackGlass);
+}
+html.light button:hover, html.light input[type=submit]:hover,
+body.light button:hover,
+body.light input[type=submit]:hover {
+  filter: invert(1);
+  box-shadow: 0 0 8px 0px black;
+}
+html.light button:focus, html.light input[type=submit]:focus,
+body.light button:focus,
+body.light input[type=submit]:focus {
+  filter: invert(1) brightness(1.5);
+}
+html.light button:active, html.light input[type=submit]:active,
+body.light button:active,
+body.light input[type=submit]:active {
+  transform: scale(1.01);
+  box-shadow: inset 0 0 8px 0px black;
 }
 
 header {
@@ -67,6 +104,7 @@ header {
   grid-gap: 2em;
   display: flex;
   margin: 0 auto;
+  color: white;
   font-weight: 500;
   font-size: 1.2em;
   position: -webkit-sticky;
@@ -198,6 +236,10 @@ header .menu.mobileNav li a {
 .subBanner *:nth-child(2) {
   font-weight: 400;
   text-align: right;
+}
+
+.profileText span:not(.emphasis) {
+  font-weight: 500;
 }
 
 .skeleton {
@@ -347,6 +389,9 @@ a {
   grid-gap: 1em;
   align-items: center;
 }
+.flex.end {
+  justify-content: flex-end !important;
+}
 .flex:not(.start) {
   justify-content: center;
 }
@@ -383,6 +428,7 @@ input {
   outline: none;
   border-radius: 4px;
   font-family: "Montserrat";
+  color: white !important;
   background: var(--blackGlass);
   transition: var(--transition);
 }
@@ -394,6 +440,34 @@ input:-ms-input-placeholder {
 }
 input::placeholder {
   color: var(--softWhite);
+}
+input[type=color] {
+  border: 0;
+  padding: 1em;
+  outline: none;
+  min-height: 60px;
+  border-radius: 4px;
+  position: relative;
+}
+input[type=color]::before {
+  transform: translate(-50%, -50%);
+  content: attr(data-color);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: white;
+  font-weight: 500;
+  height: 28px;
+  width: 96.5%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+input[type=color].dark::before {
+  color: white;
+}
+input[type=color].light::before {
+  color: black;
 }
 
 button, input[type=submit] {
@@ -494,8 +568,27 @@ button:active, input[type=submit]:active {
   font-size: 0.75em;
 }
 
+.gameAnimation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.gameAnimation lottie-player {
+  bottom: -143px;
+  position: relative;
+  transform: scale(2.3, 0.3);
+  width: 100% !important;
+  height: 100% !important;
+}
+
 .leaderBoard {
   padding: 10px;
+  color: white;
   border-radius: 4px;
   background: var(--blackGlass);
 }
@@ -509,7 +602,6 @@ button:active, input[type=submit]:active {
 section .game {
   width: 100%;
   display: flex;
-  height: 415px;
   font-weight: 500;
   max-height: 413px;
   font-size: 0.75em;
@@ -524,7 +616,7 @@ section .game .leaderBoard {
   margin-top: 75px;
 }
 section .game .fa-coins {
-  color: var(--js);
+  color: var(--js) !important;
 }
 section .game .fa-save {
   color: #00b900;
@@ -545,6 +637,12 @@ section .game .gameMessage {
   -webkit-animation: fadeIn 500ms ease-in-out;
           animation: fadeIn 500ms ease-in-out;
 }
+section .game .playerSprite {
+  /* transform: scale(1); */
+  position: absolute;
+  left: -75px;
+  top: -150px;
+}
 section .game .coinsAnimation {
   transform: scale(0.4, 0.6);
   position: absolute;
@@ -553,10 +651,11 @@ section .game .coinsAnimation {
 }
 section .game .gameControls {
   background: var(--blackGlass);
-  font-size: 0.9em;
   border-radius: 3px;
+  font-size: 0.9em;
   position: absolute;
   padding: 0.6em 2em;
+  color: white;
   grid-gap: 1.5em;
   min-width: 82%;
   max-width: 82%;
@@ -580,7 +679,7 @@ section .game .topRow {
 }
 section .game .bottomRow {
   position: relative;
-  top: -30px;
+  top: -27px;
 }
 section .game #playerTimer .timer {
   width: 100%;
@@ -659,7 +758,6 @@ section .game .player {
   border-radius: 4px;
   position: absolute;
   text-align: center;
-  mix-blend-mode: difference;
   filter: saturate(0);
 }
 section .game .player.right {
@@ -718,8 +816,8 @@ section .game .ground .groundText {
   top: 12px;
 }
 section .game .ground .groundText .emphasis {
-  color: var(--main);
   filter: brightness(1.5);
+  color: var(--main);
 }
 
 .emphasis {
@@ -728,6 +826,16 @@ section .game .ground .groundText .emphasis {
   font-size: 1.1em;
   font-weight: 700;
   font-style: italic;
+}
+.emphasis.white {
+  color: white !important;
+}
+
+.sectionImage {
+  width: 100%;
+  height: auto;
+  margin: 1em 0;
+  max-height: 350px;
 }
 
 @-webkit-keyframes enemy {
@@ -918,16 +1026,16 @@ footer .vertical-sep.fas.fa-undo, footer i.fas.fa-undo {
   }
 }
 #scroll-text {
-  width: 200%;
+  width: 235%;
   text-overflow: clip;
   white-space: nowrap;
   /* animation properties */
   transform: translateX(100%);
   -moz-transform: translateX(100%);
   -webkit-transform: translateX(100%);
-  animation: my-animation 10s linear infinite;
-  -moz-animation: my-animation 10s linear infinite;
-  -webkit-animation: my-animation 10s linear infinite;
+  animation: my-animation 20s linear infinite;
+  -moz-animation: my-animation 20s linear infinite;
+  -webkit-animation: my-animation 20s linear infinite;
   /* for Firefox */
   /* for Chrome */
 }

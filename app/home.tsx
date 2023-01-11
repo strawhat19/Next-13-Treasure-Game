@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import Banner from './components/banner';
 import AuthForm from './components/form';
 import Header from "./components/header";
@@ -60,14 +61,17 @@ export default function Home() {
 
   return <div className={`inner pageInner`}>
     <Banner id={`homeBanner`} />
-    {!user && <Section><div className={`intro flex ${width < mobileMenuBreakPoint ? `` : `row`}`}>
+    {/* {!user && <Section><div className={`intro flex ${width < mobileMenuBreakPoint ? `` : `row`}`}>
       <span>{user?.bio == `` ? `--` : content}</span>
       <button onClick={randomize}>Randomize Paragraph</button>
-    </div></Section>}
+    </div></Section>} */}
     {/* <Section><iframe width={`100%`} height={`100%`} style={{border: 0, outline: `none`, minHeight: 400}} src="https://piratechs.com/"></iframe></Section> */}
-    <Section id={`profileSection`}>
-      <Header title={`User is ${user ? user?.name : `Signed Out`}`} subtitle={`Updated ${user?.updated}`} subBanner />
-      {user ? <div className="profile flex">
+    <Section id={`homeSection`}>
+      <Header title={`User is ${user ? user?.name : `Signed Out`}`} subtitle={`${user?.updated ? `Updated ${user?.updated}` : ``}`} subBanner />
+      <div className="flex row start"><p style={{maxWidth: `fit-content`}}>This is just a website where i experiment with code and what not. lately ive been working on a game. Its my first time making a game by myself, so some things probably dont work right, but anyways thank you for playing and have fun!</p>
+      <button id="startGame" onClick={(Event: any) => window.location.href = window.location.href + `game`}>Click Here to <span className={`emphasis`}>Play</span></button></div>
+      <Image className={`sectionImage`} priority src={`/TreasureGameShip.svg`} alt={`Logo`} width={`1000`} height={`888`} />
+      {/* {user ? <div className="profile flex">
         <span>Name: {user.name}</span>
         {user?.email && <span>Email: {user?.email}</span>}
         {user?.color && <span>Color: {user?.color}</span>}
@@ -80,15 +84,15 @@ export default function Home() {
           <span>About You: {user?.bio == `` ? `--` : content}</span>
           <button className="rowButton" onClick={randomize}>Randomize Paragraph</button>  
         </div>
-      </div> : ``}
+      </div> : ``} */}
     </Section>
     <Section>
       <AuthForm />
     </Section>
-    {devEnv && <Section>
+    {/* {devEnv && <Section>
       <Header title={`Adapt`} subtitle={`This Section`} />
       This is a new section template im pushing for now and will implement later on.
-      <div id="scroll-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio excepturi iusto saepe aliquam expedita rerum veniam necessitatibus. Delectus culpa provident, accusantium ad hic ea est beatae temporibus omnis distinctio repellat rem! Qui fuga inventore doloremque, ab tempore ipsa minus dolorem vel dolorum excepturi aliquam vitae ducimus soluta autem veniam incidunt!</div>
-    </Section>}
+     
+    </Section>} */}
   </div>
 }

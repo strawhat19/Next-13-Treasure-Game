@@ -54,14 +54,45 @@ body {
     margin: 0;
     padding: 0;
     width: 100%;
-    color: white;
     overflow-x: hidden;
-    background: var(--mainTeal);
     font-family: Montserrat, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
         Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   
     &.Game {
         overflow-y: hidden !important;
+    }
+
+    &.dark {
+        color: white;
+    }
+    &.black {
+        input {
+            border: solid 2px var(--gameBlue);
+        }
+    }
+    &.light {
+        color: black;
+        .emphasis {
+            &.white {
+                color: black !important;
+            }
+        }
+
+        button, input[type="submit"] {
+            color: white !important;
+            background: var(--blackGlass);
+            &:hover { // Mouse Over
+                filter: invert(1);
+                box-shadow: 0 0 8px 0px black;
+            }
+            &:focus { // Active or Was Pushed
+                filter: invert(1) brightness(1.5);
+            }
+            &:active { // On Click
+                transform: scale(1.01);
+                box-shadow: inset 0 0 8px 0px black;
+            }
+        }
     }
 }
 
@@ -72,6 +103,7 @@ header {
     grid-gap: 2em;
     display: flex;
     margin: 0 auto;
+    color: white;
     font-weight: 500;
     font-size: 1.2em;
     position: sticky;
@@ -206,6 +238,12 @@ header {
     *:nth-child(2) {
         font-weight: 400;
         text-align: right;
+    }
+}
+
+.profileText {
+    span:not(.emphasis) {
+        font-weight: 500;
     }
 }
 
@@ -351,6 +389,9 @@ a {
     display: flex;
     grid-gap: 1em;
     align-items: center;
+    &.end {
+        justify-content: flex-end !important;
+    }
     &:not(.start) {
         justify-content: center;
     }
@@ -390,10 +431,44 @@ input {
     outline: none;
     border-radius: 4px;
     font-family: 'Montserrat';
+    color: white !important;
     background: var(--blackGlass);
     transition: var(--transition);
     &::placeholder {
         color: var(--softWhite);
+    }
+    &[type="color"] {
+        border: 0;
+        padding: 1em;
+        outline: none;
+        min-height: 60px;
+        border-radius: 4px;
+        position: relative;
+        &::before {
+            transform: translate(-50%, -50%);
+            content: attr(data-color);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            color: white;
+            font-weight: 500;
+            height: 28px;
+            width: 96.5%;
+            // border: solid 2px var(--blackGlass);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        &.dark {
+            &::before {
+                color: white;
+            }
+        }
+        &.light {
+            &::before {
+                color: black;
+            }
+        }
     }
 }
 
@@ -494,9 +569,32 @@ button, input[type="submit"] {
     }
 }
 
+.gameAnimation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    // display: flex;
+    // justify-content: center;
+    // transform: translate(-50%, -50%);
+    // align-items: baseline;
+    overflow: hidden;
+    lottie-player {
+        bottom: -143px;
+        position: relative;
+        transform: scale(2.3,0.3);
+        width: 100% !important;
+        height: 100% !important;
+    }
+}
+
 .leaderBoard {
     padding: 10px;
-    border-radius: 4px;         
+    color: white; 
+    border-radius: 4px;        
     background: var(--blackGlass);
     .userScore {
         grid-gap: 1em;
@@ -510,7 +608,6 @@ section {
     .game {
         width: 100%;
         display: flex;
-        height: 415px;
         font-weight: 500;
         max-height: 413px;
         font-size: 0.75em;
@@ -527,7 +624,7 @@ section {
         }
 
         .fa-coins {
-            color: var(--js);
+            color: var(--js) !important;
         }
     
         .fa-save {
@@ -555,12 +652,12 @@ section {
             animation: fadeIn 500ms ease-in-out;
         }
 
-        // .playerSprite {
-            // position: relative;
-            // top: -163px;
-            // z-index: 0;
-            // transform: scale(0.2);
-        // }
+        .playerSprite {
+         /* transform: scale(1); */
+            position: absolute;
+            left: -75px;
+            top: -150px;
+        }
 
         .coinsAnimation {
             transform: scale(0.4, 0.6);
@@ -571,10 +668,11 @@ section {
     
         .gameControls {
             background: var(--blackGlass);
-            font-size: 0.90em;
             border-radius: 3px;
+            font-size: 0.90em;
             position: absolute;
             padding: 0.6em 2em;
+            color: white;
             grid-gap: 1.5em;
             min-width: 82%;
             max-width: 82%;
@@ -602,7 +700,7 @@ section {
       
         .bottomRow {
             position: relative;
-            top: -30px;
+            top: -27px;
         }
 
         #playerTimer {
@@ -700,7 +798,7 @@ section {
             border-radius: 4px;
             position: absolute;
             text-align: center;
-            mix-blend-mode: difference;
+            // mix-blend-mode: difference;
             filter: saturate(0);
             &.right {
                 transform: rotate(0deg);
@@ -761,8 +859,8 @@ section {
                 right: 25px;
                 top: 12px;
                 .emphasis {
-                    color: var(--main);
                     filter: brightness(1.5);
+                    color: var(--main);
                 }
             }
         }
@@ -775,8 +873,18 @@ section {
     font-size: 1.1em;
     font-weight: 700;
     font-style: italic;
+    &.white {
+        color: white !important;
+    }
     // -webkit-text-stroke-width: 1px; 
     // -webkit-text-stroke-color: var(--gameBlue); 
+}
+
+.sectionImage {
+    width: 100%;
+    height: auto;
+    margin: 1em 0;
+    max-height: 350px;
 }
 
 @keyframes enemy {
@@ -919,7 +1027,7 @@ footer {
 
 #scroll-text {
 
-    width: 200%;
+    width: 235%;
     // overflow: hidden;
     text-overflow: clip;
     white-space: nowrap;
@@ -928,9 +1036,9 @@ footer {
     transform: translateX(100%);
     -moz-transform: translateX(100%);
     -webkit-transform: translateX(100%);
-    animation: my-animation 10s linear infinite;
-    -moz-animation: my-animation 10s linear infinite;
-    -webkit-animation: my-animation 10s linear infinite;
+    animation: my-animation 20s linear infinite;
+    -moz-animation: my-animation 20s linear infinite;
+    -webkit-animation: my-animation 20s linear infinite;
 
     /* for Firefox */
     @-moz-keyframes my-animation {
