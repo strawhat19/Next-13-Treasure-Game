@@ -568,22 +568,42 @@ button:active, input[type=submit]:active {
   font-size: 0.75em;
 }
 
+.gameStateAction {
+  position: relative;
+  z-index: 1;
+}
+
 .gameAnimation {
   position: absolute;
   top: 0;
   left: 0;
   bottom: 0;
   right: 0;
+  z-index: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
 .gameAnimation lottie-player {
+  z-index: 0;
   bottom: -143px;
   position: relative;
-  transform: scale(2.3, 0.3);
   width: 100% !important;
   height: 100% !important;
+  transform: scale(3.2, 0.3);
+}
+.gameAnimation lottie-player#cloudsAnimation {
+  top: 0;
+  opacity: 0.35;
+  position: absolute;
+  transform: scale(1.6, 1);
+  width: 100% !important;
+}
+.gameAnimation lottie-player.windAnim {
+  transform: scale(0.35) rotateY(180deg) !important;
+  position: absolute;
+  width: 100% !important;
+  filter: invert(1);
 }
 
 .leaderBoard {
@@ -642,6 +662,13 @@ section .game .playerSprite {
   position: absolute;
   left: -75px;
   top: -150px;
+}
+section .game .playerSprite .windAnim {
+  transform: scale(0.35) rotateY(180deg) !important;
+  position: absolute;
+  width: 100% !important;
+  filter: invert(1);
+  max-height: 100%;
 }
 section .game .coinsAnimation {
   transform: scale(0.4, 0.6);
@@ -744,6 +771,8 @@ section .game #startGame {
   font-size: 1.2em;
 }
 section .game .playerText {
+  z-index: 1;
+  pointer-events: none;
   transition: var(--transition);
 }
 section .game .playerText button i {
@@ -754,6 +783,8 @@ section .game .healthText i.fa-heartbeat {
   color: red !important;
 }
 section .game .player {
+  z-index: 1;
+  pointer-events: none;
   transition: var(--transition);
   border-radius: 4px;
   position: absolute;
@@ -781,7 +812,9 @@ section .game .enemy {
   transition: var(--transition);
 }
 section .game .enemy.moving {
-  background: var(--dangerColor) !important;
+  border-radius: 100px;
+  background: var(--blackGlass) !important;
+  box-shadow: inset 0 0 3px 1px #333333;
 }
 section .game .enemy.stopped {
   opacity: 0;
@@ -791,6 +824,7 @@ section .game .enemy.stopped {
 }
 section .game .health {
   transition: var(--transition);
+  border: solid 2px black;
   justify-content: center;
   align-items: center;
   border-radius: 3px;

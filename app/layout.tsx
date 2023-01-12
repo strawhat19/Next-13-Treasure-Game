@@ -3,7 +3,6 @@ import Link from 'next/link';
 import '../styles/global.css';
 import Image from 'next/image';
 import { db } from '../firebase';
-import Section from './components/section';
 import { isShadeOfBlack } from './components/form';
 import { useRef, useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';

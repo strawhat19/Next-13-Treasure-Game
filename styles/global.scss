@@ -569,12 +569,18 @@ button, input[type="submit"] {
     }
 }
 
+.gameStateAction {
+    position: relative;
+    z-index: 1;
+}
+
 .gameAnimation {
     position: absolute;
     top: 0;
     left: 0;
     bottom: 0;
     right: 0;
+    z-index: 0;
     width: 100%;
     height: 100%;
     // display: flex;
@@ -583,11 +589,25 @@ button, input[type="submit"] {
     // align-items: baseline;
     overflow: hidden;
     lottie-player {
+        z-index: 0;
         bottom: -143px;
         position: relative;
-        transform: scale(2.3,0.3);
         width: 100% !important;
         height: 100% !important;
+        transform: scale(3.2, 0.3);
+        &#cloudsAnimation {
+            top: 0;
+            opacity: 0.35;
+            position: absolute;
+            transform: scale(1.6, 1);
+            width: 100% !important;
+        }
+        &.windAnim {
+            transform: scale(0.35) rotateY(180deg) !important;
+            position: absolute;
+            width: 100% !important;
+            filter: invert(1);
+        }
     }
 }
 
@@ -657,6 +677,13 @@ section {
             position: absolute;
             left: -75px;
             top: -150px;
+            .windAnim {
+                transform: scale(0.35) rotateY(180deg) !important;
+                position: absolute;
+                width: 100% !important;
+                filter: invert(1);
+                max-height: 100%;
+            }
         }
 
         .coinsAnimation {
@@ -776,6 +803,8 @@ section {
         }
 
         .playerText {
+            z-index: 1;
+            pointer-events: none;
             transition: var(--transition);
             button {
                 i {
@@ -794,6 +823,8 @@ section {
     }
     
         .player {
+            z-index: 1;
+            pointer-events: none;
             transition: var(--transition);
             border-radius: 4px;
             position: absolute;
@@ -824,7 +855,10 @@ section {
             justify-content: center;
             transition: var(--transition);
             &.moving {
-                background: var(--dangerColor) !important;
+                border-radius: 100px;
+                background: var(--blackGlass) !important;
+                box-shadow: inset 0 0 3px 1px #333333;
+                // background: var(--dangerColor) !important;
             }
             &.stopped {
                 opacity: 0;
@@ -835,6 +869,7 @@ section {
     
         .health {
             transition: var(--transition);
+            border: solid 2px black;
             justify-content: center;
             align-items: center;
             border-radius: 3px;

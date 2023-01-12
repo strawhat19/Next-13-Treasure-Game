@@ -11,16 +11,21 @@ import { useContext, useEffect, useRef, useState } from 'react';
 // Global Variables
 declare global {
   interface Anim extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> {
-    src?: string;
+    background?: string;
     position?: any;
+    src?: string;
+    class?: any;
     left?: any;
     right?: any;
     muted?: any;
-    background?: string;
     speed?: any;
     style?: {
       width?: number;
       height?: number;
+      top?: any;
+      left?: any;
+      bottom?: any;
+      right?: any;
     };
     loop?: any;
     autoplay?: any;
@@ -61,12 +66,14 @@ export default function Game() {
   let [movement, setMovement] = useState(0);
   let [scoring, setScoring] = useState(false);
   let [score, setScore] = useState(startScore);
+  let [leftWind, setLeftWind] = useState(false);
   let [gameOver, setGameOver] = useState(false);
   let [jumpSpeed, setJumpSpeed] = useState(500);
   let [totalDamage, setTotalDamage] = useState(0);
   let [gameHeight, setGameHeight] = useState(415);
   let [damage, setDamage] = useState(startDamage);
   let [prevHealth, setPrevHealth] = useState(100);
+  let [gameLoaded, setGameLoaded] = useState(true);
   let [showLeaders, setShowLeaders] = useState(false);
   let [direction, setDirection] = useState(`standing`);
   let [initialHealth, setInitialHealth] = useState(startHP);
@@ -76,6 +83,7 @@ export default function Game() {
   let [controls, setControls] = useState({minWidth: controlWidth});
   let playerAnim = `https://assets7.lottiefiles.com/packages/lf20_9xRdLu.json`;
   let shipAnim = `https://lottie.host/520bb91b-0130-4949-91d1-3a512fde1751/UGP7Ccvvfl.json`;
+  let cloudsAnimation = `https://assets8.lottiefiles.com/datafiles/mBcU0bs3hiqgyCF/data.json`;
   let { width, updates, setUpdates, user, setPage, setUser, focus, setFocus, users, highScore, setHighScore, authState } = useContext(StateContext);
   let initialBounds = {background: `var(--ground)`, height: 40, width: `${initialHealth}%`, color: `white`, fontWeight: 700};
   let initialPlayer = {height: 55, width: 55, bottom: initialBounds.height - 1, left: 70};
@@ -129,11 +137,13 @@ export default function Game() {
 
   const moveLeft = () => {
     if (player.left > 70) {
+      setLeftWind(true);
       let distance = player.left - (moveSpeed * 35);
       setMovement(2);
       setDirection(`left`);
       setUpdates(updates+1);
       setPlayer({...player, left: distance});
+      setLeftWind(false);
     }
   }
   
@@ -186,6 +196,7 @@ export default function Game() {
     setMoveSpeed(parseFloat(mvspd?.value));
     setDamage(parseFloat(dmg?.value));
     setSpeed(parseFloat(spd?.value));
+    setLeftWind(false);
 
     if (plyr && enmy && fnsh) {
       setEnemy({...enemy, animation: `enemy ${parseFloat(spd?.value)}ms linear infinite`});
@@ -467,7 +478,7 @@ export default function Game() {
     setPage(`Game`);
     if (loadedRef.current) return;
     loadedRef.current = true;
-
+    
     startGame();
     setUpdates(updates+1);
     setHealth({...health, width: `${startHP}%`});
@@ -489,10 +500,12 @@ export default function Game() {
             </div>
         </div>
     </section>
-    <Section id={`gameSection`}>
+    {gameLoaded &&  <Section id={`gameSection`}>
       <div className="game" style={{background: gameBackground, height: gameHeight}}>
         <div className="gameAnimation" id="gameAnimation">
-          <lottie-player src="https://assets3.lottiefiles.com/datafiles/N8DaINa2dmLOJja/data.json" background="transparent" speed="2" style={{ width: 1000, height: 888 }} loop autoplay></lottie-player>
+          {/* {leftWind ? <lottie-player class="windAnim" src={`https://assets1.lottiefiles.com/packages/lf20_qdgvz2hn.json`} background="transparent" speed="0.75" style={{ width: 1000, height: 888, top: 0, left: 0 }} loop autoplay></lottie-player> : <lottie-player class="windAnim" src={`https://assets1.lottiefiles.com/packages/lf20_qdgvz2hn.json`} background="transparent" speed="0.75" style={{ width: 1000, height: 888, top: 100, left: 100 }} loop autoplay></lottie-player>} */}
+          <lottie-player id="cloudsAnimation" src={cloudsAnimation} background="transparent" speed="1" style={{ width: 1000, height: 888 }} loop autoplay></lottie-player>
+          <lottie-player id="oceanWaves" src="https://assets3.lottiefiles.com/datafiles/N8DaINa2dmLOJja/data.json" background="transparent" speed="2" style={{ width: 1000, height: 888 }} loop autoplay></lottie-player>
         </div>
         <div className="gameControls flex row">
           <div style={{display: `none`}} className="flex row">Jump Speed <input id={`jumpSpeed`} defaultValue={jumpSpeed} type="range" min="250" max="900" step="50" /> <div className="flex row">x{1000 - jumpSpeed}</div></div>
@@ -520,15 +533,15 @@ export default function Game() {
           <button className={`flex row`} style={{pointerEvents: `none`, fontSize: `0.85em`, fontWeight: 500, height: 30}}><i className="fas fa-signal"></i> Score <span className="score" id={`score`}>{Math.floor(score).toLocaleString(`en-US`)}</span></button>
           <button className={`flex row`} style={{fontSize: `0.85em`, fontWeight: 500}} onClick={() => window.location.reload()}><i style={{width: `15%`}} className="fas fa-undo"></i> Reset</button>
         </div>
-        {!game && (gameOver ? <div className="gameOver flex">
+        {!game && (gameOver ? <div className="gameStateAction gameOver flex">
           <LeaderBoard id={`leaderBoard`} className={`leaderBoard`} />
           <button id="startGame" onClick={saveAndRestartGame}><span className={`emphasis`} style={{color: `var(--mainGlass)`}}>GAME OVER,</span> Click Here or <span className={`emphasis`}>Type Enter</span> to Try Again</button>
         </div> : (win ? <div className="win">
           <button id="winGame" onClick={(Event: any) => startGame(Event)}>You Won</button>
-        </div> : <div className="start flex">{showLeaders && <LeaderBoard id={`leaderBoard`} className={`leaderBoard`} />}<button id="startGame" onClick={(Event: any) => startGame(Event)}>Click Here or <span className={`emphasis`}>Type Enter</span> to Play <span className="emphasis">//</span> You can also <span className="emphasis">Press Escape</span> to Reset the Game!</button></div>))} 
-        <div className="gameMessages flex">
+        </div> : <div className="gameStateAction start flex">{showLeaders && <LeaderBoard id={`leaderBoard`} className={`leaderBoard`} />}<button id="startGame" onClick={(Event: any) => startGame(Event)}>Click Here or <span className={`emphasis`}>Type Enter</span> to Play <span className="emphasis">//</span> You can also <span className="emphasis">Press Escape</span> to Reset the Game!</button></div>))} 
+        <div className="gameStateAction gameMessages flex">
           {game && time < 2 && <div className="intro">Try to get to the Treasure!</div>}
-          {game && time > 2 && time < 10 && <div className="gameMessage" style={{color: `white`}}>Jump over enemies and move by tapping arrow keys!</div>}
+          {game && time > 2 && time < 10 && <div className="gameMessage" style={{color: `white`}}>Jump over Cannon Balls and move by tapping arrow keys!</div>}
           {game && time > 10 && time < 15 && <div className="gameMessage" style={{color: `white`}}>Getting treasure gives you LOTS of points, but sends you back!</div>}
           {game && time > 15 && <div className="gameMessage flex row stretch">
             {/* <span style={{minWidth: `max-content`}}>Your Current Score:</span> */}
@@ -536,9 +549,10 @@ export default function Game() {
         </div>
         <div className={`player playerObj ${direction}`} style={player}><div className="playerSprite">
           {/* {movement != `standing` ?  : <img src="/stand.svg" />}   */}
+          <lottie-player class="windAnim" src={`https://assets1.lottiefiles.com/packages/lf20_qdgvz2hn.json`} background="transparent" speed="0.75" style={{ width: 1000, height: 888, top: 25, left: -160 }} loop autoplay></lottie-player>
           <lottie-player src={shipAnim}  background="transparent" speed={playerSpeed} style={{width: initialPlayer.width * 5, height: initialPlayer.height * 5}} loop autoplay></lottie-player>
         </div></div>
-        <div className={`enemy ${game ? `moving` : `stopped`}`} style={enemy}>1</div>
+        <div className={`enemy ${game ? `moving` : `stopped`}`} style={enemy}></div>
         {/* <div className={`enemy ${game ? `moving` : `stopped`}`} style={{...enemy, left: 55 + Math.floor(Math.random() * 400), bottom: enemy.bottom + 15, animationDelay: `3s`}}>2</div> */}
         <div className="ground" style={ground}>
           <div className="groundText">Click Arrow Buttons or Use Left and Right Arrow Keys to Move and Up or Space to jump. Thank you for Playing!</div>
@@ -560,7 +574,7 @@ export default function Game() {
           <div style={{position: `relative`, right: coinsPlacement + coinsDistance * 2 }}><lottie-player src="https://assets10.lottiefiles.com/packages/lf20_smGEjL.json" background="transparent" speed={`2`} style={{ width: 300, height: 300 }} loop autoplay></lottie-player></div>
         </div></button>
       </div>
-    </Section>
+    </Section>}
     <Section id={`gameAuth`}>
       <h2>{focus ? `Please Sign In or Sign Up to Save Your Score!` : <i>User is {user ? user?.name : `Signed Out`}</i>}</h2>
       <AuthForm />

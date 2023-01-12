@@ -18,7 +18,7 @@ I am also experimenting with making a game in JavaScript, im very new to game de
 
 ![Screenshot of Application](./public/next-13-app.gif)
 
-![Screenshot of Game](./public/TreasureGameShip.svg)
+![Screenshot of Game](./public/pirateTreasure.JPG)
 
 ## Getting Started
 

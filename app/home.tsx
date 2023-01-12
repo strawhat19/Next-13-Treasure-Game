@@ -70,7 +70,7 @@ export default function Home() {
       <Header title={`User is ${user ? user?.name : `Signed Out`}`} subtitle={`${user?.updated ? `Updated ${user?.updated}` : ``}`} subBanner />
       <div className="flex row start"><p style={{maxWidth: `fit-content`}}>This is just a website where i experiment with code and what not. lately ive been working on a game. Its my first time making a game by myself, so some things probably dont work right, but anyways thank you for playing and have fun!</p>
       <button id="startGame" onClick={(Event: any) => window.location.href = window.location.href + `game`}>Click Here to <span className={`emphasis`}>Play</span></button></div>
-      <Image className={`sectionImage`} priority src={`/TreasureGameShip.svg`} alt={`Logo`} width={`1000`} height={`888`} />
+      <Image className={`sectionImage`} priority src={`/pirateTreasure.svg`} alt={`Logo`} width={`1000`} height={`888`} />
       {/* {user ? <div className="profile flex">
         <span>Name: {user.name}</span>
         {user?.email && <span>Email: {user?.email}</span>}
