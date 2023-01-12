@@ -596,7 +596,7 @@ button:active, input[type=submit]:active {
   top: 0;
   opacity: 0.35;
   position: absolute;
-  transform: scale(1.6, 1);
+  transform: scale(3, 1);
   width: 100% !important;
 }
 .gameAnimation lottie-player.windAnim {
