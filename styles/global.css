@@ -590,7 +590,7 @@ button:active, input[type=submit]:active {
   position: relative;
   width: 100% !important;
   height: 100% !important;
-  transform: scale(3.2, 0.3);
+  transform: scale(3.5, 0.3);
 }
 .gameAnimation lottie-player#cloudsAnimation {
   top: 0;
@@ -687,7 +687,7 @@ section .game .gameControls {
   min-width: 82%;
   max-width: 82%;
   left: 25px;
-  top: 25px;
+  top: 80px;
 }
 section .game .gameControls #jumpSpeed {
   transform: rotateY(180deg);
@@ -834,7 +834,7 @@ section .game .health {
   max-width: 82%;
   display: flex;
   left: 25px;
-  top: 75px;
+  top: 25px;
 }
 section .game .ground {
   border-bottom-left-radius: 3px;

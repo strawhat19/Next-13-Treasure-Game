@@ -84,7 +84,7 @@ export default function Game() {
   let playerAnim = `https://assets7.lottiefiles.com/packages/lf20_9xRdLu.json`;
   let shipAnim = `https://lottie.host/520bb91b-0130-4949-91d1-3a512fde1751/UGP7Ccvvfl.json`;
   let cloudsAnimation = `https://assets8.lottiefiles.com/datafiles/mBcU0bs3hiqgyCF/data.json`;
-  let { width, updates, setUpdates, user, setPage, setUser, focus, setFocus, users, highScore, setHighScore, authState } = useContext(StateContext);
+  let { width, updates, setUpdates, user, setPage, setUser, focus, setFocus, users, highScore, setHighScore, authState, devEnv } = useContext(StateContext);
   let initialBounds = {background: `var(--ground)`, height: 40, width: `${initialHealth}%`, color: `white`, fontWeight: 700};
   let initialPlayer = {height: 55, width: 55, bottom: initialBounds.height - 1, left: 70};
   let [finish, setFinish] = useState({background: `var(--blackGlass)`, height: 80, width: controlWidth, bottom: initialBounds.height - 1, right: 25, borderRadius: 4});
@@ -217,7 +217,7 @@ export default function Game() {
             if (hlthPts > 0) {
               setHurt(true);
               setScoring(false);
-              setHealth({...health, width: `${hlthPts - (dmg.value / 2)}%`, background: hlthPts <= lowHealth ? dangerColor : (hlthPts <= medHealth ? `#cbcb1c` : initialBounds.background), color: hlthPts <= lowHealth ? `white` : (hlthPts <= medHealth ? `black` : `white`), fontWeight: hlthPts <= lowHealth ? 700 : (hlthPts <= medHealth ? 500 : 700)});
+              setHealth({...health, width: `${hlthPts - (dmg.value / 2)}%`, background: hlthPts <= lowHealth ? `rgba(184, 13, 0, 0.75)` : (hlthPts <= medHealth ? `#cbcb1c` : initialBounds.background), color: hlthPts <= lowHealth ? `white` : (hlthPts <= medHealth ? `black` : `white`), fontWeight: hlthPts <= lowHealth ? 700 : (hlthPts <= medHealth ? 500 : 700)});
               setHits(JSON.parse(localStorage.getItem(`health`) as any) - (hlthPts - 1) > (((damage * 10) * (speed /3333))/1.5) ? ((JSON.parse(localStorage.getItem(`health`) as any) - (hlthPts - 1)) / 2) : JSON.parse(localStorage.getItem(`health`) as any) - (hlthPts - 1));
               setTotalDamage(totalDamage + (prevHealth - parseFloat(health.width)));
               calcScore(true);
@@ -258,7 +258,7 @@ export default function Game() {
       
       // Check for Game Over
       if (hlthPts <= 0) {
-        setHealth({...health, width: `${0}%`, background: hlthPts <= lowHealth ? dangerColor : (hlthPts <= medHealth ? `#cbcb1c` : initialBounds.background), color: hlthPts <= lowHealth ? `white` : (hlthPts <= medHealth ? `black` : `white`), fontWeight: hlthPts <= lowHealth ? 700 : (hlthPts <= medHealth ? 500 : 700)});
+        setHealth({...health, width: `${0}%`, background: hlthPts <= lowHealth ? `rgba(184, 13, 0, 0.75)` : (hlthPts <= medHealth ? `#cbcb1c` : initialBounds.background), color: hlthPts <= lowHealth ? `white` : (hlthPts <= medHealth ? `black` : `white`), fontWeight: hlthPts <= lowHealth ? 700 : (hlthPts <= medHealth ? 500 : 700)});
         // localStorage.setItem(`deaths`, JSON.stringify(parseInt(ded?.innerHTML) + 1));
         setDeaths(parseInt(ded?.innerHTML) + 1);
         setGameOver(true);
@@ -452,7 +452,7 @@ export default function Game() {
       plyr.top <= enmy.bottom) {
         if (hlthPts > 0) {
           setHurt(true);
-          setHealth({...health, width: `${hlthPts - dmg.value}%`, background: hlthPts <= lowHealth ? dangerColor : (hlthPts <= medHealth ? `#cbcb1c` : initialBounds.background), color: hlthPts <= lowHealth ? `white` : (hlthPts <= medHealth ? `black` : `white`), fontWeight: hlthPts <= lowHealth ? 700 : (hlthPts <= medHealth ? 500 : 700)});
+          setHealth({...health, width: `${hlthPts - dmg.value}%`, background: hlthPts <= lowHealth ? `rgba(184, 13, 0, 0.75)` : (hlthPts <= medHealth ? `#cbcb1c` : initialBounds.background), color: hlthPts <= lowHealth ? `white` : (hlthPts <= medHealth ? `black` : `white`), fontWeight: hlthPts <= lowHealth ? 700 : (hlthPts <= medHealth ? 500 : 700)});
           setHits(JSON.parse(localStorage.getItem(`health`) as any) - (hlthPts - 1) > (((damage * 10) * (speed /3333))/1.5) ? ((JSON.parse(localStorage.getItem(`health`) as any) - (hlthPts - 1)) / 2) : JSON.parse(localStorage.getItem(`health`) as any) - (hlthPts - 1));
           setTotalDamage(totalDamage + (prevHealth - parseFloat(health.width)));
           calcScore(true);
@@ -507,15 +507,15 @@ export default function Game() {
           <lottie-player id="cloudsAnimation" src={cloudsAnimation} background="transparent" speed="1" style={{ width: 1000, height: 888 }} loop autoplay></lottie-player>
           <lottie-player id="oceanWaves" src="https://assets3.lottiefiles.com/datafiles/N8DaINa2dmLOJja/data.json" background="transparent" speed="2" style={{ width: 1000, height: 888 }} loop autoplay></lottie-player>
         </div>
-        <div className="gameControls flex row">
+        {devEnv && <div className="gameControls flex row">
           <div style={{display: `none`}} className="flex row">Jump Speed <input id={`jumpSpeed`} defaultValue={jumpSpeed} type="range" min="250" max="900" step="50" /> <div className="flex row">x{1000 - jumpSpeed}</div></div>
           <div className="flex row" style={{display: `none`}}><span className={`flex row`}><i style={{width: 15}} className="fas fa-heartbeat"></i><span style={{minWidth: 47, marginLeft: 5}}>Start HP</span></span><input id={`initialHealth`} defaultValue={initialHealth} type="range" min="69" max="100" onInput={changeHP} onKeyDown={(e) => e.preventDefault()} /><span className="startHP">{initialHealth}%</span></div>
           <div style={{display: `none`}} className="flex row">Enemy Speed <input id={`speed`} defaultValue={speed} type="range" min="1000" max="5500" step="500" /> <div className="flex row">{speed / 1000} S</div></div>
           <div className="flex row"><span className={`flex row`}><i style={{width: 15}} className="fas fa-tachometer-alt"></i><span style={{minWidth: 47, marginLeft: 5}}>Damage</span></span><input id={`damage`} defaultValue={damage} type="range" min="0.50" max="2.25" step="0.25" onKeyDown={(e) => e.preventDefault()} /> <div className="dmgText flex row">{`${((damage * 8) * (speed /8000)).toString().substr(0,4)}% - ${(Math.floor((damage * 10) * (speed /3333))).toString().substr(0,4)}%`}</div></div>
           <div className="flex row"><span className={`flex row`}><i style={{width: 15}} className="fas fa-tachometer-alt"></i><span style={{minWidth: 47, marginLeft: 5}}>Speed</span></span><input id={`moveSpeed`} defaultValue={moveSpeed} type="range" min="1" max="5" step="0.5" onKeyDown={(e) => e.preventDefault()} /> <div className="flex row">{moveSpeed}x</div></div>
           <div style={{display: `none`}} className="flex row"><span className={`flex row`}><i style={{width: 15}} className="fas fa-tachometer-alt"></i><span style={{minWidth: 47, marginLeft: 5}}>Countdown</span></span><input id={`deathTimer`} defaultValue={deathTimer} type="range" min="15" max="128" onKeyDown={(e) => e.preventDefault()} /> <div className="deathTime flex row">{deathTimer}s</div></div>
-        </div>
-        <div className="health" style={health}><span className="healthText"><i className="fas fa-heartbeat" style={{marginRight: 10}}></i><span style={{position: `relative`, top: `-4px`}}>Health</span></span><span className="healthPoints">{health.width}</span>{parseFloat(health.width) >= 30 && <div className="damageIndicator flex row" style={{minWidth: 200}}>
+        </div>}
+        <div className={`health`} style={health}><span className="healthText"><i className="fas fa-heartbeat" style={{marginRight: 10}}></i><span style={{position: `relative`, top: `-4px`}}>Health</span></span><span className="healthPoints">{health.width}</span>{parseFloat(health.width) >= 30 && <div className="damageIndicator flex row" style={{minWidth: 200}}>
           {!hurt && (Math.abs(prevHealth - parseFloat(health.width)) < (((damage * 10) * (speed /3333)))) && <div id="dmg" className="dmg"><span className="damage">-{Math.abs(prevHealth - parseFloat(health.width))}%</span></div>}
           <div className="hit" style={{opacity: hits > 0.01 ? 1 : 0, color: dangerColor}}>-<span className="hits">{parseInt(hits as any)}%</span></div>
         </div>}</div>
@@ -541,8 +541,8 @@ export default function Game() {
         </div> : <div className="gameStateAction start flex">{showLeaders && <LeaderBoard id={`leaderBoard`} className={`leaderBoard`} />}<button id="startGame" onClick={(Event: any) => startGame(Event)}>Click Here or <span className={`emphasis`}>Type Enter</span> to Play <span className="emphasis">//</span> You can also <span className="emphasis">Press Escape</span> to Reset the Game!</button></div>))} 
         <div className="gameStateAction gameMessages flex">
           {game && time < 2 && <div className="intro">Try to get to the Treasure!</div>}
-          {game && time > 2 && time < 10 && <div className="gameMessage" style={{color: `white`}}>Jump over Cannon Balls and move by tapping arrow keys!</div>}
-          {game && time > 10 && time < 15 && <div className="gameMessage" style={{color: `white`}}>Getting treasure gives you LOTS of points, but sends you back!</div>}
+          {game && time > 2 && time < 7 && <div className="gameMessage" style={{color: `white`}}>Jump over Cannon Balls and move by tapping arrow keys!</div>}
+          {game && time > 7 && time < 15 && <div className="gameMessage" style={{color: `white`}}>Getting treasure gives you LOTS of points, but sends you back!</div>}
           {game && time > 15 && <div className="gameMessage flex row stretch">
             {/* <span style={{minWidth: `max-content`}}>Your Current Score:</span> */}
             <span className="emphasis flex row" style={{color: `var(--js)`}}><i style={{color: `var(--js)`, maxWidth: `fit-content`}} className="fas fa-signal"></i> <span style={{maxWidth: `fit-content`}}>{Math.floor(score).toLocaleString(`en-US`)}</span></span></div>}

@@ -253,8 +253,8 @@ export default function AuthForm(props?: any) {
 
   return <>
   <form id="authForm" className={`flex`} onSubmit={authForm} style={style}>
-      {!user && <input placeholder="Email" type="email" name="email" autoComplete={`email`} required />}
-      {!user && emailField && <input placeholder="Password" type="password" name="password" autoComplete={`current-password`} />}
+      {!user && <input placeholder="Email (You can use a fake email or throwaway email! We dont actually send you any emails)" type="email" name="email" autoComplete={`email`} required />}
+      {!user && emailField && <input placeholder="Password (Use a password that you dont care about, but its still easy to remember)" type="password" name="password" autoComplete={`current-password`} />}
       {user && window?.location?.href?.includes(`profile`) && <input id="name" className={`name userData`} placeholder="Name" type="text" name="status" />}
       {user && window?.location?.href?.includes(`profile`) && <input id="status" className={`status userData`} placeholder="Status" type="text" name="status" />}
       {user && window?.location?.href?.includes(`profile`) && <input id="bio" className={`bio userData`} placeholder="About You" type="text" name="bio" />}

@@ -594,7 +594,7 @@ button, input[type="submit"] {
         position: relative;
         width: 100% !important;
         height: 100% !important;
-        transform: scale(3.2, 0.3);
+        transform: scale(3.5, 0.3);
         &#cloudsAnimation {
             top: 0;
             opacity: 0.35;
@@ -704,7 +704,7 @@ section {
             min-width: 82%;
             max-width: 82%;
             left: 25px;
-            top: 25px;
+            top: 80px;
 
             #jumpSpeed {
                 transform: rotateY(180deg);
@@ -879,7 +879,7 @@ section {
             max-width: 82%;
             display: flex;
             left: 25px;
-            top: 75px;
+            top: 25px;
         }
     
         .ground {
