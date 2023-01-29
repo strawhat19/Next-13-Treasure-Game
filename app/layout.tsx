@@ -120,7 +120,7 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
           {page != `profile` && <footer>
             <div className="inner">
               <div className="left">
-                  {!devEnv && <><a href="https://github.com/strawhat19" target="_blank" className="hoverLink" title="GitHub"><i className="fab fa-github"></i> | Rakib Ahmed</a> 
+                  {devEnv && <><a href="https://github.com/strawhat19" target="_blank" className="hoverLink" title="GitHub"><i className="fab fa-github"></i> | Rakib Ahmed</a> 
                   <span className="vertical-sep">|</span></>}
                   <Link className={`hoverLink`} href={`/`}>Home  <i className="fas fa-undo"></i></Link>
               </div>
