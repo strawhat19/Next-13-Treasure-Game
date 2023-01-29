@@ -1003,6 +1003,29 @@ footer {
             margin-bottom: 0em;
         }
     }
+
+   .inner {
+    .right {
+        img, svg {
+            fill: var(--main);
+            path {
+                fill: var(--main);
+            }
+        }
+        .piratechs {
+            fill: var(--main);
+            path {
+                fill: var(--main);
+            }
+            img, svg {
+                fill: var(--main);
+                path {
+                    fill: var(--main);
+                }
+            }
+        }
+    }
+   }
 }
 
 @keyframes fadeIn {

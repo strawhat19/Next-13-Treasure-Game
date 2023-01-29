@@ -987,6 +987,24 @@ footer .vertical-sep.fas.fa-undo, footer i.fas.fa-undo {
   font-size: 0.8em;
   margin-bottom: 0em;
 }
+footer .inner .right img, footer .inner .right svg {
+  fill: var(--main);
+}
+footer .inner .right img path, footer .inner .right svg path {
+  fill: var(--main);
+}
+footer .inner .right .piratechs {
+  fill: var(--main);
+}
+footer .inner .right .piratechs path {
+  fill: var(--main);
+}
+footer .inner .right .piratechs img, footer .inner .right .piratechs svg {
+  fill: var(--main);
+}
+footer .inner .right .piratechs img path, footer .inner .right .piratechs svg path {
+  fill: var(--main);
+}
 
 @-webkit-keyframes fadeIn {
   0% {
