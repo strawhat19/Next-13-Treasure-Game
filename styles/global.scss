@@ -548,6 +548,18 @@ button, input[type="submit"] {
     }
 }
 
+.tasks {
+    grid-gap: 1em;
+    display: flex;
+    flex-direction: column;
+    .task {
+        padding: 1em;
+        // cursor: grab;
+        border-radius: 4px;
+        background: black;
+    }
+}
+
 .highScore {
     max-width: fit-content;
     position: relative;

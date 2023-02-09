@@ -107,7 +107,6 @@ header {
   color: white;
   font-weight: 500;
   font-size: 1.2em;
-  position: -webkit-sticky;
   position: sticky;
   align-items: center;
   -webkit-backdrop-filter: blur(8px);
@@ -124,8 +123,7 @@ header .logo {
   justify-content: center;
 }
 header .logo.reactLogo {
-  -webkit-animation: logo-spin infinite 20s linear;
-          animation: logo-spin infinite 20s linear;
+  animation: logo-spin infinite 20s linear;
 }
 header .menu {
   display: flex;
@@ -133,8 +131,7 @@ header .menu {
   list-style: none;
   align-items: center;
   justify-content: flex-end;
-  -webkit-animation: fadeIn var(--transition);
-          animation: fadeIn var(--transition);
+  animation: fadeIn var(--transition);
 }
 header .menu.hide {
   display: none;
@@ -148,8 +145,7 @@ header .menu.mobileNav {
   flex-direction: column;
   background: var(--blackGlass);
   border-top: 1px solid white;
-  -webkit-animation: fadeIn var(--transition);
-          animation: fadeIn var(--transition);
+  animation: fadeIn var(--transition);
 }
 header .menu.mobileNav li {
   width: 100%;
@@ -249,8 +245,7 @@ header .menu.mobileNav li a {
 .skeleton .skeletonItem {
   position: relative;
   filter: blur(1px) brightness(1.35);
-  -webkit-animation: skeleton 1.5s var(--transition) infinite alternate;
-          animation: skeleton 1.5s var(--transition) infinite alternate;
+  animation: skeleton 1.5s var(--transition) infinite alternate;
 }
 .skeleton .skeletonItem::before {
   content: "";
@@ -271,8 +266,7 @@ header .menu.mobileNav li a {
   position: relative;
   filter: blur(1px) brightness(1.35);
   background: var(--skeleton) !important;
-  -webkit-animation: skeleton 1.5s var(--transition) infinite alternate;
-          animation: skeleton 1.5s var(--transition) infinite alternate;
+  animation: skeleton 1.5s var(--transition) infinite alternate;
 }
 .skeleton * *::before {
   content: "Loading...";
@@ -285,15 +279,6 @@ header .menu.mobileNav li a {
   justify-content: center;
   align-items: center;
   background: var(--skeleton) !important;
-}
-
-@-webkit-keyframes skeleton {
-  0% {
-    filter: blur(1px) brightness(1.35);
-  }
-  100% {
-    filter: blur(0px) brightness(1);
-  }
 }
 
 @keyframes skeleton {
@@ -435,9 +420,6 @@ input {
 input::-moz-placeholder {
   color: var(--softWhite);
 }
-input:-ms-input-placeholder {
-  color: var(--softWhite);
-}
 input::placeholder {
   color: var(--softWhite);
 }
@@ -545,8 +527,18 @@ button:active, input[type=submit]:active {
   text-align: center;
 }
 
+.tasks {
+  grid-gap: 1em;
+  display: flex;
+  flex-direction: column;
+}
+.tasks .task {
+  padding: 1em;
+  border-radius: 4px;
+  background: black;
+}
+
 .highScore {
-  max-width: -webkit-fit-content;
   max-width: -moz-fit-content;
   max-width: fit-content;
   position: relative;
@@ -645,8 +637,7 @@ section .game .intro {
   font-size: 35px;
   color: transparent;
   pointer-events: none;
-  -webkit-animation: intro 2000ms ease-in-out;
-          animation: intro 2000ms ease-in-out;
+  animation: intro 2000ms ease-in-out;
 }
 section .game .controls button:not(.moveButton), section .game .playerText button:not(.moveButton) {
   font-size: 0.95em !important;
@@ -654,8 +645,7 @@ section .game .controls button:not(.moveButton), section .game .playerText butto
 section .game .gameMessage {
   font-size: 25px;
   pointer-events: none;
-  -webkit-animation: fadeIn 500ms ease-in-out;
-          animation: fadeIn 500ms ease-in-out;
+  animation: fadeIn 500ms ease-in-out;
 }
 section .game .playerSprite {
   /* transform: scale(1); */
@@ -697,8 +687,7 @@ section .game .gameControls i {
 }
 section .game .dmg {
   color: transparent;
-  -webkit-animation: damage 1500ms ease-in-out;
-          animation: damage 1500ms ease-in-out;
+  animation: damage 1500ms ease-in-out;
 }
 section .game .topRow {
   justify-content: flex-start;
@@ -710,7 +699,6 @@ section .game .bottomRow {
 }
 section .game #playerTimer .timer {
   width: 100%;
-  max-width: -webkit-fit-content;
   max-width: -moz-fit-content;
   max-width: fit-content;
 }
@@ -819,8 +807,7 @@ section .game .enemy.moving {
 section .game .enemy.stopped {
   opacity: 0;
   pointer-events: none;
-  -webkit-animation-play-state: paused !important;
-          animation-play-state: paused !important;
+  animation-play-state: paused !important;
 }
 section .game .health {
   transition: var(--transition);
@@ -872,30 +859,12 @@ section .game .ground .groundText .emphasis {
   max-height: 350px;
 }
 
-@-webkit-keyframes enemy {
-  0% {
-    left: 100%;
-  }
-  100% {
-    left: 0;
-  }
-}
-
 @keyframes enemy {
   0% {
     left: 100%;
   }
   100% {
     left: 0;
-  }
-}
-@-webkit-keyframes intro {
-  0% {
-    color: white;
-  }
-  100% {
-    color: transparent;
-    font-size: 15px;
   }
 }
 @keyframes intro {
@@ -905,28 +874,6 @@ section .game .ground .groundText .emphasis {
   100% {
     color: transparent;
     font-size: 15px;
-  }
-}
-@-webkit-keyframes damage {
-  0% {
-    color: var(--dangerColor);
-  }
-  33% {
-    color: var(--dangerColor);
-    font-weight: 300;
-    font-size: 0.85em;
-  }
-  66% {
-    color: var(--dangerColor);
-    font-weight: 300;
-    font-size: 0.75em;
-    opacity: 0.5;
-  }
-  100% {
-    color: transparent;
-    font-weight: 300;
-    font-size: 0.65em;
-    opacity: 0;
   }
 }
 @keyframes damage {
@@ -1006,17 +953,6 @@ footer .inner .right .piratechs img path, footer .inner .right .piratechs svg pa
   fill: var(--main);
 }
 
-@-webkit-keyframes fadeIn {
-  0% {
-    opacity: 0;
-    pointer-events: none;
-  }
-  100% {
-    opacity: 1;
-    pointer-events: all;
-  }
-}
-
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -1025,14 +961,6 @@ footer .inner .right .piratechs img path, footer .inner .right .piratechs svg pa
   100% {
     opacity: 1;
     pointer-events: all;
-  }
-}
-@-webkit-keyframes logo-spin {
-  0% {
-    transform: rotate(0);
-  }
-  100% {
-    transform: rotate(360deg);
   }
 }
 @keyframes logo-spin {
@@ -1091,14 +1019,6 @@ footer .inner .right .piratechs img path, footer .inner .right .piratechs svg pa
   /* for Firefox */
   /* for Chrome */
 }
-@-webkit-keyframes my-animation {
-  from {
-    -webkit-transform: translateX(100%);
-  }
-  to {
-    -webkit-transform: translateX(-100%);
-  }
-}
 
 @keyframes my-animation {
   from {
@@ -1152,35 +1072,7 @@ footer .inner .right .piratechs img path, footer .inner .right .piratechs svg pa
 }
 
 .fadeInOut {
-  -webkit-animation: fadeInOut 3500ms ease-in-out 1;
-          animation: fadeInOut 3500ms ease-in-out 1;
-}
-
-@-webkit-keyframes fadeInOut {
-  0% {
-    transform: scale(1, 0);
-    opacity: 0;
-  }
-  20% {
-    opacity: 0;
-    transform: scale(1, 0.4);
-  }
-  30% {
-    transform: scale(1, 1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1, 1);
-    opacity: 1;
-  }
-  80% {
-    transform: scale(1, 1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1, 0);
-    opacity: 0;
-  }
+  animation: fadeInOut 3500ms ease-in-out 1;
 }
 
 @keyframes fadeInOut {
@@ -1214,25 +1106,6 @@ footer .inner .right .piratechs img path, footer .inner .right .piratechs svg pa
   border: solid var(--dangerColor) 3px;
   box-shadow: 0px 0px 4px 1px var(--dangerColor);
   animation: shake 1s ease-in-out infinite alternate-reverse;
-}
-
-@-webkit-keyframes shake {
-  0% {
-    left: 0px;
-    top: 0px;
-  }
-  33% {
-    left: -1px;
-    top: -1px;
-  }
-  66% {
-    left: 1px;
-    top: 1px;
-  }
-  100% {
-    left: 0px;
-    top: 0px;
-  }
 }
 
 @keyframes shake {
