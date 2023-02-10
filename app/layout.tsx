@@ -69,15 +69,15 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
     //   setHighScore(Math.floor(storedHighScore));
     // }
     
-    windowEvents();
+    // windowEvents();
 
-    window.addEventListener(`resize`, () => windowEvents());
-    window.addEventListener(`scroll`, () => windowEvents());
+    // window.addEventListener(`resize`, () => windowEvents());
+    // window.addEventListener(`scroll`, () => windowEvents());
 
-    return () => {
-      window.removeEventListener(`resize`, () => windowEvents());
-      window.removeEventListener(`scroll`, () => windowEvents());
-    }
+    // return () => {
+    //   window.removeEventListener(`resize`, () => windowEvents());
+    //   window.removeEventListener(`scroll`, () => windowEvents());
+    // }
   }, [user, users, authState, dark])
 
   return (
@@ -93,7 +93,7 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
           <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js" defer></script>
         </head>
         <body className={`${page} ${colorPref ? (dark ? `dark` : `light`) : ``} ${isShadeOfBlack(color) ? `black` : ``}`} style={{background: color == `` ? `var(--mainTeal)` : colorPref ? color : `var(--mainTeal)`}}>
-          <header>
+          <header style={{display: `none`}}>
             <nav className="inner">
               <Link className={`logo hoverLink`} href={`/`}>
                 <Image className={`logo reactLogo`} priority src={`/react.svg`} alt={`Logo`} width={`50`} height={`50`} /> Home
@@ -114,6 +114,29 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
                   </a>
                 </div>
               </div>}
+            </nav>
+          </header>
+          <header>
+            <nav className="inner">
+              <Link className={`logo hoverLink`} href={`/`}>
+                <Image className={`logo reactLogo`} priority src={`/react.svg`} alt={`Logo`} width={`50`} height={`50`} /> Home
+              </Link>
+              <ul className={`menu ${mobileMenu ? `show` : `hide`}`}>
+                {user && <li><Link className={`hoverLink`} href={`/profile`}>{capitalizeAllWords(user?.name?.split(` `)[0])}'s Profile</Link></li>}
+                {/* <li><Link className={`hoverLink`} href={`/about`}>About</Link></li> */}
+                {/* <li><Link className={`hoverLink`} href={`/projects`}>Projects</Link></li> */}
+                <li><Link className={`hoverLink`} href={`/game`}>Game</Link></li>
+                {/* <li><Link className={`hoverLink`} href={`/contact`}>Contact</Link></li> */}
+              </ul>
+              <div className="mobileMenu">
+                <div id="menuToggle" onClick={toggleMobileMenu}> Menu |
+                  <a id="openMenuToggler" className={mobileMenu ? `openMenuToggler clicked` : `openMenuToggler`}>
+                      <span id="menuTogglerSpan" className="menuTogglerSpan"></span>
+                      <span id="menuTogglerSpan" className="menuTogglerSpan"></span>
+                      <span id="menuTogglerSpan" className="menuTogglerSpan"></span>
+                  </a>
+                </div>
+              </div>
             </nav>
           </header>
           <main className={page}>{children}</main>

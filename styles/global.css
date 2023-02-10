@@ -115,6 +115,11 @@ header {
   background: var(--blackGlass);
   justify-content: space-between;
 }
+@media (min-width: 697px) {
+  header .mobileMenu {
+    display: none;
+  }
+}
 header .logo {
   display: flex;
   grid-gap: 1em;
@@ -136,8 +141,32 @@ header .menu {
   -webkit-animation: fadeIn var(--transition);
           animation: fadeIn var(--transition);
 }
-header .menu.hide {
-  display: none;
+@media (max-width: 697px) {
+  header .menu {
+    left: 0;
+    top: 100px;
+    width: 100%;
+    grid-gap: 0;
+    position: absolute;
+    flex-direction: column;
+    background: var(--blackGlass);
+    border-top: 1px solid white;
+    -webkit-animation: fadeIn var(--transition);
+            animation: fadeIn var(--transition);
+  }
+  header .menu li {
+    width: 100%;
+    padding: 1em 0;
+    border-bottom: 1px solid white;
+  }
+  header .menu li a {
+    margin: 0 auto;
+    max-width: 250px;
+    justify-content: center;
+  }
+  header .menu.hide {
+    display: none;
+  }
 }
 header .menu.mobileNav {
   left: 0;

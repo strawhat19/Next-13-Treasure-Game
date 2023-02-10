@@ -111,6 +111,13 @@ header {
     backdrop-filter: blur(8px);
     background: var(--blackGlass);
     justify-content: space-between;
+
+    @media (min-width: 697px) {
+        .mobileMenu {
+            display: none;
+        }
+    }
+
     .logo {
         display: flex;
         grid-gap: 1em;
@@ -129,8 +136,30 @@ header {
         align-items: center;
         justify-content: flex-end;
         animation: fadeIn var(--transition);
-        &.hide {
-            display: none;
+
+        @media (max-width: 697px) {
+            left: 0;
+            top: 100px;
+            width: 100%;
+            grid-gap: 0;
+            position: absolute;
+            flex-direction: column;
+            background: var(--blackGlass);
+            border-top: 1px solid white;
+            animation: fadeIn var(--transition);
+            li {
+                width: 100%;
+                padding: 1em 0;
+                border-bottom: 1px solid white;
+                a {
+                    margin: 0 auto;
+                    max-width: 250px;
+                    justify-content: center;
+                }
+            }
+            &.hide {
+                display: none;
+            }
         }
         &.mobileNav {
             left: 0;
