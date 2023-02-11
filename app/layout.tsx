@@ -92,6 +92,7 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
           <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" />
           <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js" defer></script>
           <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+          <link rel="icon" href="/piratechs.svg" type="image/x-icon"></link>
         </head>
         <body className={`${page} ${colorPref ? (dark ? `dark` : `light`) : ``} ${isShadeOfBlack(color) ? `black` : ``}`} style={{background: color == `` ? `var(--mainTeal)` : colorPref ? color : `var(--mainTeal)`}}>
           <header>
@@ -103,7 +104,7 @@ export default function RootLayout({ children, } : { children: React.ReactNode; 
                 {user && <li><Link className={`hoverLink`} href={`/profile`}>{capitalizeAllWords(user?.name?.split(` `)[0])}'s Profile</Link></li>}
                 {/* <li><Link className={`hoverLink`} href={`/about`}>About</Link></li> */}
                 {/* <li><Link className={`hoverLink`} href={`/projects`}>Projects</Link></li> */}
-                {user && user.id == `1 Rakib 5:21 AM 12-21-2022` && <li><Link className={`hoverLink`} href={`/active`}>Active</Link></li>}
+                <li><Link className={`hoverLink`} href={`/lists`}>Lists</Link></li>
                 <li><Link className={`hoverLink`} href={`/game`}>Game</Link></li>
                 {/* <li><Link className={`hoverLink`} href={`/contact`}>Contact</Link></li> */}
               </ul>

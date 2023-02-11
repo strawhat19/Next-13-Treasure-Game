@@ -330,6 +330,22 @@ section article {
   justify-content: flex-end;
 }
 
+.overflow.items {
+  max-height: 390px;
+  overflow-x: hidden;
+  overflow-y: overlay;
+  padding-right: 10px;
+}
+.overflow.items::-webkit-scrollbar {
+  position: relative;
+  border-radius: 4px;
+  width: 4px !important;
+  background: black !important;
+}
+.overflow.items::-webkit-scrollbar-thumb {
+  background: var(--react);
+  border-radius: 4px;
+}
 .overflow article {
   overflow-x: hidden;
   overflow-y: overlay;
@@ -527,15 +543,38 @@ button:active, input[type=submit]:active {
   text-align: center;
 }
 
-.tasks {
+.lists {
+  grid-gap: 1em;
+  display: flex;
+  margin: 0 auto;
+  overflow: visible;
+  align-items: flex-start;
+  width: calc(var(--containerWidth));
+}
+.lists .list {
+  width: 100%;
+  max-width: 33%;
+  border-radius: 4px;
+  /* Neumorphic Inner shadow */
+  box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
+  /* Neumorphic Outer shadow */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1), 0px 0px 20px rgba(0, 0, 0, 0.05);
+}
+.lists .list .items {
   grid-gap: 1em;
   display: flex;
   flex-direction: column;
 }
-.tasks .task {
+.lists .list .items .item {
+  cursor: grab;
   padding: 1em;
   border-radius: 4px;
-  background: black;
+  background: var(--blackGlass);
+  transition: var(--transition);
+}
+.lists .list .items .item.complete {
+  background: var(--authGlass);
+  text-decoration: line-through;
 }
 
 .highScore {
