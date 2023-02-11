@@ -74,7 +74,6 @@ export default function Game() {
   let [damage, setDamage] = useState(startDamage);
   let [prevHealth, setPrevHealth] = useState(100);
   let [gameLoaded, setGameLoaded] = useState(true);
-  let [showLeaders, setShowLeaders] = useState(false);
   let [direction, setDirection] = useState(`standing`);
   let [initialHealth, setInitialHealth] = useState(startHP);
   let [deathTimer, setDeathTimer] = useState(initialDeathTimer);
@@ -84,7 +83,7 @@ export default function Game() {
   let playerAnim = `https://assets7.lottiefiles.com/packages/lf20_9xRdLu.json`;
   let shipAnim = `https://lottie.host/520bb91b-0130-4949-91d1-3a512fde1751/UGP7Ccvvfl.json`;
   let cloudsAnimation = `https://assets8.lottiefiles.com/datafiles/mBcU0bs3hiqgyCF/data.json`;
-  let { width, updates, setUpdates, user, setPage, setUser, focus, setFocus, users, highScore, setHighScore, authState, devEnv } = useContext(StateContext);
+  let { width, updates, setUpdates, user, setPage, setUser, focus, setFocus, users, highScore, setHighScore, authState, devEnv, showLeaders, setShowLeaders } = useContext(StateContext);
   let initialBounds = {background: `var(--ground)`, height: 40, width: `${initialHealth}%`, color: `white`, fontWeight: 700};
   let initialPlayer = {height: 55, width: 55, bottom: initialBounds.height - 1, left: 70};
   let [finish, setFinish] = useState({background: `var(--blackGlass)`, height: 80, width: controlWidth, bottom: initialBounds.height - 1, right: 25, borderRadius: 4});
@@ -491,14 +490,14 @@ export default function Game() {
 
   return <div className={`inner pageInner`}>
     <section id={`gameBanner`} className={`topContent`}>
-        <div className="inner">
-            <h1 style={{fontSize: `2.1em`}}>Get that Treasure Game</h1>
-            <div className={`column rightColumn gameStats`}>
-                {/* <h2 className={`flex row`}><span className="label">Total:</span><span className="score">{score.toLocaleString(`en-US`)}</span><i className="fas fa-coins"></i></h2> */}
-                {/* <h2 className={`flex row`}><span className="label">Deaths:</span><span className="deaths">{deaths}</span><i className="fas fa-skull-crossbones"></i></h2> */}
-                <button title={gameOver && !user ? `Click to Clear High Score` : `Click to View High Scores`} onClick={() => !gameOver ? setShowLeaders(!showLeaders) : !user ? clearHighScore() : setShowLeaders(!showLeaders)} style={{background: `var(--blackGlass)`, borderRadius: 4, justifyContent: `center`, alignItems: `center`, maxWidth: `fit-content`, padding: `5px 15px`}} className={`flex row`}><h2 className={`flex row`}><i style={{color: `var(--gameBlue)`}} className="fas fa-signal"></i><span className="highScore">{Math.floor(highScore).toLocaleString(`en-US`)}</span><span className="label">High Score</span></h2></button>
-            </div>
+      <div className="inner">
+        <h1 style={{fontSize: `2.1em`}}>Get that Treasure Game</h1>
+        <div className={`column rightColumn gameStats`}>
+            {/* <h2 className={`flex row`}><span className="label">Total:</span><span className="score">{score.toLocaleString(`en-US`)}</span><i className="fas fa-coins"></i></h2> */}
+            {/* <h2 className={`flex row`}><span className="label">Deaths:</span><span className="deaths">{deaths}</span><i className="fas fa-skull-crossbones"></i></h2> */}
+            <button title={gameOver && !user ? `Click to Clear High Score` : `Click to View High Scores`} onClick={() => !gameOver ? setShowLeaders(!showLeaders) : !user ? clearHighScore() : setShowLeaders(!showLeaders)} style={{background: `var(--blackGlass)`, borderRadius: 4, justifyContent: `center`, alignItems: `center`, maxWidth: `fit-content`, padding: `5px 15px`}} className={`flex row`}><h2 className={`flex row`}><i style={{color: `var(--gameBlue)`}} className="fas fa-signal"></i><span className="highScore">{Math.floor(highScore).toLocaleString(`en-US`)}</span><span className="label">High Score</span></h2></button>
         </div>
+      </div>
     </section>
     {gameLoaded &&  <Section id={`gameSection`}>
       <div className="game" style={{background: gameBackground, height: gameHeight}}>

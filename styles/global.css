@@ -331,7 +331,7 @@ section article {
 }
 
 .overflow.items {
-  max-height: 390px;
+  max-height: 300px;
   overflow-x: hidden;
   overflow-y: overlay;
   padding-right: 10px;
@@ -340,10 +340,10 @@ section article {
   position: relative;
   border-radius: 4px;
   width: 4px !important;
-  background: black !important;
+  background: var(--blackGlass) !important;
 }
 .overflow.items::-webkit-scrollbar-thumb {
-  background: var(--react);
+  background: var(--softWhite);
   border-radius: 4px;
 }
 .overflow article {
@@ -553,28 +553,80 @@ button:active, input[type=submit]:active {
 }
 .lists .list {
   width: 100%;
-  max-width: 33%;
   border-radius: 4px;
+  background: -internal-light-dark(rgb(232, 240, 254), rgba(70, 90, 126, 0.4)) !important;
   /* Neumorphic Inner shadow */
   box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
   /* Neumorphic Outer shadow */
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1), 0px 0px 20px rgba(0, 0, 0, 0.05);
 }
+.lists .list h2 {
+  color: white;
+}
+.lists .list.oneList {
+  padding: 2em 0;
+}
+.lists .list.oneList .items {
+  grid-template-columns: auto auto auto auto;
+}
+.lists .list.twoList {
+  padding: 1em 0;
+}
+.lists .list.bigList {
+  max-width: 33%;
+}
 .lists .list .items {
-  grid-gap: 1em;
-  display: flex;
-  flex-direction: column;
+  gap: 1em;
+  display: grid;
+  width: 100% !important;
 }
 .lists .list .items .item {
   cursor: grab;
-  padding: 1em;
+  padding: 0em;
+  display: flex;
+  grid-gap: 0.85em;
+  font-size: 0.85em;
   border-radius: 4px;
+  align-items: center;
   background: var(--blackGlass);
+  /* Neumorphic Inner shadow */
+  box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
+  /* Neumorphic Outer shadow */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1), 0px 0px 20px rgba(0, 0, 0, 0.05);
+  transition: var(--transition);
+}
+.lists .list .items .item:hover {
+  filter: invert(1);
+}
+.lists .list .items .item .itemOrder {
+  padding: 1em;
+  display: flex;
+  color: black;
+  min-width: 55px;
+  font-weight: 800;
+  align-items: center;
+  background: var(--softWhite);
+  justify-content: center;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  transition: var(--transition);
+}
+.lists .list .items .item.itemName {
+  font-weight: 500 !important;
   transition: var(--transition);
 }
 .lists .list .items .item.complete {
+  filter: invert(1);
   background: var(--authGlass);
+}
+.lists .list .items .item.complete .itemOrder {
+  background: transparent;
+  color: white;
+}
+.lists .list .items .item.complete .itemName {
   text-decoration: line-through;
+  text-decoration-thickness: 0;
+  text-decoration-color: black;
 }
 
 .highScore {
@@ -594,6 +646,7 @@ button:active, input[type=submit]:active {
 .gameStats h2 .label {
   min-width: 110px;
   font-size: 0.85em;
+  font-weight: 400 !important;
 }
 .gameStats h2 i {
   font-size: 0.75em;
@@ -980,7 +1033,9 @@ footer .inner .right img path, footer .inner .right svg path {
   fill: var(--main);
 }
 footer .inner .right .piratechs {
+  max-height: 15px;
   fill: var(--main);
+  margin: 0 -7px 1px 0;
 }
 footer .inner .right .piratechs path {
   fill: var(--main);

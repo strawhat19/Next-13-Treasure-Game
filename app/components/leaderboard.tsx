@@ -7,7 +7,7 @@ import { collection, getDocs } from 'firebase/firestore';
 
 export default function LeaderBoard(props: any) {
     const loadedRef = useRef(false);
-    const { id, className } = props;
+    const { id, className, style } = props;
     const { user, setUser, users, setUsers } = useContext(StateContext);
 
     useEffect(() => {
@@ -32,7 +32,7 @@ export default function LeaderBoard(props: any) {
     }, [user, users]);
 
     return <>
-        <section id={id} className={`${className} flex`}>
+        <section id={id} className={`${className} flex`} style={style}>
             <div className="inner">
                 <h2 className={`flex row`}><i style={{width: 15, color: `var(--gameBlue)`}} className="fas fa-signal"></i><span style={{minWidth: 117, marginLeft: 5}} className="label">High Scores</span></h2>
                 <div className={`column rightColumn`}>

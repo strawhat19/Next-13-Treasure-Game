@@ -30,7 +30,7 @@ export default function AuthForm(props?: any) {
   const loadedRef = useRef(false);
   const [loaded, setLoaded] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false); 
-  const { user, setUser, updates, setUpdates, setUsers, setContent, authState, setAuthState, emailField, setEmailField, users, setFocus, setHighScore, color, setColor, dark, setDark } = useContext(StateContext);
+  const { user, setUser, updates, setUpdates, setUsers, setContent, authState, setAuthState, emailField, setEmailField, users, setFocus, setHighScore, color, setColor, dark, setDark, setLists } = useContext(StateContext);
 
   const genUUID = (latestUsers?:any, potentialUser?:any) => {
     return `${latestUsers.length + 1} ${potentialUser?.name} ${potentialUser?.registered.split(` `)[0] + ` ` + potentialUser?.registered.split(` `)[1] + ` ` + potentialUser?.registered.split(` `)[2]}`;
@@ -132,6 +132,7 @@ export default function AuthForm(props?: any) {
         setEmailField(false);
         break;
       case `Sign Out`:
+        setLists([]);
         setUser(null);
         setHighScore(0);
         setAuthState(`Next`);
@@ -140,6 +141,7 @@ export default function AuthForm(props?: any) {
         setContent(defaultContent);
         localStorage.removeItem(`user`);
         localStorage.removeItem(`users`);
+        localStorage.removeItem(`lists`);
         localStorage.removeItem(`score`);
         localStorage.removeItem(`health`);
         localStorage.removeItem(`account`);
@@ -179,13 +181,15 @@ export default function AuthForm(props?: any) {
         let storedScore = JSON.parse(localStorage.getItem(`score`) as any);
         let existingAccount = JSON.parse(localStorage.getItem(`account`) as any);
         let password = formFields?.password?.value;
+        let listsToSet = existingAccount?.lists || JSON.parse(localStorage.getItem(`lists`) as any) || [];
         let scoreToSet = Math.floor(existingAccount?.highScore > storedScore ? existingAccount?.highScore : storedScore);
 
         if (password == ``) {
           showAlert(`Password Required`);
-        } else {
+        } else { // Successful Sign In
           if (password == existingAccount?.password) {
             setFocus(false);
+            setLists(listsToSet);
             setAuthState(`Sign Out`);
             setUser(existingAccount);
             setHighScore(scoreToSet);

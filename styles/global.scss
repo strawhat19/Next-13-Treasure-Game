@@ -343,7 +343,7 @@ header {
 
 .overflow {
     &.items {
-        max-height: 390px;
+        max-height: 300px;
         overflow-x: hidden;
         overflow-y: overlay;
         padding-right: 10px;
@@ -351,10 +351,10 @@ header {
             position: relative;
             border-radius: 4px;
             width: 4px !important;
-            background: black !important;
+            background: var(--blackGlass) !important;
         }
         &::-webkit-scrollbar-thumb {
-            background: var(--react);
+            background: var(--softWhite);
             border-radius: 4px;
         }
     }
@@ -573,8 +573,29 @@ button, input[type="submit"] {
     width: calc(var(--containerWidth));
     .list {
         width: 100%;
-        max-width: 33%;
         border-radius: 4px;
+        // background: rgba(14, 67, 81, 0.4);
+        background: -internal-light-dark(rgb(232, 240, 254), rgba(70, 90, 126, 0.4)) !important;
+
+        h2 {
+            color: white;
+        }
+
+        &.oneList {
+            padding: 2em 0;
+            .items {
+                grid-template-columns: auto auto auto auto;
+            }
+        }
+
+        &.twoList {
+            padding: 1em 0;
+        }
+
+        &.bigList {
+            max-width: 33%;
+        }
+
         /* Neumorphic Inner shadow */
         box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
 
@@ -582,18 +603,59 @@ button, input[type="submit"] {
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1),0px 0px 20px rgba(0, 0, 0, 0.05);
 
         .items {
-            grid-gap: 1em;
-            display: flex;
-            flex-direction: column;
+            gap: 1em;
+            display: grid;
+            width: 100% !important;
+            // grid-gap: 1em;
+            // display: flex;
+            // flex-direction: column;
             .item {
                 cursor: grab;
-                padding: 1em;
+                padding: 0em;
+                display: flex;
+                grid-gap: 0.85em;
+                font-size: 0.85em;
                 border-radius: 4px;
+                align-items: center;
                 background: var(--blackGlass);
+                       /* Neumorphic Inner shadow */
+                box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
+
+                /* Neumorphic Outer shadow */
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1),0px 0px 20px rgba(0, 0, 0, 0.05);
                 transition: var(--transition);
+                &:hover {
+                    filter: invert(1);
+                }
+                .itemOrder {
+                    padding: 1em;
+                    display: flex;
+                    color: black;
+                    min-width: 55px;
+                    font-weight: 800;
+                    align-items: center;
+                    background: var(--softWhite);
+                    justify-content: center;
+                    border-top-left-radius: 4px;
+                    border-bottom-left-radius: 4px;
+                    transition: var(--transition);
+                }
+                &.itemName {
+                    font-weight: 500 !important;
+                    transition: var(--transition);
+                }
                 &.complete {
+                    filter: invert(1);
                     background: var(--authGlass);
-                    text-decoration: line-through;
+                    .itemOrder {
+                        background: transparent;
+                        color: white;
+                    }
+                    .itemName {
+                        text-decoration: line-through;
+                        text-decoration-thickness: 0;
+                        text-decoration-color: black;
+                    }
                 }
             }
         }
@@ -613,6 +675,7 @@ button, input[type="submit"] {
         .label {
             min-width: 110px;
             font-size: 0.85em;
+            font-weight: 400 !important;
         }
         font-size: 1.35em;
         i {
@@ -1065,7 +1128,9 @@ footer {
             }
         }
         .piratechs {
+            max-height: 15px;
             fill: var(--main);
+            margin: 0 -7px 1px 0;
             path {
                 fill: var(--main);
             }
