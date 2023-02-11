@@ -101,27 +101,6 @@ export default function Lists() {
       any.droppable({
         drop: (event: any, ui: any) => {
           updateIndexes(event, ui);
-          // let thisList = JSON.parse(event.target.dataset.list);
-          // setTimeout(() => {
-          //   const children = Array.from(event.target.children);
-          //   const filteredChildren = children.filter((listItem: any) => !listItem.classList.contains(`ui-sortable-placeholder`));
-          //   let reorderedItems = filteredChildren.map((itm: any, index: any) => {
-          //     return {
-          //       index: index,
-          //       order: index + 1,
-          //       item: itm.dataset.item,
-          //       id: getNumberFromString(itm.id),
-          //       complete: JSON.parse(itm.dataset.complete),
-          //     }
-          //   }).sort((a, b) => a?.index - b?.index);
-          //   let filteredLists = updatedListsToSet.filter((lis: any) => lis.id != getNumberFromString(event.target.id));
-          //   let newList = {...thisList, items: reorderedItems};
-          //   let newLists = [...filteredLists, newList].sort((a: any, b: any) => a.id - b.id);
-          //   // dev() && console.log(`New Lists`, newLists);
-          //   dev() && console.log(`New List Items`, newLists[0].items.sort((a: any, b: any) => a.index - b.index));
-          //   updateLists(newLists);
-          //   setLists(newLists);
-          // }, 1);
         },
       });
     });
@@ -132,19 +111,14 @@ export default function Lists() {
     let currentUser = storedUser;
     if (currentUser) {
       let updatedUser = { ...currentUser, lists: newLists, updated: formatDate(new Date())};
-      localStorage.setItem(`lists`, JSON.stringify(newLists));
       addOrUpdateUser(currentUser?.id, updatedUser);
-      await setLists(newLists);
-      // dev() && console.log(`Updated User Lists`, updatedUser?.lists);
-      // dev() && console.log(`Updated User List Items`, updatedUser?.lists[0].items.sort((a: any, b: any) => a?.index - b?.index));
-      // dev() && console.log(`Default Lists`, defaultLists);
-      // dev() && console.log(`Updated Lists`, newLists);
+      dev() && console.log(`Lists`, (newLists.length == 1 ? newLists[0] : newLists), `user`, updatedUser);
+    } else {
+      dev() && console.log(`Lists`, (newLists.length == 1 ? newLists[0] : newLists));
     }
     localStorage.setItem(`lists`, JSON.stringify(newLists));
-    if ($(`.items`).length > 0) {
-      await setDraggable();
-    }
-    await setUpdates(updates + 1);
+    if ($(`.items`).length > 0) setDraggable();
+    setUpdates(updates + 1);
     await setLists(newLists);
   }
 
@@ -152,8 +126,7 @@ export default function Lists() {
     list.items[list.items.indexOf(item)].complete = !list.items[list.items.indexOf(item)].complete;
     let filteredLists = lists.filter((lis: any) => lis.id != list.id);
     let newLists = [...filteredLists, list].sort((a: any, b: any) => a.id - b.id);
-    updateLists(newLists);
-    await setLists(newLists);
+    await updateLists(newLists);
   }
   
   const createItem = async (e: any, list: any) => {
@@ -163,8 +136,7 @@ export default function Lists() {
     let newList = {...list, items: [...list.items, newItem]};
     let filteredLists = lists.filter((lis: any) => lis.id != list.id);
     let newLists = [...filteredLists, newList].sort((a: any, b: any) => a.id - b.id);
-    await setLists(newLists);
-    updateLists(newLists);
+    await updateLists(newLists);
     e.target.reset();
   }
 
@@ -205,20 +177,8 @@ export default function Lists() {
 
     let filteredLists = lists.filter((lis: any) => lis.id != list.id);
     let newLists = [...filteredLists, changedList].sort((a: any, b: any) => a.id - b.id);
-    await setLists(newLists);
-    updateLists(newLists);
+    await updateLists(newLists);
     e.target.reset();
-
-    // if (hasListAndItem) {
-    // }
-    
-    // // console.log(values[item]);
-    // values.forEach((val: any) => {
-    //   console.log({val, values, list, lists});
-    //   // if (val?.list)
-    // })
-    // let newList = {...list, };
-    // let newItem = {id: list.items.length + 1, item: formFields[0].value, complete: false, index: list.items.length, order: list.items.length + 1};
   }
 
   const updateIndexes = (event: any, ui: any) => {
@@ -231,14 +191,11 @@ export default function Lists() {
         if (allItems.length > 0) {
           allItems.forEach((item: any, index: any) => {
             if (!item.classList.contains(`ui-sortable-placeholder`)) {
-              // dev() && console.log(`Item`, item);
               item.firstChild.innerHTML = index + 1;
             }
           });
         }
       } else {
-        // dev() && console.log(`Dropped Item`, {event, ui}, event.target);
-
         const children = Array.from(event.target.children);
         const filteredChildren = children.filter((listItem: any) => !listItem.classList.contains(`ui-sortable-placeholder`));
         let reorderedItems = filteredChildren.map((itm: any, index: any) => {
@@ -253,32 +210,19 @@ export default function Lists() {
 
         let thisList = JSON.parse(event.target.dataset.list);
         let filteredLists = updatedListsToSet.filter((lis: any) => lis.id != getNumberFromString(event.target.id));
-        let newList = {...thisList, items: reorderedItems};
+        let newList = { ...thisList, items: reorderedItems.sort((a: any, b: any) => a.index - b.index)};
         let newLists = [...filteredLists, newList].sort((a: any, b: any) => a.id - b.id);
-        dev() && console.log(`New List Items`, newLists[0].items.sort((a: any, b: any) => a.index - b.index));
-        // updateLists(newLists);
-        // setLists(newLists);
-
+        
         let storedUser = JSON.parse(localStorage.getItem(`user`) as any);
         let currentUser = storedUser;
         if (currentUser) {
+          dev() && console.log(`New User Lists`, newLists);
           addOrUpdateUser(currentUser?.id, {...currentUser, lists: newLists, updated: formatDate(new Date())});
-          setLists(newLists);
-          // getDocs(collection(db, `users`)).then((snapshot: any) => {
-          //   let latestUsers = snapshot.docs.map((doc: any) => doc.data()).sort((a: any, b: any) => b?.highScore - a?.highScore);
-          //   let latestUser = latestUsers.filter((usr: any) => usr?.id == storedUser?.id)[0];
-          //   dev() && console.log(`Current User List Items`, latestUser?.lists[0].items.sort((a: any, b: any) => a?.index - b?.index));
-          //   setUser(latestUser || null);
-          //   updatedListsToSet = latestUser?.lists || JSON.parse(localStorage.getItem(`lists`) as any) || defaultLists;
-          //   let cachedLists = latestUser?.lists[0].items.sort((a: any, b: any) => a?.index - b?.index);
-          //   dev() && console.log(`Cached Lists`, cachedLists);
-          //   setLists(updatedListsToSet);
-          // });
-          // updateLists(currentUser?.lists);
-          // setLists(currentUser?.lists);
         } else {
-          updateLists(newLists);
+          dev() && console.log(`Updated Lists`, newLists.length == 1 ? newLists[0] : newLists);
         }
+        
+        localStorage.setItem(`lists`, JSON.stringify(newLists));
         clearInterval(updateInterval);
       }
     }, 1); 
@@ -290,21 +234,20 @@ export default function Lists() {
     loadedRef.current = true;
     let storedUser = JSON.parse(localStorage.getItem(`user`) as any);
     let currentUser = storedUser;
-    let listsToSet = [];
     if (currentUser) {
       getDocs(collection(db, `users`)).then((snapshot: any) => {
         let latestUsers = snapshot.docs.map((doc: any) => doc.data()).sort((a: any, b: any) => b?.highScore - a?.highScore);
         let latestUser = latestUsers.filter((usr: any) => usr?.id == storedUser?.id)[0];
-        dev() && console.log(`Current User List Items`, latestUser?.lists[0].items.sort((a: any, b: any) => a?.index - b?.index));
+
+        dev() && console.log(`Dev Env Current User List Items`, (latestUser?.lists.length == 1 ? latestUser?.lists[0] : latestUser?.lists).items.sort((a: any, b: any) => a?.index - b?.index));
         updatedListsToSet = latestUser?.lists || JSON.parse(localStorage.getItem(`lists`) as any) || defaultLists;
-        listsToSet = latestUser?.lists || JSON.parse(localStorage.getItem(`lists`) as any) || defaultLists;
         setUser(latestUser || null);
-        setLists(listsToSet);
+        updateLists(updatedListsToSet);
       });
     } else {
       updatedListsToSet = JSON.parse(localStorage.getItem(`lists`) as any) || defaultLists;
-      listsToSet = JSON.parse(localStorage.getItem(`lists`) as any) || defaultLists;
-      setLists(listsToSet);
+      dev() && console.log(`Dev Env List Items`, updatedListsToSet);
+      updateLists(updatedListsToSet);
     }
 
     setUpdates(updates+1);
@@ -351,18 +294,23 @@ export default function Lists() {
     {(user ? user.lists : lists).map((list: any, listIndex: any) => {
       return <article key={`list-${listIndex}-${list.id}`} id={`list${list.id}`} className={`list inner ${lists.length == 2 ? `twoList` : (lists.length == 1 ? `oneList` : `bigList`)}`} style={{width: `100%`}}>
       <Section id={`listsSection`}>
-        <h2><i>{list.name}</i><span style={{fontSize: 15, fontWeight: 500, padding: `0 10px`}}>({list.items.length})</span></h2>
+        <h2 className={`textOverflow`}><i>{list.name}</i><span style={{fontSize: 15, fontWeight: 500, padding: `0 10px`}}>({list.items.length})</span></h2>
         <div id={`items${list.id}`} className={`items active sortable draggable ${list.items.length > 6 ? `overflow` : ``}`} data-list={JSON.stringify(list)}>
           {list.items.sort((a: any, b: any) => a?.index - b?.index).map((item: any, itemIndex: any) => {
             // dev() && console.log({itemIndex, item, list, lists});
             return <div className={`item sortable draggable ${item.complete ? `complete` : ``}`} title={`Click to Complete, Click and Hold to Drag & Drop!`} id={`item${item.id}`} key={itemIndex} onClick={(e) => setItemComplete(e, item, list)} data-order={item.order} data-index={item.index} data-complete={item.complete} data-item={item.item}>
-              <span className={`itemOrder`}>{item.order}</span> <span className={`itemName`}>{item.item}</span>
+              <span className={`itemOrder`}>{itemIndex + 1}</span> <span className={`itemName textOverflow`}>{item.item}</span>
             </div>
           })}
         </div>
       </Section>
       <Section id={`createItemFormSection`}>
         {/* <h2><i>{list.name}</i></h2> */}
+        {/* <form id={`addList${list.id}`} className={`flex`} style={{width: `100%`, flexDirection: `row`}} onInput={(e: any) => setTypedValue(e.target.value)} onSubmit={(e) => manageList(e, list, lists)}>
+          <input placeholder={`Add '${list.name}' Name`} type="text" name="list" />
+          <input placeholder={`Change the '${list.itemName}' Item Name`} type="text" name="item" />
+          <input style={{width: `35%`}} id={user?.id} className={`save`} type="submit" value={`Save`} />
+        </form> */}
         <form id={`listsForm${list.id}`} className={`flex`} style={{width: `100%`, flexDirection: `row`}} onInput={(e: any) => setTypedValue(e.target.value)} onSubmit={(e) => manageList(e, list, lists)}>
           <input placeholder={`Change '${list.name}' Name`} type="text" name="list" />
           <input placeholder={`Change the '${list.itemName}' Item Name`} type="text" name="item" />

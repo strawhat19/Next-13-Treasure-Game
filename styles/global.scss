@@ -532,6 +532,14 @@ button, input[type="submit"] {
     }
 }
 
+.textOverflow {
+    max-width: 60%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    margin: 0;
+}
+
 .alert {
     top: 50%;
     left: 50%;
@@ -573,9 +581,10 @@ button, input[type="submit"] {
     width: calc(var(--containerWidth));
     .list {
         width: 100%;
+        position: relative;
         border-radius: 4px;
-        // background: rgba(14, 67, 81, 0.4);
-        background: -internal-light-dark(rgb(232, 240, 254), rgba(70, 90, 126, 0.4)) !important;
+        background: rgba(14, 67, 81, 0.4);
+        // background: -internal-light-dark(rgb(232, 240, 254), rgba(70, 90, 126, 0.4)) !important;
 
         h2 {
             color: white;
@@ -583,16 +592,16 @@ button, input[type="submit"] {
 
         &.oneList {
             padding: 2em 0;
-            .items {
-                grid-template-columns: auto auto auto auto;
-            }
+            grid-template-columns: auto auto auto auto;
         }
-
+        
         &.twoList {
+            grid-template-columns: auto auto ;
             padding: 1em 0;
         }
-
+        
         &.bigList {
+            grid-template-columns: auto;
             max-width: 33%;
         }
 
@@ -615,6 +624,7 @@ button, input[type="submit"] {
                 display: flex;
                 grid-gap: 0.85em;
                 font-size: 0.85em;
+                position: relative;
                 border-radius: 4px;
                 align-items: center;
                 background: var(--blackGlass);
