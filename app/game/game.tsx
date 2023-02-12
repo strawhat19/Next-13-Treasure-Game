@@ -463,7 +463,7 @@ export default function Game() {
         <div className={`column rightColumn gameStats`}>
             {/* <h2 className={`flex row`}><span className="label">Total:</span><span className="score">{score.toLocaleString(`en-US`)}</span><i className="fas fa-coins"></i></h2> */}
             {/* <h2 className={`flex row`}><span className="label">Deaths:</span><span className="deaths">{deaths}</span><i className="fas fa-skull-crossbones"></i></h2> */}
-            <button title={gameOver && !user ? `Click to Clear High Score` : `Click to View High Scores`} onClick={() => !gameOver ? setShowLeaders(!showLeaders) : !user ? clearHighScore() : setShowLeaders(!showLeaders)} style={{background: `var(--blackGlass)`, borderRadius: 4, justifyContent: `center`, alignItems: `center`, maxWidth: `fit-content`, padding: `5px 15px`}} className={`flex row`}><h2 className={`flex row`}><i style={{color: `var(--gameBlue)`}} className="fas fa-signal"></i><span className="buttonInnerLabel">{Math.floor(highScore).toLocaleString(`en-US`)}</span><span className="label">High Score</span></h2></button>
+            <button title={gameOver && !user ? `Click to Clear High Score` : `Click to View High Scores`} onClick={() => !gameOver ? setShowLeaders(!showLeaders) : !user ? clearHighScore() : setShowLeaders(!showLeaders)} style={{background: `var(--blackGlass)`, borderRadius: 4, justifyContent: `center`, alignItems: `center`, maxWidth: `fit-content`, padding: `5px 15px`}} className={`flex row iconButton`}><h2 className={`flex row`}><i style={{color: `var(--gameBlue)`}} className="fas fa-signal"></i><span className="buttonInnerLabel">{Math.floor(highScore).toLocaleString(`en-US`)}</span><span className="label">High Score</span></h2></button>
         </div>
       </div>
     </section>
@@ -502,10 +502,10 @@ export default function Game() {
         </div>
         {!game && (gameOver ? <div className="gameStateAction gameOver flex">
           <LeaderBoard id={`leaderBoard`} className={`leaderBoard`} />
-          <button id="startGame" onClick={saveAndRestartGame}><span className={`emphasis`} style={{color: `var(--mainGlass)`}}>GAME OVER,</span> Click Here or <span className={`emphasis`}>Type Enter</span> to Try Again</button>
+          <button id="startGame" onClick={saveAndRestartGame} className={`iconButton`}><span className={`emphasis`} style={{color: `var(--mainGlass)`}}>GAME OVER,</span> Click Here or <span className={`emphasis`}>Type Enter</span> to Try Again</button>
         </div> : (win ? <div className="win">
           <button id="winGame" onClick={(Event: any) => startGame(Event)}>You Won</button>
-        </div> : <div className="gameStateAction start flex">{showLeaders && <LeaderBoard id={`leaderBoard`} className={`leaderBoard`} />}<button id="startGame" onClick={(Event: any) => startGame(Event)}>Click Here or <span className={`emphasis`}>Type Enter</span> to Play <span className="emphasis">//</span> You can also <span className="emphasis">Press Escape</span> to Reset the Game!</button></div>))} 
+        </div> : <div className="gameStateAction start flex">{showLeaders && <LeaderBoard id={`leaderBoard`} className={`leaderBoard`} />}<button className={`iconButton`} id="startGame" onClick={(Event: any) => startGame(Event)}>Click Here or <span className={`emphasis`}>Type Enter</span> to Play <span className="emphasis">//</span> You can also <span className="emphasis">Press Escape</span> to Reset the Game!</button></div>))} 
         <div className="gameStateAction gameMessages flex">
           {game && time < 2 && <div className="intro">Try to get to the Treasure!</div>}
           {game && time > 2 && time < 7 && <div className="gameMessage" style={{color: `white`}}>Jump over Cannon Balls and move by tapping arrow keys!</div>}

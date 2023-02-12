@@ -78,21 +78,21 @@ body {
             }
         }
 
-        button, input[type="submit"] {
-            color: white !important;
-            background: var(--blackGlass);
-            &:hover { // Mouse Over
-                filter: invert(1);
-                box-shadow: 0 0 8px 0px black;
-            }
-            &:focus { // Active or Was Pushed
-                filter: invert(1) brightness(1.5);
-            }
-            &:active { // On Click
-                transform: scale(1.01);
-                box-shadow: inset 0 0 8px 0px black;
-            }
-        }
+        // button, input[type="submit"] {
+        //     color: white !important;
+        //     background: var(--blackGlass);
+        //     &:hover { // Mouse Over
+        //         filter: invert(1);
+        //         box-shadow: 0 0 8px 0px black;
+        //     }
+        //     &:focus { // Active or Was Pushed
+        //         filter: invert(1) brightness(1.5);
+        //     }
+        //     &:active { // On Click
+        //         transform: scale(1.01);
+        //         box-shadow: inset 0 0 8px 0px black;
+        //     }
+        // }
     }
 }
 
@@ -114,12 +114,20 @@ header {
     .logo {
         display: flex;
         grid-gap: 1em;
-        font-weight: 700;
         font-size: 1.3em;
+        font-weight: 700;
+        position: relative;
         align-items: center;
         justify-content: center;
         &.reactLogo {
+            top: 0;
+            left: 0;
+            opacity: 0.1;
+            position: absolute;
+            transform: scale(2);
+            transform-origin: center;
             animation: logo-spin infinite 20s linear;
+            filter: saturate(0) invert(1) brightness(2);
         }
     }
     .menu {
@@ -446,13 +454,14 @@ form {
 
 input {
     border: 0;
-    padding: 10px;
     outline: none;
+    font-weight: 600;
     border-radius: 4px;
-    font-family: 'Montserrat';
-    color: white !important;
+    padding: 10px 25px;
+    font-family: "Montserrat";
     background: var(--blackGlass);
     transition: var(--transition);
+    color: var(--softWhite) !important;
     &::placeholder {
         color: var(--softWhite);
     }
@@ -505,8 +514,10 @@ button, input[type="submit"] {
         margin-top: -17px;
     }
     &:hover { // Mouse Over
-        filter: invert(1);
-        box-shadow: 0 0 8px 0px black;
+        &:not(.iconButton) {
+            filter: invert(1);
+            box-shadow: 0 0 8px 0px black;
+        }
     }
     &:focus { // Active or Was Pushed
         filter: invert(1) brightness(1.5);
@@ -583,7 +594,7 @@ button, input[type="submit"] {
 }
 
 .buttonLabel {
-    width: 350px !important;
+    width: 100% !important;
     align-items: center !important;
     * {
         width: max-content !important;
@@ -592,12 +603,19 @@ button, input[type="submit"] {
 
 .iconButton {
     background: var(--blackGlass);
+    transition: var(--transition);
+    font-weight: 700 !important;
     justify-content: center;
     align-items: center;
     border-radius: 4px;
     padding: 5px 15px;
     font-size: 0.85em;
+    min-height: 35px;
     width: 100%;
+    &:hover {
+        background: white !important;
+        color: black !important;
+    }
 }
 
 .lists {
@@ -607,6 +625,9 @@ button, input[type="submit"] {
     overflow: visible;
     align-items: flex-start;
     width: calc(var(--containerWidth));
+    .buttonLabel {
+        justify-content: flex-start;
+    }
     .list {
         width: 100%;
         position: relative;
@@ -649,8 +670,9 @@ button, input[type="submit"] {
             .item {
                 cursor: grab;
                 padding: 0em;
+                height: 33px;
                 display: flex;
-                grid-gap: 0.85em;
+                grid-gap: 10px;
                 font-size: 0.85em;
                 position: relative;
                 border-radius: 4px;
@@ -662,23 +684,40 @@ button, input[type="submit"] {
                 /* Neumorphic Outer shadow */
                 box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1),0px 0px 20px rgba(0, 0, 0, 0.05);
                 transition: var(--transition);
+
+                span {
+                    width: 100%;
+                    max-height: 100%;
+                }
+
                 &:hover {
                     filter: invert(1);
+                    .itemOrder {
+                        // filter: invert(1);
+                        .itemIndex {
+                            filter: invert(1);
+                        }
+                    }
                 }
+
                 .itemOrder {
-                    padding: 1em;
+                    width: 45px;
                     display: flex;
-                    color: black;
-                    min-width: 55px;
-                    font-weight: 800;
+                    padding: 1em 0;
+                    max-height: 100%;
+                    font-weight: 700;
                     align-items: center;
-                    background: var(--softWhite);
+                    background: white;
+                    color: var(--gameBlue);
                     justify-content: center;
                     border-top-left-radius: 4px;
                     border-bottom-left-radius: 4px;
                     transition: var(--transition);
+                    .itemIndex {
+                        transition: var(--transition);
+                    }
                 }
-                &.itemName {
+                .itemName {
                     font-weight: 500 !important;
                     transition: var(--transition);
                 }
@@ -706,7 +745,6 @@ button, input[type="submit"] {
         .label {
             min-width: 110px;
             font-size: 0.85em;
-            font-weight: 400 !important;
         }
         font-size: 1.35em;
         i {

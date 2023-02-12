@@ -4,30 +4,81 @@ import Banner from './components/banner';
 import AuthForm from './components/form';
 import Header from "./components/header";
 import Section from "./components/section";
-import { createContext, useRef } from "react";
-import { useContext, useEffect, useState } from 'react';
+import { createContext, useRef, useContext, useEffect } from 'react';
 
-export const defaultContent = `Hey, I’m Rakib, a Software Engineer @ Mitsubishi Electric Trane HVAC US, or just Mitsubishi Electric for short. Along with my 7 years of experience as a developer, and owner of my own tech and digital media side business, Piratechs. This website is just for me to test out Next.js 13.`;
+export const StateContext = createContext<any>({});
+export const log = (item: any) => console.log(item);
 
-export const generateUniqueID = (existingIDs?:any) => {
-  let newID = Math.random().toString(36).substr(2, 9);
-  if (existingIDs && existingIDs.length > 0) {
-    while (existingIDs.includes(newID)) {
-      newID = Math.random().toString(36).substr(2, 9);
+declare global {
+  interface User {
+    color: any;
+    id: string;
+    bio: string;
+    updated: any; 
+    name: string; 
+    email: string;
+    lists: List[];
+    number: number;
+    status: string;
+    roles: string[];
+    lastSignin: any; 
+    registered: any; 
+    password: string;
+    highScore: number;
+    [key: string]: any;
+  }
+
+  interface Item {
+    id: number;
+    order: number;
+    index: number;
+    item: string;
+    complete: boolean;
+    [key: string]: any;
+  }
+  
+  interface List {
+    id: number;
+    name: string;
+    itemName: string;
+    items: Item[];
+    [key: string]: any;
+  }
+
+  interface Anim extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> {
+    background?: string;
+    position?: any;
+    src?: string;
+    class?: any;
+    left?: any;
+    right?: any;
+    muted?: any;
+    speed?: any;
+    style?: {
+      width?: number;
+      height?: number;
+      top?: any;
+      left?: any;
+      bottom?: any;
+      right?: any;
+    };
+    loop?: any;
+    autoplay?: any;
+    [key: string]: any;
+  }
+
+  namespace JSX {
+    interface IntrinsicElements {
+      'lottie-player': Anim,
     }
   }
-  return newID;
 }
 
-export const updateOrAdd = (obj: any, arr: any) => {
-  let index = arr.findIndex((item: any) => item.name === obj.name);
-  if (index !== -1) {
-    arr[index] = obj;
-  } else {
-    arr.push(obj);
-  }
-  return arr;
-}
+export const getCurrentPageName = () => {
+  return window.location.hash.slice(window.location.hash.lastIndexOf(`/`)).replace(`/`, ``);
+};
+
+export const defaultContent = `Hey, I’m Rakib, a Software Engineer @ Mitsubishi Electric Trane HVAC US, or just Mitsubishi Electric for short. Along with my 7 years of experience as a developer, and owner of my own tech and digital media side business, Piratechs. This website is just for me to test out Next.js 13.`;
 
 export const getNumberFromString = (string: string) => {
   let result: any = string.match(/\d+/);
@@ -47,6 +98,23 @@ export const capitalizeAllWords = (string: any) => {
   }
 };
 
+export const cutOffTextAndReplace = (string: string, end: number, replacement?: string) => {
+  if (!replacement) {
+    replacement = `...` || `-`;
+  }
+  return string?.length > end ? string?.substring(0, end - 1) + replacement : string;
+};
+
+export const removeDuplicateObjectFromArray = (arrayOfObjects?: any) => {
+  const uniqueArray = arrayOfObjects?.filter((value?: any, index?: any) => {
+    const _value = JSON.stringify(value);
+    return index === arrayOfObjects?.findIndex((obj?: any) => {
+        return JSON.stringify(obj) === _value;
+    });
+  });
+  return uniqueArray;
+};
+
 export const getFormValuesFromFields = (formFields: any) => {
   for (let i = 0; i < formFields.length; i++) {
     let field = formFields[i];
@@ -54,7 +122,27 @@ export const getFormValuesFromFields = (formFields: any) => {
       console.log(field.type, field.value);
     };
   }
-}
+};
+
+export const generateUniqueID = (existingIDs?:any) => {
+  let newID = Math.random().toString(36).substr(2, 9);
+  if (existingIDs && existingIDs.length > 0) {
+    while (existingIDs.includes(newID)) {
+      newID = Math.random().toString(36).substr(2, 9);
+    }
+  }
+  return newID;
+};
+
+export const updateOrAdd = (obj: any, arr: any) => {
+  let index = arr.findIndex((item: any) => item.name === obj.name);
+  if (index !== -1) {
+    arr[index] = obj;
+  } else {
+    arr.push(obj);
+  }
+  return arr;
+};
 
 export const formatDate = (date: any) => {
   let hours = date.getHours();
@@ -65,7 +153,7 @@ export const formatDate = (date: any) => {
   minutes = minutes < 10 ? '0' + minutes : minutes;
   let strTime = hours + ':' + minutes + ' ' + ampm;
   return strTime + ` ` + (date.getMonth() + 1) + "-" + date.getDate() + "-" + date.getFullYear();
-}
+};
 
 export const defaultLists: List[] = [
   {id: 1, name: `ProductIVF`, itemName: `Ticket`, items: [
@@ -94,9 +182,6 @@ export const defaultLists: List[] = [
     {id: 5, order: 5, index: 4, item: `Mihawk`, complete: false},
   ]},
 ];
-
-export const StateContext = createContext<any>({});
-export const log = (item: any) => console.log(item);
 
 export default function Home() {
   const loadedRef = useRef(false);

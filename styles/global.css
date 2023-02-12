@@ -73,29 +73,6 @@ html.light .emphasis.white,
 body.light .emphasis.white {
   color: black !important;
 }
-html.light button, html.light input[type=submit],
-body.light button,
-body.light input[type=submit] {
-  color: white !important;
-  background: var(--blackGlass);
-}
-html.light button:hover, html.light input[type=submit]:hover,
-body.light button:hover,
-body.light input[type=submit]:hover {
-  filter: invert(1);
-  box-shadow: 0 0 8px 0px black;
-}
-html.light button:focus, html.light input[type=submit]:focus,
-body.light button:focus,
-body.light input[type=submit]:focus {
-  filter: invert(1) brightness(1.5);
-}
-html.light button:active, html.light input[type=submit]:active,
-body.light button:active,
-body.light input[type=submit]:active {
-  transform: scale(1.01);
-  box-shadow: inset 0 0 8px 0px black;
-}
 
 header {
   top: 0;
@@ -117,13 +94,21 @@ header {
 header .logo {
   display: flex;
   grid-gap: 1em;
-  font-weight: 700;
   font-size: 1.3em;
+  font-weight: 700;
+  position: relative;
   align-items: center;
   justify-content: center;
 }
 header .logo.reactLogo {
+  top: 0;
+  left: 0;
+  opacity: 0.1;
+  position: absolute;
+  transform: scale(2);
+  transform-origin: center;
   animation: logo-spin infinite 20s linear;
+  filter: saturate(0) invert(1) brightness(2);
 }
 header .menu {
   display: flex;
@@ -428,13 +413,14 @@ form {
 
 input {
   border: 0;
-  padding: 10px;
   outline: none;
+  font-weight: 600;
   border-radius: 4px;
+  padding: 10px 25px;
   font-family: "Montserrat";
-  color: white !important;
   background: var(--blackGlass);
   transition: var(--transition);
+  color: var(--softWhite) !important;
 }
 input::-moz-placeholder {
   color: var(--softWhite);
@@ -485,7 +471,7 @@ button, input[type=submit] {
 button.rowButton, input[type=submit].rowButton {
   margin-top: -17px;
 }
-button:hover, input[type=submit]:hover {
+button:hover:not(.iconButton), input[type=submit]:hover:not(.iconButton) {
   filter: invert(1);
   box-shadow: 0 0 8px 0px black;
 }
@@ -563,7 +549,7 @@ button:active, input[type=submit]:active {
 }
 
 .buttonLabel {
-  width: 350px !important;
+  width: 100% !important;
   align-items: center !important;
 }
 .buttonLabel * {
@@ -573,12 +559,19 @@ button:active, input[type=submit]:active {
 
 .iconButton {
   background: var(--blackGlass);
+  transition: var(--transition);
+  font-weight: 700 !important;
   justify-content: center;
   align-items: center;
   border-radius: 4px;
   padding: 5px 15px;
   font-size: 0.85em;
+  min-height: 35px;
   width: 100%;
+}
+.iconButton:hover {
+  background: white !important;
+  color: black !important;
 }
 
 .lists {
@@ -588,6 +581,9 @@ button:active, input[type=submit]:active {
   overflow: visible;
   align-items: flex-start;
   width: calc(var(--containerWidth));
+}
+.lists .buttonLabel {
+  justify-content: flex-start;
 }
 .lists .list {
   width: 100%;
@@ -622,8 +618,9 @@ button:active, input[type=submit]:active {
 .lists .list .items .item {
   cursor: grab;
   padding: 0em;
+  height: 33px;
   display: flex;
-  grid-gap: 0.85em;
+  grid-gap: 10px;
   font-size: 0.85em;
   position: relative;
   border-radius: 4px;
@@ -635,23 +632,34 @@ button:active, input[type=submit]:active {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1), 0px 0px 20px rgba(0, 0, 0, 0.05);
   transition: var(--transition);
 }
+.lists .list .items .item span {
+  width: 100%;
+  max-height: 100%;
+}
 .lists .list .items .item:hover {
   filter: invert(1);
 }
+.lists .list .items .item:hover .itemOrder .itemIndex {
+  filter: invert(1);
+}
 .lists .list .items .item .itemOrder {
-  padding: 1em;
+  width: 45px;
   display: flex;
-  color: black;
-  min-width: 55px;
-  font-weight: 800;
+  padding: 1em 0;
+  max-height: 100%;
+  font-weight: 700;
   align-items: center;
-  background: var(--softWhite);
+  background: white;
+  color: var(--gameBlue);
   justify-content: center;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
   transition: var(--transition);
 }
-.lists .list .items .item.itemName {
+.lists .list .items .item .itemOrder .itemIndex {
+  transition: var(--transition);
+}
+.lists .list .items .item .itemName {
   font-weight: 500 !important;
   transition: var(--transition);
 }
@@ -678,7 +686,6 @@ button:active, input[type=submit]:active {
 .gameStats h2 .label {
   min-width: 110px;
   font-size: 0.85em;
-  font-weight: 400 !important;
 }
 .gameStats h2 i {
   font-size: 0.75em;

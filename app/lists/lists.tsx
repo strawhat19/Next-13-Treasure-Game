@@ -10,9 +10,9 @@ import { defaultLists, formatDate, getNumberFromString, StateContext } from '../
 export default function Lists() {
   let loadedRef = useRef(false);
   let updatedListsToSet: List[] = [];
-  let [typedValue, setTypedValue] = useState();
+  let [typedValue, setTypedValue] = useState(``);
   let dev = () => window.location.host.includes(`localhost`);
-  const { lists, setLists, updates, setUpdates, user, page, setPage, setUser, showLeaders, setShowLeaders } = useContext(StateContext);
+  const { items, setItems, lists, setLists, updates, setUpdates, user, page, setPage, setUser, showLeaders, setShowLeaders } = useContext(StateContext);
 
   const addOrUpdateUserLists = async (id: any, user: User) => {
     setDoc(doc(db, `users`, id), { ...user, id }).then(newSub => {
@@ -49,13 +49,14 @@ export default function Lists() {
     if ($(`.items`).length > 0) setDraggable();
     setUpdates(updates + 1);
     await setLists(updatedLists);
+    await setItems([].concat(...updatedLists.map((lis: any) => lis.items)));
   }
 
   const setItemComplete = async (e: any, item: Item, list: List) => {
-    list.items[list.items.indexOf(item)].complete = !list.items[list.items.indexOf(item)].complete;
+    list.items.sort((a, b) => a?.index - b?.index)[list.items.sort((a, b) => a?.index - b?.index).indexOf(item)].complete = !list.items.sort((a, b) => a?.index - b?.index)[list.items.sort((a, b) => a?.index - b?.index).indexOf(item)].complete;
     let filteredLists: List[] = lists.filter((lis: any) => lis.id != list.id);
     let newLists: List[] = [...filteredLists, list].sort((a: any, b: any) => a.id - b.id);
-    await updateLists(newLists, setItemComplete);
+    await updateLists(newLists, `Set Item Complete Form`);
   }
   
   const createItem = async (e: any, list: List) => {
@@ -68,11 +69,11 @@ export default function Lists() {
       id: list.items.length + 1, 
       order: list.items.length + 1,
     };
-    let updatedItems: Item[] = [...list.items, newItem];
+    let updatedItems: Item[] = [...list.items.sort((a, b) => a?.index - b?.index), newItem];
     let newList: List = {...list, items: updatedItems};
     let filteredLists: List[] = lists.filter((lis: any) => lis.id != list.id);
     let newLists: List[] = [...filteredLists, newList].sort((a: any, b: any) => a.id - b.id);
-    await updateLists(newLists, createItem);
+    await updateLists(newLists, `Create Item Form`);
     e.target.reset();
   }
 
@@ -113,7 +114,7 @@ export default function Lists() {
 
     let filteredLists: List[] = lists.filter((lis: List) => lis.id != list.id);
     let newLists: any[] = [...filteredLists, changedList].sort((a: any, b: any) => a.id - b.id);
-    await updateLists(newLists, manageList);
+    await updateLists(newLists, `Manage List Form`);
     e.target.reset();
   }
 
@@ -153,7 +154,7 @@ export default function Lists() {
         let currentUser = storedUser;
         if (currentUser) {
           dev() && console.log(`New User Lists`, newLists);
-          addOrUpdateUserLists(currentUser?.id, {...currentUser, lists: newLists, updated: formatDate(new Date())});
+          // addOrUpdateUserLists(currentUser?.id, {...currentUser, lists: newLists, updated: formatDate(new Date())});
         } else {
           dev() && console.log(`Updated Lists`, newLists.length == 1 ? newLists[0] : newLists);
         }
@@ -206,7 +207,6 @@ export default function Lists() {
     // });
     
     setTimeout(() => {
-      // dev() && console.log(`Dev Env Draggable Items`, $(`.items`));
       if ($(`.items`).length > 0) {
         setDraggable();
       }
@@ -219,58 +219,57 @@ export default function Lists() {
     <div className="inner">
       <button id={`manageListsButton`} title={`Manage ${lists.length} List(s)`} className={`flex row iconButton`} onClick={(e) => setShowLeaders(!showLeaders)}>
         <h2 className={`flex row buttonLabel`}>
-          <i style={{color: `var(--gameBlue)`}} className="fas fa-list"></i>
-          <span className="label">Manage <span className="buttonInnerLabel" style={{color: `var(--gameBlue)`}}>{Math.floor(lists.length).toLocaleString(`en-US`)}</span> Lists</span>
+          <i style={{color: `var(--gameBlue)`, fontSize: 20}} className="fas fa-list"></i>
+          <span className="label">
+            <i style={{fontWeight: 500}}>Manage 
+              <span className="buttonInnerLabel" style={{fontSize: 18, fontWeight: 700, padding: `0 10px`, color: `var(--gameBlue)`}}>
+                {Math.floor(lists.length).toLocaleString(`en-US`)}
+              </span> 
+              Lists with
+              <span className="buttonInnerLabel" style={{fontSize: 18, fontWeight: 700, padding: `0 10px`, color: `var(--gameBlue)`}}>
+                {items.length}
+              </span> 
+              Total Items
+            </i>
+          </span>
         </h2>
       </button>
     </div>
   </section>
   <section className={`lists`} id={`lists`}>
     {(user ? user.lists : lists).map((list: any, listIndex: any) => {
-      return <article key={`list-${listIndex}-${list.id}`} id={`list${list.id}`} className={`list inner ${lists.length == 2 ? `twoList` : (lists.length == 1 ? `oneList` : `bigList`)}`} style={{width: `100%`}}>
-      <Section id={`listsSection`}>
+      return <Section key={`list-${listIndex}-${list.id}`} id={`list${list.id}`} className={`list inner ${lists.length == 2 ? `twoList` : (lists.length == 1 ? `oneList` : `bigList`)}`} style={{width: `100%`}}>
         <button id={`manageList#${list.id}Button`} title={`Manage ${list.name}`}  className={`flex row iconButton`} onClick={(e) => setShowLeaders(!showLeaders)}>
           <div className={`flex row buttonLabel`}>
-            <h2><i style={{color: `var(--gameBlue)`}} className="fas fa-list"></i></h2>
-            <h3 className={`textOverflow`}><i>{list.name}</i><span style={{fontSize: 15, fontWeight: 500, padding: `0 10px`}}>({list.items.length})</span></h3>
+            <h2><i style={{color: `var(--gameBlue)`, fontSize: 18}} className="fas fa-list"></i></h2>
+            <h3>
+              <i style={{fontSize: 16, fontWeight: 500}}>{list.name}</i>
+              <span className={`textOverflow`} style={{fontSize: 18, fontWeight: 700, padding: `0 10px`, color: `var(--gameBlue)`}}>{list.items.length}</span>
+            </h3>
           </div>
         </button>
         <div id={`items${list.id}`} className={`items active sortable draggable ${list.items.length > 6 ? `overflow` : ``}`} data-list={JSON.stringify(list)}>
           {list.items.sort((a: any, b: any) => a?.index - b?.index).map((item: any, itemIndex: any) => {
             return <div className={`item sortable draggable ${item.complete ? `complete` : ``}`} title={`Click to Complete, Click and Hold to Drag & Drop!`} id={`item${item.id}`} key={itemIndex} onClick={(e) => setItemComplete(e, item, list)} data-order={item.order} data-index={item.index} data-complete={item.complete} data-item={item.item}>
-              <span className={`itemOrder`}>{itemIndex + 1}</span> <span className={`itemName textOverflow`}>{item.item}</span>
+              <span className={`itemOrder`}><i className={`itemIndex`}>{itemIndex + 1}</i></span> <span className={`itemName textOverflow`}>{item.item}</span>
             </div>
           })}
         </div>
-      </Section>
-      <Section id={`createItemFormSection`}>
-        {/* <h2><i>{list.name}</i></h2> */}
-        {/* <form id={`addList${list.id}`} className={`flex`} style={{width: `100%`, flexDirection: `row`}} onInput={(e: any) => setTypedValue(e.target.value)} onSubmit={(e) => manageList(e, list, lists)}>
-          <input placeholder={`Add '${list.name}' Name`} type="text" name="list" />
-          <input placeholder={`Change the '${list.itemName}' Item Name`} type="text" name="item" />
-          <input style={{width: `35%`}} id={user?.id} className={`save`} type="submit" value={`Save`} />
-        </form> */}
-        <form id={`listsForm${list.id}`} className={`flex`} style={{width: `100%`, flexDirection: `row`}} onInput={(e: any) => setTypedValue(e.target.value)} onSubmit={(e) => manageList(e, list, lists)}>
+        <form id={`listsForm${list.id}`} className={`flex`} style={{width: `100%`, flexDirection: `row`}} onInput={(e: any) => setTypedValue(e.target.value ?? typedValue)} onSubmit={(e) => manageList(e, list, lists)}>
           <input placeholder={`Change '${list.name}' Name`} type="text" name="list" />
-          <input placeholder={`Change the '${list.itemName}' Item Name`} type="text" name="item" />
-          {/* <input placeholder={`or Select Custom Position in List`} type="number" min={0} max={lists.length} name="selectPosition" /> */}
+          {/* <input placeholder={`Change the '${list.itemName}' Item Name`} type="text" name="item" /> */}
           <input style={{width: `35%`}} id={user?.id} className={`save`} type="submit" value={`Save`} />
         </form>
         <form id={`listForm${list.id}`} className={`flex`} style={{width: `100%`, flexDirection: `row`}} onSubmit={(e) => createItem(e, list)}>
-          <input placeholder={`Add ${list.itemName} #${list.items.length + 1}`} type="text" name="createItem" required />
-          <input placeholder={`or Select Custom Position in List`} type="number" min={0} max={lists.length} name="selectPosition" />
-          <input style={{width: `35%`}} id={user?.id} className={`save`} type="submit" value={`Add ${list.itemName}`} />
+          <input placeholder={`Add ${`Item` ?? list.itemName} ${list.items.length + 1}`} type="text" name="createItem" required />
+          {/* <input placeholder={`or Select Custom Position in List`} type="number" min={0} max={lists.length} name="selectPosition" /> */}
+          <input style={{width: `35%`}} id={user?.id} className={`save`} type="submit" value={`Add ${`Item` ?? list.itemName}`} />
         </form>
       </Section>
-    </article>
     })}
   </section>
-  <Section id={`profileSection`}>
+  <Section id={`listsAuthSection`}>
     <AuthForm />
-    {/* {user ? <div className="flex row subBanner">
-      <h2 style={{fontSize: 18, fontWeight: 400}}><i>You have {lists.length} Total Lists</i></h2>
-      {user?.updated && <h4><i>Updated {user?.updated}</i></h4>}
-    </div> : <AuthForm />} */}
   </Section>
 </div>
 }
