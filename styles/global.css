@@ -43,6 +43,7 @@
   --mainGlass: rgba(255, 28, 11, 0.75);
   --dangerColor: rgba(255, 28, 11, 0.75);
   --softWhite: rgba(255, 255, 255, 0.87);
+  --gameBlueSoft: rgba(0, 194, 255, 0.75);
   --transition: 0.24s cubic-bezier(0.77, 0.2, 0.05, 1) !important;
 }
 
@@ -840,7 +841,7 @@ button:active, input[type="submit"]:active {
   width: 100%;
   position: relative;
   border-radius: 4px;
-  background: rgba(14, 67, 81, 0.4);
+  background: var(--gameBlueSoft) !important;
   /* Neumorphic Inner shadow */
   -webkit-box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
           box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
@@ -875,9 +876,9 @@ button:active, input[type="submit"]:active {
 }
 
 .lists .list .items.bigList {
-  max-width: 33% !important;
-  -ms-grid-columns: auto !important;
-      grid-template-columns: auto !important;
+  max-width: 100% !important;
+  -ms-grid-columns: auto auto !important;
+      grid-template-columns: auto auto !important;
 }
 
 .lists .list .items .item {
@@ -915,14 +916,27 @@ button:active, input[type="submit"]:active {
   display: -ms-grid;
   display: grid;
   position: relative;
+  max-width: 125px !important;
   -ms-grid-columns: auto auto;
       grid-template-columns: auto auto;
 }
 
 .lists .list .items .item .itemButtons button {
-  max-width: 25px;
-  max-height: 25px;
+  padding: 0;
+  max-width: 100%;
   position: relative;
+  background: white;
+  width: 25px !important;
+  max-height: 9px !important;
+}
+
+.lists .list .items .item .itemButtons button i {
+  color: black;
+  pointer-events: none;
+}
+
+.lists .list .items .item .itemButtons button:hover i {
+  color: var(--gameBlue);
 }
 
 .lists .list .items .item:hover {
@@ -980,8 +994,9 @@ button:active, input[type="submit"]:active {
 }
 
 .lists .list .items .item.complete .itemName {
-  text-decoration: line-through;
+  min-width: 215px !important;
   text-decoration-thickness: 0;
+  text-decoration: line-through;
   -webkit-text-decoration-color: black;
           text-decoration-color: black;
 }

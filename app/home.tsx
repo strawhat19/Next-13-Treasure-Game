@@ -168,12 +168,6 @@ export const defaultLists: List[] = [
     {id: 9, order: 9, index: 8, item: `Save User List if Signed In`, complete: false},
     {id: 10, order: 10, index: 9,  item: `Mobile Responsiveness`, complete: false},
   ]},
-  {id: 2, name: `To Do List`, itemName: `Task`, items: [
-    {id: 1, order: 1, index: 0, item: `Check Calendar`, complete: false},
-    {id: 2, order: 2, index: 1, item: `Pay Bills`, complete: false},
-    {id: 3, order: 3, index: 2, item: `KOL`, complete: false},
-    {id: 4, order: 4, index: 3, item: `YT`, complete: false},
-  ]},
   {id: 3, name: `One Piece Strongest 2023`, itemName: `Character`, items: [
     {id: 1, order: 1, index: 0, item: `Imu`, complete: false},
     {id: 2, order: 2, index: 1, item: `Shanks`, complete: false},

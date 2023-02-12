@@ -255,10 +255,7 @@ export default function Lists() {
               <span className={`itemName textOverflow`}>{item.item}</span>
               {devEnv && <span className={`itemButtons`}>
                 <button id={`editItem#${item.id}Button`} title={`Edit ${item.name}`} className={`flex row iconButton`} onClick={(e) => console.log(e)}>
-                  <i style={{ color: `var(--gameBlue)` }} className="fas fa-edit"></i>
-                </button>
-                <button id={`editItem#${item.id}Button`} title={`Edit ${item.name}`} className={`flex row iconButton`} onClick={(e) => console.log(e)}>
-                  <i style={{ color: `var(--gameBlue)` }} className="fas fa-edit"></i>
+                  <i className="fas fa-edit"></i>
                 </button>
               </span>}
             </div>
