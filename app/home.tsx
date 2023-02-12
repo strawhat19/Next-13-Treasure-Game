@@ -9,7 +9,31 @@ import { useContext, useEffect, useState } from 'react';
 
 export const defaultContent = `Hey, I’m Rakib, a Software Engineer @ Mitsubishi Electric Trane HVAC US, or just Mitsubishi Electric for short. Along with my 7 years of experience as a developer, and owner of my own tech and digital media side business, Piratechs. This website is just for me to test out Next.js 13.`;
 
-export const StateContext = createContext<any>({});
+export const generateUniqueID = (existingIDs?:any) => {
+  let newID = Math.random().toString(36).substr(2, 9);
+  if (existingIDs && existingIDs.length > 0) {
+    while (existingIDs.includes(newID)) {
+      newID = Math.random().toString(36).substr(2, 9);
+    }
+  }
+  return newID;
+}
+
+export const updateOrAdd = (obj: any, arr: any) => {
+  let index = arr.findIndex((item: any) => item.name === obj.name);
+  if (index !== -1) {
+    arr[index] = obj;
+  } else {
+    arr.push(obj);
+  }
+  return arr;
+}
+
+export const getNumberFromString = (string: string) => {
+  let result: any = string.match(/\d+/);
+  let number = parseInt(result[0]);
+  return number;
+}
 
 export const createXML = (xmlString: string) => {
   let div = document.createElement('div');
@@ -31,6 +55,48 @@ export const getFormValuesFromFields = (formFields: any) => {
     };
   }
 }
+
+export const formatDate = (date: any) => {
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  let ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  let strTime = hours + ':' + minutes + ' ' + ampm;
+  return strTime + ` ` + (date.getMonth() + 1) + "-" + date.getDate() + "-" + date.getFullYear();
+}
+
+export const defaultLists: List[] = [
+  {id: 1, name: `ProductIVF`, itemName: `Ticket`, items: [
+    {id: 1, order: 1, index: 0, item: `Draggable Lists`, complete: false},
+    {id: 2, order: 2, index: 1, item: `Complete Item in List`, complete: false},
+    {id: 3, order: 3, index: 2, item: `Icon in Tab`, complete: false},
+    {id: 4, order: 4, index: 3, item: `Update Lists on Reorder`, complete: false},
+    {id: 5, order: 5, index: 4, item: `Corner Draggable`, complete: false},
+    {id: 6, order: 6, index: 5, item: `Create List`, complete: false},
+    {id: 7, order: 7, index: 6, item: `localStorage if Signed Out`, complete: false},
+    {id: 8, order: 8, index: 7, item: `Switch to User`, complete: false},
+    {id: 9, order: 9, index: 8, item: `Save User List if Signed In`, complete: false},
+    {id: 10, order: 10, index: 9,  item: `Mobile Responsiveness`, complete: false},
+  ]},
+  {id: 2, name: `To Do List`, itemName: `Task`, items: [
+    {id: 1, order: 1, index: 0, item: `Check Calendar`, complete: false},
+    {id: 2, order: 2, index: 1, item: `Pay Bills`, complete: false},
+    {id: 3, order: 3, index: 2, item: `KOL`, complete: false},
+    {id: 4, order: 4, index: 3, item: `YT`, complete: false},
+  ]},
+  {id: 3, name: `One Piece Strongest 2023`, itemName: `Character`, items: [
+    {id: 1, order: 1, index: 0, item: `Imu`, complete: false},
+    {id: 2, order: 2, index: 1, item: `Shanks`, complete: false},
+    {id: 3, order: 3, index: 2, item: `Dragon`, complete: false},
+    {id: 4, order: 4, index: 3, item: `Kaido`, complete: false},
+    {id: 5, order: 5, index: 4, item: `Mihawk`, complete: false},
+  ]},
+];
+
+export const StateContext = createContext<any>({});
+export const log = (item: any) => console.log(item);
 
 export default function Home() {
   const loadedRef = useRef(false);

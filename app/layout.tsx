@@ -8,6 +8,73 @@ import { useRef, useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { capitalizeAllWords, defaultContent, StateContext } from './home';
 
+// Global Variables
+declare global {
+
+  interface User {
+    color: any;
+    id: string;
+    bio: string;
+    updated: any; 
+    name: string; 
+    email: string;
+    lists: List[];
+    number: number;
+    status: string;
+    roles: string[];
+    lastSignin: any; 
+    registered: any; 
+    password: string;
+    highScore: number;
+    [key: string]: any;
+  }
+
+  interface Item {
+    id: number;
+    order: number;
+    index: number;
+    item: string;
+    complete: boolean;
+    [key: string]: any;
+  }
+  
+  interface List {
+    id: number;
+    name: string;
+    itemName: string;
+    items: Item[];
+    [key: string]: any;
+  }
+
+  interface Anim extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> {
+    background?: string;
+    position?: any;
+    src?: string;
+    class?: any;
+    left?: any;
+    right?: any;
+    muted?: any;
+    speed?: any;
+    style?: {
+      width?: number;
+      height?: number;
+      top?: any;
+      left?: any;
+      bottom?: any;
+      right?: any;
+    };
+    loop?: any;
+    autoplay?: any;
+    [key: string]: any;
+  }
+
+  namespace JSX {
+    interface IntrinsicElements {
+      'lottie-player': Anim,
+    }
+  }
+}
+
 export default function RootLayout({ children, } : { children: React.ReactNode; }) {
   const mobileMenuBreakPoint = 697;
 

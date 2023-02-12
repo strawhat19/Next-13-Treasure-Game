@@ -20,7 +20,7 @@ export default function Profile() {
           {/* <h1>Profile</h1>
           <h2><i>User is {user ? user?.name : `Signed Out`}</i></h2> */}
           <div className={`column rightColumn gameStats`}>
-            <button title="Click to View High Scores" style={{background: `var(--blackGlass)`, borderRadius: 4, justifyContent: `center`, alignItems: `center`, maxWidth: `fit-content`, padding: `5px 15px`}} className={`flex row`}><h2 className={`flex row`} onClick={(e) => setShowLeaders(!showLeaders)}><i style={{color: `var(--gameBlue)`}} className="fas fa-signal"></i><span className="highScore">{Math.floor(highScore).toLocaleString(`en-US`)}</span><span className="label">High Score</span></h2></button>
+            <button title="Click to View High Scores" style={{background: `var(--blackGlass)`, borderRadius: 4, justifyContent: `center`, alignItems: `center`, maxWidth: `fit-content`, padding: `5px 15px`}} className={`flex row`}><h2 className={`flex row`} onClick={(e) => setShowLeaders(!showLeaders)}><i style={{color: `var(--gameBlue)`}} className="fas fa-signal"></i><span className="buttonInnerLabel">{Math.floor(highScore).toLocaleString(`en-US`)}</span><span className="label">High Score</span></h2></button>
             <button onClick={() => setColorPref(!colorPref)} title="Click to Set Color Preference" style={{background: `var(--blackGlass)`, borderRadius: 4, justifyContent: `center`, alignItems: `center`, maxWidth: `fit-content`, padding: `5px 15px`, marginTop: 10}} className={`flex row`}><h2 className={`flex row`}><span className="label">{colorPref ? `Default Color` : `Change Color`}</span><i style={{color: `var(--gameBlue)`}} className="fas fa-question"></i></h2></button>
           </div>
       </div>

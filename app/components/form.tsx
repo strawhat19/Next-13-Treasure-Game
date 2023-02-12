@@ -1,8 +1,7 @@
 'use client';
 import { db } from '../../firebase';
-import { defaultContent } from '../home';
-import { formatDate } from '../projects/projects';
 import { useContext, useEffect, useRef, useState } from 'react';
+import { defaultContent, defaultLists, formatDate } from '../home';
 import { capitalizeAllWords, createXML, StateContext } from '../home';
 import { collection, doc, getDocs, setDoc } from 'firebase/firestore';
 
@@ -66,7 +65,7 @@ export default function AuthForm(props?: any) {
     }    
   }
 
-  const addOrUpdateUser = async (id: any, user: any) => {
+  const addOrUpdateUser = async (id: any, user: User) => {
     setDoc(doc(db, `users`, id), { ...user, id }).then(newSub => {
       localStorage.setItem(`user`, JSON.stringify({ ...user, id }));
       setUser({ ...user, id });
@@ -227,12 +226,12 @@ export default function AuthForm(props?: any) {
               bio: ``,
               color: ``, 
               number: 0,
-              deaths: 0,
               status: ``,
               name: name, 
               email: email,
               roles: [`user`],
               password: password, 
+              lists: defaultLists,
               updated: formatDate(new Date()), 
               lastSignin: formatDate(new Date()), 
               registered: formatDate(new Date()), 

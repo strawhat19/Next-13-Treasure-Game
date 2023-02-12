@@ -1,42 +1,11 @@
 'use client';
 import { db } from '../../firebase';
-import { StateContext } from '../home';
 import AuthForm from '../components/form';
 import Section from '../components/section';
 import { doc, setDoc } from 'firebase/firestore';
-import { formatDate } from '../projects/projects';
+import { formatDate, StateContext } from '../home';
 import LeaderBoard from '../components/leaderboard';
 import { useContext, useEffect, useRef, useState } from 'react';
-
-// Global Variables
-declare global {
-  interface Anim extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> {
-    background?: string;
-    position?: any;
-    src?: string;
-    class?: any;
-    left?: any;
-    right?: any;
-    muted?: any;
-    speed?: any;
-    style?: {
-      width?: number;
-      height?: number;
-      top?: any;
-      left?: any;
-      bottom?: any;
-      right?: any;
-    };
-    loop?: any;
-    autoplay?: any;
-  }
-
-  namespace JSX {
-    interface IntrinsicElements {
-      'lottie-player': Anim,
-    }
-  }
-}
 
 export default function Game() {
   let runGame: any;
@@ -358,9 +327,8 @@ export default function Game() {
     if (currentScore > storedHighScore) setHighScore(currentScore);
     if (currentUser) {
       if (currentScore > currentUser?.highScore) {
-        // console.log(`New High Score`, currentScore, `Previous Record`, currentUser?.highScore);
         setHighScore(currentScore);
-        addOrUpdateUser(currentUser?.id, { ...currentUser, deaths, highScore: currentScore, updated: formatDate(new Date())});
+        addOrUpdateUserGame(currentUser?.id, { ...currentUser, deaths, highScore: currentScore, updated: formatDate(new Date())});
         localStorage.setItem(`highScore`, JSON.stringify(currentScore));
       };
     } else {
@@ -420,8 +388,8 @@ export default function Game() {
     setHealth({...health, width: `${parseFloat(hp?.value)}%`});
     setInitialHealth(parseFloat(hp?.value));
   }
-  
-  const addOrUpdateUser = async (id: any, user: any) => {
+
+  const addOrUpdateUserGame = async (id: any, user: User) => {
     setDoc(doc(db, `users`, id), { ...user, id }).then(newSub => {
       localStorage.setItem(`user`, JSON.stringify({ ...user, id }));
       setUser({ ...user, id });
@@ -495,7 +463,7 @@ export default function Game() {
         <div className={`column rightColumn gameStats`}>
             {/* <h2 className={`flex row`}><span className="label">Total:</span><span className="score">{score.toLocaleString(`en-US`)}</span><i className="fas fa-coins"></i></h2> */}
             {/* <h2 className={`flex row`}><span className="label">Deaths:</span><span className="deaths">{deaths}</span><i className="fas fa-skull-crossbones"></i></h2> */}
-            <button title={gameOver && !user ? `Click to Clear High Score` : `Click to View High Scores`} onClick={() => !gameOver ? setShowLeaders(!showLeaders) : !user ? clearHighScore() : setShowLeaders(!showLeaders)} style={{background: `var(--blackGlass)`, borderRadius: 4, justifyContent: `center`, alignItems: `center`, maxWidth: `fit-content`, padding: `5px 15px`}} className={`flex row`}><h2 className={`flex row`}><i style={{color: `var(--gameBlue)`}} className="fas fa-signal"></i><span className="highScore">{Math.floor(highScore).toLocaleString(`en-US`)}</span><span className="label">High Score</span></h2></button>
+            <button title={gameOver && !user ? `Click to Clear High Score` : `Click to View High Scores`} onClick={() => !gameOver ? setShowLeaders(!showLeaders) : !user ? clearHighScore() : setShowLeaders(!showLeaders)} style={{background: `var(--blackGlass)`, borderRadius: 4, justifyContent: `center`, alignItems: `center`, maxWidth: `fit-content`, padding: `5px 15px`}} className={`flex row`}><h2 className={`flex row`}><i style={{color: `var(--gameBlue)`}} className="fas fa-signal"></i><span className="buttonInnerLabel">{Math.floor(highScore).toLocaleString(`en-US`)}</span><span className="label">High Score</span></h2></button>
         </div>
       </div>
     </section>

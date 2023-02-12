@@ -1,29 +1,11 @@
 'use client';
 import Project from './project';
 import { db } from '../../firebase';
-import { StateContext } from '../home';
 import Banner from '../components/banner';
 import AuthForm from '../components/form';
 import { doc, getDoc } from 'firebase/firestore';
+import { formatDate, StateContext } from '../home';
 import { useContext, useEffect, useState, useRef } from 'react';
-
-export const getDefaultUser = async () => {
-  const defaultUser = await getDoc(doc(db, `users`, `1 Rakib 5:21 AM 12-21-2022`));
-  if (defaultUser.exists()) {
-    return defaultUser.data();
-  }
-}
-
-export const formatDate = (date: any) => {
-  let hours = date.getHours();
-  let minutes = date.getMinutes();
-  let ampm = hours >= 12 ? 'PM' : 'AM';
-  hours = hours % 12;
-  hours = hours ? hours : 12; // the hour '0' should be '12'
-  minutes = minutes < 10 ? '0' + minutes : minutes;
-  let strTime = hours + ':' + minutes + ' ' + ampm;
-  return strTime + ` ` + (date.getMonth() + 1) + "-" + date.getDate() + "-" + date.getFullYear();
-}
 
 export default function Projects() {
   const initialLoad = useRef(false);
@@ -31,6 +13,13 @@ export default function Projects() {
   const [projects, setProjects] = useState<any>([]);
   const [overrideUser, setOverrideUser] = useState(false);
   const { updates, setUpdates, user, setPage, setUser } = useContext(StateContext);
+
+  const getDefaultUser = async () => {
+    const defaultUser = await getDoc(doc(db, `users`, `1 Rakib 5:21 AM 12-21-2022`));
+    if (defaultUser.exists()) {
+      return defaultUser.data();
+    }
+  }
 
   // Github
   const getGithubData = async () => {

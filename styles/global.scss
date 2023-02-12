@@ -325,6 +325,9 @@ header {
     align-items: center;
     width: var(--containerWidth);
     justify-content: space-between;
+    &.stretch {
+        width: 100%;
+    }
     &.pageInner {
         width: 100%;
         flex-direction: column;
@@ -572,6 +575,31 @@ button, input[type="submit"] {
     }
 }
 
+.buttonInnerLabel {
+    max-width: fit-content;
+    position: relative;
+    font-size: 0.95em;
+    top: -1px;
+}
+
+.buttonLabel {
+    width: 350px !important;
+    align-items: center !important;
+    * {
+        width: max-content !important;
+    }
+}
+
+.iconButton {
+    background: var(--blackGlass);
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    padding: 5px 15px;
+    font-size: 0.85em;
+    width: 100%;
+}
+
 .lists {
     grid-gap: 1em;
     display: flex;
@@ -670,13 +698,6 @@ button, input[type="submit"] {
             }
         }
     }
-}
-
-.highScore {
-    max-width: fit-content;
-    position: relative;
-    font-size: 0.95em;
-    top: -1px;
 }
 
 .gameStats {

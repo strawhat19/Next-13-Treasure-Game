@@ -1,97 +1,26 @@
 'use client';
-// import $ from 'jquery';
 import { db } from '../../firebase';
-import { StateContext } from '../home';
 import AuthForm from '../components/form';
 import Section from '../components/section';
 import { doc, setDoc } from 'firebase/firestore';
 import { collection, getDocs } from 'firebase/firestore';
 import { useState, useRef, useEffect, useContext } from 'react';
-
-export const log = (item: any) => console.log(item);
-
-const defaultLists = [
-  {id: 1, name: `ProductIVF`, itemName: `Ticket`, items: [
-    {id: 1, order: 1, index: 0, item: `Draggable Lists`, complete: false},
-    {id: 2, order: 2, index: 1, item: `Complete Item in List`, complete: false},
-    {id: 3, order: 3, index: 2, item: `Icon in Tab`, complete: false},
-    {id: 4, order: 4, index: 3, item: `Update Lists on Reorder`, complete: false},
-    {id: 5, order: 5, index: 4, item: `Corner Draggable`, complete: false},
-    {id: 6, order: 6, index: 5, item: `Create List`, complete: false},
-    {id: 7, order: 7, index: 6, item: `localStorage if Signed Out`, complete: false},
-    {id: 8, order: 8, index: 7, item: `Switch to User`, complete: false},
-    {id: 9, order: 9, index: 8, item: `Save User List if Signed In`, complete: false},
-    {id: 10, order: 10, index: 9,  item: `Mobile Responsiveness`, complete: false},
-  ]},
-  {id: 2, name: `To Do List`, itemName: `Task`, items: [
-    {id: 1, order: 1, index: 0, item: `Check Calendar`, complete: false},
-    {id: 2, order: 2, index: 1, item: `Pay Bills`, complete: false},
-    {id: 3, order: 3, index: 2, item: `KOL`, complete: false},
-    {id: 4, order: 4, index: 3, item: `YT`, complete: false},
-  ]},
-  {id: 3, name: `One Piece Strongest 2023`, itemName: `Character`, items: [
-    {id: 1, order: 1, index: 0, item: `Imu`, complete: false},
-    {id: 2, order: 2, index: 1, item: `Shanks`, complete: false},
-    {id: 3, order: 3, index: 2, item: `Dragon`, complete: false},
-    {id: 4, order: 4, index: 3, item: `Kaido`, complete: false},
-    {id: 5, order: 5, index: 4, item: `Mihawk`, complete: false},
-  ]},
-];
+import { defaultLists, formatDate, getNumberFromString, StateContext } from '../home';
 
 export default function Lists() {
   let loadedRef = useRef(false);
-  let updatedListsToSet: any = [];
+  let updatedListsToSet: List[] = [];
   let [typedValue, setTypedValue] = useState();
   let dev = () => window.location.host.includes(`localhost`);
   const { lists, setLists, updates, setUpdates, user, page, setPage, setUser, showLeaders, setShowLeaders } = useContext(StateContext);
 
-  const generateUniqueID = (existingIDs?:any) => {
-    let newID = Math.random().toString(36).substr(2, 9);
-    if (existingIDs && existingIDs.length > 0) {
-      while (existingIDs.includes(newID)) {
-        newID = Math.random().toString(36).substr(2, 9);
-      }
-    }
-    return newID;
-  }
-  
-  const updateOrAdd = (obj: any, arr: any) => {
-    let index = arr.findIndex((item: any) => item.name === obj.name);
-    if (index !== -1) {
-      arr[index] = obj;
-    } else {
-      arr.push(obj);
-    }
-    return arr;
-  }
-  
-  const getNumberFromString = (string: string) => {
-    let result: any = string.match(/\d+/);
-    let number = parseInt(result[0]);
-    return number;
-  }
-
-  const addOrUpdateUser = async (id: any, user: any) => {
-    await setDoc(doc(db, `users`, id), { ...user, id }).then(newSub => {
+  const addOrUpdateUserLists = async (id: any, user: User) => {
+    setDoc(doc(db, `users`, id), { ...user, id }).then(newSub => {
       localStorage.setItem(`user`, JSON.stringify({ ...user, id }));
       setUser({ ...user, id });
       setUpdates(updates + 1);
-      // dev() && console.log(`addOrUpdateUser`, { ...user, id });
-      // dev() && console.log(`addOrUpdateUser lists`, { ...user, id }.lists);
-      // dev() && console.log(`Updated Database Items`, { ...user, id }.lists[0].items.sort((a: any, b: any) => a.index - b.index));
       return newSub;
     }).catch(error => console.log(error));
-  }
-
-  const formatDate = (date: any) => {
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-    let ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    let strTime = hours + ':' + minutes + ' ' + ampm;
-    return strTime + ` ` + (date.getMonth() + 1) + "-" + date.getDate() + "-" + date.getFullYear();
   }
 
   const setDraggable = async () => {
@@ -106,41 +35,48 @@ export default function Lists() {
     });
   }
 
-  const updateLists = async (newLists: any) => {
+  const updateLists = async (updatedLists: List[], logString?: any) => {
     let storedUser = JSON.parse(localStorage.getItem(`user`) as any);
     let currentUser = storedUser;
     if (currentUser) {
-      let updatedUser = { ...currentUser, lists: newLists, updated: formatDate(new Date())};
-      addOrUpdateUser(currentUser?.id, updatedUser);
-      dev() && console.log(`Lists`, (newLists.length == 1 ? newLists[0] : newLists), `user`, updatedUser);
+      let updatedUser = { ...currentUser, lists: updatedLists, updated: formatDate(new Date())};
+      addOrUpdateUserLists(currentUser?.id, updatedUser);
+      dev() && console.log(`${logString ?? ``} Lists`, (updatedLists.length == 1 ? updatedLists[0] : updatedLists), `user`, updatedUser);
     } else {
-      dev() && console.log(`Lists`, (newLists.length == 1 ? newLists[0] : newLists));
+      dev() && console.log(`${logString ?? ``} Lists`, (updatedLists.length == 1 ? updatedLists[0] : updatedLists));
     }
-    localStorage.setItem(`lists`, JSON.stringify(newLists));
+    localStorage.setItem(`lists`, JSON.stringify(updatedLists));
     if ($(`.items`).length > 0) setDraggable();
     setUpdates(updates + 1);
-    await setLists(newLists);
+    await setLists(updatedLists);
   }
 
-  const setItemComplete = async (e: any, item: any, list: any) => {
+  const setItemComplete = async (e: any, item: Item, list: List) => {
     list.items[list.items.indexOf(item)].complete = !list.items[list.items.indexOf(item)].complete;
-    let filteredLists = lists.filter((lis: any) => lis.id != list.id);
-    let newLists = [...filteredLists, list].sort((a: any, b: any) => a.id - b.id);
-    await updateLists(newLists);
+    let filteredLists: List[] = lists.filter((lis: any) => lis.id != list.id);
+    let newLists: List[] = [...filteredLists, list].sort((a: any, b: any) => a.id - b.id);
+    await updateLists(newLists, setItemComplete);
   }
   
-  const createItem = async (e: any, list: any) => {
+  const createItem = async (e: any, list: List) => {
     e.preventDefault();
     let formFields = e.target.children;
-    let newItem = {id: list.items.length + 1, item: formFields[0].value, complete: false, index: list.items.length, order: list.items.length + 1};
-    let newList = {...list, items: [...list.items, newItem]};
-    let filteredLists = lists.filter((lis: any) => lis.id != list.id);
-    let newLists = [...filteredLists, newList].sort((a: any, b: any) => a.id - b.id);
-    await updateLists(newLists);
+    let newItem: Item = {
+      complete: false, 
+      index: list.items.length, 
+      item: formFields[0].value, 
+      id: list.items.length + 1, 
+      order: list.items.length + 1,
+    };
+    let updatedItems: Item[] = [...list.items, newItem];
+    let newList: List = {...list, items: updatedItems};
+    let filteredLists: List[] = lists.filter((lis: any) => lis.id != list.id);
+    let newLists: List[] = [...filteredLists, newList].sort((a: any, b: any) => a.id - b.id);
+    await updateLists(newLists, createItem);
     e.target.reset();
   }
 
-  const manageList = async (e: any, list: any, lists: any) => {
+  const manageList = async (e: any, list: List, lists: List[]) => {
     e.preventDefault();
     let changedList;
     let formFields = e.target.children;
@@ -162,22 +98,22 @@ export default function Lists() {
         ...list, 
         name: listObject.list ?? list.name, 
         itemName: itemObject.item ?? list.itemName
-      };
+      } as List;
     } else if (hasListOnly) {
       changedList = {
         ...list, 
         name: listObject.list ?? list.name, 
-      };
+      } as List;
     } else if (hasItemOnly) {
       changedList = {
         ...list, 
         itemName: itemObject.item ?? list.itemName
-      };
+      } as List;
     }
 
-    let filteredLists = lists.filter((lis: any) => lis.id != list.id);
-    let newLists = [...filteredLists, changedList].sort((a: any, b: any) => a.id - b.id);
-    await updateLists(newLists);
+    let filteredLists: List[] = lists.filter((lis: List) => lis.id != list.id);
+    let newLists: any[] = [...filteredLists, changedList].sort((a: any, b: any) => a.id - b.id);
+    await updateLists(newLists, manageList);
     e.target.reset();
   }
 
@@ -198,26 +134,26 @@ export default function Lists() {
       } else {
         const children = Array.from(event.target.children);
         const filteredChildren = children.filter((listItem: any) => !listItem.classList.contains(`ui-sortable-placeholder`));
-        let reorderedItems = filteredChildren.map((itm: any, index: any) => {
+        let reorderedItems: Item[] = filteredChildren.map((itm: any, index: any) => {
           return {
             index: index,
             order: index + 1,
             item: itm.dataset.item,
             id: getNumberFromString(itm.id),
             complete: JSON.parse(itm.dataset.complete),
-          }
+          } as Item;
         }).sort((a, b) => a?.index - b?.index);
 
-        let thisList = JSON.parse(event.target.dataset.list);
-        let filteredLists = updatedListsToSet.filter((lis: any) => lis.id != getNumberFromString(event.target.id));
-        let newList = { ...thisList, items: reorderedItems.sort((a: any, b: any) => a.index - b.index)};
-        let newLists = [...filteredLists, newList].sort((a: any, b: any) => a.id - b.id);
+        let thisList: List = JSON.parse(event.target.dataset.list);
+        let filteredLists: List[] = updatedListsToSet.filter((lis: any) => lis.id != getNumberFromString(event.target.id));
+        let newList: List = { ...thisList, items: reorderedItems.sort((a: any, b: any) => a.index - b.index)};
+        let newLists: List[] = [...filteredLists, newList].sort((a: any, b: any) => a.id - b.id);
         
         let storedUser = JSON.parse(localStorage.getItem(`user`) as any);
         let currentUser = storedUser;
         if (currentUser) {
           dev() && console.log(`New User Lists`, newLists);
-          addOrUpdateUser(currentUser?.id, {...currentUser, lists: newLists, updated: formatDate(new Date())});
+          addOrUpdateUserLists(currentUser?.id, {...currentUser, lists: newLists, updated: formatDate(new Date())});
         } else {
           dev() && console.log(`Updated Lists`, newLists.length == 1 ? newLists[0] : newLists);
         }
@@ -238,16 +174,28 @@ export default function Lists() {
       getDocs(collection(db, `users`)).then((snapshot: any) => {
         let latestUsers = snapshot.docs.map((doc: any) => doc.data()).sort((a: any, b: any) => b?.highScore - a?.highScore);
         let latestUser = latestUsers.filter((usr: any) => usr?.id == storedUser?.id)[0];
-
-        dev() && console.log(`Dev Env Current User List Items`, (latestUser?.lists.length == 1 ? latestUser?.lists[0] : latestUser?.lists).items.sort((a: any, b: any) => a?.index - b?.index));
-        updatedListsToSet = latestUser?.lists || JSON.parse(localStorage.getItem(`lists`) as any) || defaultLists;
+        updatedListsToSet = latestUser?.lists.map((lis: List) => {
+          return {
+            ...lis,
+            items: lis.items.sort((a: any, b: any) => a?.index - b?.index)
+          }
+        }) || JSON.parse(localStorage.getItem(`lists`) as any).map((lis: List) => {
+          return {
+            ...lis,
+            items: lis.items.sort((a: any, b: any) => a?.index - b?.index)
+          }
+        }) || defaultLists.map((lis: List) => {
+          return {
+            ...lis,
+            items: lis.items.sort((a: any, b: any) => a?.index - b?.index)
+          }
+        });
         setUser(latestUser || null);
-        updateLists(updatedListsToSet);
+        updateLists(updatedListsToSet, `User Initialized`);
       });
     } else {
       updatedListsToSet = JSON.parse(localStorage.getItem(`lists`) as any) || defaultLists;
-      dev() && console.log(`Dev Env List Items`, updatedListsToSet);
-      updateLists(updatedListsToSet);
+      updateLists(updatedListsToSet, `Initialized`);
     }
 
     setUpdates(updates+1);
@@ -267,37 +215,28 @@ export default function Lists() {
   }, [user, lists]);
 
   return <div className={`inner pageInner`}>
-  {/* <section id={`listsPageBanner`} className={`topContent`}>
+  <section id={`listsBanner`} className={`topContent`}>
     <div className="inner">
-      <h1 style={{width: `40%`}}>{page != `` ? capitalizeAllWords(page) + ` (${lists.length})` : `Lists`}</h1>
-      <div className={`column rightColumn`} style={{width: `60%`}}>
-        {user ? <h2>User is {user ? user?.name : `Signed Out`}</h2> : <AuthForm style={{width: `100%`}} />}
-      </div>
-    </div>
-  </section> */}
-  <section id={`profileBanner`} className={`topContent`}>
-    <div className="inner">
-      {/* {user ? <h1 style={{fontSize: `2.1em`}}>{user?.name}'s List(s)</h1> : <h2><i>List(s)</i></h2>} */}
-      <div className={`column rightColumn gameStats`}>
-        {/* <button title={`Manage ${lists.length} List(s)`} style={{background: `var(--blackGlass)`, borderRadius: 4, justifyContent: `center`, alignItems: `center`, maxWidth: `fit-content`, padding: `5px 15px`}} className={`flex row`} onClick={(e) => setShowLeaders(!showLeaders)}>
-          <h2 className={`flex row`}>
-            <span className="highScore">{Math.floor(lists.length).toLocaleString(`en-US`)}</span>
-            <i style={{color: `var(--gameBlue)`}} className="fas fa-list"></i>
-            <span className="label">Manage Lists</span>
-          </h2>
-        </button> */}
-        {/* <button title="Click to View High Scores" style={{background: `var(--blackGlass)`, borderRadius: 4, justifyContent: `center`, alignItems: `center`, maxWidth: `fit-content`, padding: `5px 15px`, pointerEvents: `none`}} className={`flex row`}><h2 className={`flex row`}><i style={{color: `var(--gameBlue)`}} className="fas fa-list"></i><span className="highScore">{Math.floor(lists.length).toLocaleString(`en-US`)}</span><span className="label">{user ? `${user?.name}` : `Your Lists`}</span></h2></button> */}
-      </div>
+      <button id={`manageListsButton`} title={`Manage ${lists.length} List(s)`} className={`flex row iconButton`} onClick={(e) => setShowLeaders(!showLeaders)}>
+        <h2 className={`flex row buttonLabel`}>
+          <i style={{color: `var(--gameBlue)`}} className="fas fa-list"></i>
+          <span className="label">Manage <span className="buttonInnerLabel" style={{color: `var(--gameBlue)`}}>{Math.floor(lists.length).toLocaleString(`en-US`)}</span> Lists</span>
+        </h2>
+      </button>
     </div>
   </section>
   <section className={`lists`} id={`lists`}>
     {(user ? user.lists : lists).map((list: any, listIndex: any) => {
       return <article key={`list-${listIndex}-${list.id}`} id={`list${list.id}`} className={`list inner ${lists.length == 2 ? `twoList` : (lists.length == 1 ? `oneList` : `bigList`)}`} style={{width: `100%`}}>
       <Section id={`listsSection`}>
-        <h2 className={`textOverflow`}><i>{list.name}</i><span style={{fontSize: 15, fontWeight: 500, padding: `0 10px`}}>({list.items.length})</span></h2>
+        <button id={`manageList#${list.id}Button`} title={`Manage ${list.name}`}  className={`flex row iconButton`} onClick={(e) => setShowLeaders(!showLeaders)}>
+          <div className={`flex row buttonLabel`}>
+            <h2><i style={{color: `var(--gameBlue)`}} className="fas fa-list"></i></h2>
+            <h3 className={`textOverflow`}><i>{list.name}</i><span style={{fontSize: 15, fontWeight: 500, padding: `0 10px`}}>({list.items.length})</span></h3>
+          </div>
+        </button>
         <div id={`items${list.id}`} className={`items active sortable draggable ${list.items.length > 6 ? `overflow` : ``}`} data-list={JSON.stringify(list)}>
           {list.items.sort((a: any, b: any) => a?.index - b?.index).map((item: any, itemIndex: any) => {
-            // dev() && console.log({itemIndex, item, list, lists});
             return <div className={`item sortable draggable ${item.complete ? `complete` : ``}`} title={`Click to Complete, Click and Hold to Drag & Drop!`} id={`item${item.id}`} key={itemIndex} onClick={(e) => setItemComplete(e, item, list)} data-order={item.order} data-index={item.index} data-complete={item.complete} data-item={item.item}>
               <span className={`itemOrder`}>{itemIndex + 1}</span> <span className={`itemName textOverflow`}>{item.item}</span>
             </div>
