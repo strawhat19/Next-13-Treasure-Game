@@ -1,8 +1,8 @@
 'use client';
 import Image from 'next/image';
-import Banner from './components/banner';
 import AuthForm from './components/form';
 import Header from "./components/header";
+import Banner from './components/banner';
 import Section from "./components/section";
 import { createContext, useRef, useContext, useEffect } from 'react';
 

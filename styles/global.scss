@@ -639,21 +639,6 @@ button, input[type="submit"] {
             color: white;
         }
 
-        &.oneList {
-            padding: 2em 0;
-            grid-template-columns: auto auto auto auto;
-        }
-        
-        &.twoList {
-            grid-template-columns: auto auto ;
-            padding: 1em 0;
-        }
-        
-        &.bigList {
-            grid-template-columns: auto;
-            max-width: 33%;
-        }
-
         /* Neumorphic Inner shadow */
         box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
 
@@ -664,30 +649,56 @@ button, input[type="submit"] {
             gap: 1em;
             display: grid;
             width: 100% !important;
-            // grid-gap: 1em;
-            // display: flex;
-            // flex-direction: column;
+            transition: var(--transition);
+
+            &.oneList {
+                padding: 2em 0 !important;
+                grid-template-columns: auto auto auto auto !important;
+            }
+        
+            &.twoList {
+                padding: 1em 0 !important;
+                grid-template-columns: auto auto !important;
+            }
+        
+            &.bigList {
+                max-width: 33% !important;
+                grid-template-columns: auto !important;
+            }
+
             .item {
                 cursor: grab;
                 padding: 0em;
-                height: 33px;
                 display: flex;
-                grid-gap: 10px;
+                grid-gap: 20px;
+                min-height: 35px;
                 font-size: 0.85em;
                 position: relative;
                 border-radius: 4px;
                 align-items: center;
                 background: var(--blackGlass);
-                       /* Neumorphic Inner shadow */
+                transition: var(--transition);
+
+                /* Neumorphic Inner shadow */
                 box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.2);
 
                 /* Neumorphic Outer shadow */
                 box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1),0px 0px 20px rgba(0, 0, 0, 0.05);
-                transition: var(--transition);
 
                 span {
                     width: 100%;
                     max-height: 100%;
+                }
+
+                .itemButtons {
+                    display: grid;
+                    position: relative;
+                    grid-template-columns: auto auto;
+                    button {
+                        max-width: 25px;
+                        max-height: 25px;
+                        position: relative;
+                    }
                 }
 
                 &:hover {
